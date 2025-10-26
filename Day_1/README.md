@@ -1,4 +1,4 @@
-## Summary
+## Introduction to QFN-48 Package, chip, pads, core, die and IPs
 
 This document introduces foundational concepts and terminology in open-source hardware and chip design, focusing on understanding electronic boards, the internal structure of chips, and the critical role of foundries. It is intended as an entry-level guide for students and newcomers to the hardware design field.
 
@@ -67,3 +67,62 @@ This document introduces foundational concepts and terminology in open-source ha
 - **Foundry and IP** are central to modern chip design, with foundries supplying both the physical manufacturing capability and foundational building blocks for design integration.
 - Successful hardware design and fabrication rely on standardized communication between designers (engineers) and foundry operations, often mediated by shared interface files and design standards.  
 - Mastery of these fundamentals opens up advanced work in hardware design, SoC integration, and semiconductor manufacturing.
+
+---
+
+##  Introduction to RISC-V
+
+This introduction explains the foundational role of the **Instruction Set Architecture (ISA)**—focusing on RISC-V—in computer hardware and software design. ISA serves as the central language between software applications and hardware, outlining how instructions are formatted, interpreted, and executed within a processor. The flow from high-level application code to executable machine binaries involves several stages and interfaces, ultimately allowing programs to interact with physical silicon implementations.
+
+<img width="1448" height="910" alt="image" src="https://github.com/user-attachments/assets/aaf06205-f60d-4c5c-8e8f-90a827a0040b" />
+
+
+## Core Concepts
+
+### Instruction Set Architecture (ISA)
+
+- The **ISA** is the formal definition of how a computer's processor executes instructions and manages operations. It acts as an interface dictating how software communicates with hardware.
+- In RISC-V and similar architectures, the ISA specifies available operations, data types, register sets, and memory addressing mechanisms.
+- The ISA does not exist physically within computer memory; rather, it is a **conceptual specification** that hardware designs implement.
+
+
+### Compilation Flow
+
+- Applications (e.g., in C) must be translated so that processors can execute them. The flow is:
+    - **Source Code** (C, etc.) $\rightarrow$ **Assembly Language** (RISC-V assembly) $\rightarrow$ **Machine Code** (binary instructions)
+    - Machine code is composed of binary representations: strings of $0$ and $1$; sometimes expressed as hexadecimal for readability.
+- The translation process ensures that the logic authored by the programmer becomes a stream of hardware-level commands.
+
+
+### RTL and Hardware Implementation
+
+- The **ISA** forms the basis for hardware design.
+    - Design engineers use **Hardware Description Languages (HDLs)** to implement the ISA specifications as **Register Transfer Level (RTL)** logic.
+    - RTL abstracts the internal data flows and logic required to realize the operations defined by the ISA on silicon.
+- The **RTL implementation** is then synthesized to produce the physical layout of the chip (using standard chip design flows like Place-and-Route).
+
+
+## Key Points
+
+- **ISA as a Language:** The ISA can be likened to the language that software uses to communicate intent to the hardware—defining the permissible set of instructions for computation and control.
+- **Separation of Concerns:** The ISA allows hardware designers and software developers to operate independently, provided both conform to the ISA specification. This separation ensures software binary compatibility across different hardware implementations adhering to the same ISA.
+- **Binary Execution:** The final code executed by hardware consists of sequences of binary digits (bits) that encode the instructions as specified by the ISA. This is the format directly understood by the chip's logic gates and transistors.
+    - Example: If a program swaps two numbers, that logic is ultimately converted to a specific set of binary instructions implemented and executed by the chip.
+
+
+- **ISA vs. Microarchitecture:**
+    - **ISA**: High-level, abstract specification (“what” the hardware should do).
+    - **Microarchitecture/RTL**: Actual realization (“how” those operations are implemented) in silicon.
+
+- **Hardware Description Language (HDL):** Used to express RTL implementations that embody the ISA specifications in physical logic.
+
+
+- **Design Flow Overview:**
+    1. **Start with ISA specifications**
+    2. **Implement with HDL/RTL**
+    3. **Synthesize RTL into chip layout (physical design)**
+    4. **Applications compile to binary executable for that ISA**
+    5. **Chip executes machine instructions, producing output for the user**
+
+
+- **User Perspective:** For most users, executing a program appears seamless. The underlying complexity—translating software logic through layers of abstraction down to transistor-level operations—remains hidden.
