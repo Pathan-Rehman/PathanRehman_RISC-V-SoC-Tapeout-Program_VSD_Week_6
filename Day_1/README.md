@@ -350,8 +350,6 @@ The ASIC (Application-Specific Integrated Circuit) design flow is a systematic p
 - **Place and Route (P&R)**: Physically arrange gates and route interconnections, perform clock tree and power grid synthesis.
 - **Physical Verification**: Validate that the layout follows design rules (DRC), matches intended circuit topology (LVS), and is free from manufacturing violations.
 - **Timing Analysis**: Confirm the design is free of timing violations, i.e., meets setup and hold time constraints for all paths: 
-  - $t_{\text{setup}} < t_{\text{clock}}$
-  - $t_{\text{hold}} > t_{\text{min\_delay}}$
 - **Tapeout**: Produce the final layout file (GDSII) and send to manufacturing.
 
 ### Open Source ASIC Methodology
