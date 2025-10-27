@@ -676,6 +676,145 @@ Always ensure to run OpenLane from this directory.
 ### 12. Invoking OpenLane
 
 To start the OpenLane tool, you will proceed from the `openlane` working directory.
+---
+## Design Preparation Step
+
+This lab guides you through performing an **interactive OpenLane flow** on a sample RISC-V core design. Key steps include launching the interactive session, inspecting and setting up the design folder, configuring design parameters, preparing the file system, and merging library files required for synthesis.
+
+## Lab Steps
+
+### 1. Start OpenLane Interactive Session
+
+Begin by running OpenLane in interactive mode. This allows you to execute each step of the flow manually, observe changes, and compare results.
+
+```bash
+docker
+./flow.tcl -interactive
+```
+<img width="767" height="322" alt="image" src="https://github.com/user-attachments/assets/fcec656b-0b73-441e-a2d8-a31d170f2c46" />
+
+
+You will see the prompt change to a percentage symbol (`%`), indicating the OpenLane interactive prompt.
+
+### 2. Load Required OpenLane Packages
+
+Next, load the necessary OpenLane packages for the flow to run.
+
+```tcl
+package require openlane 0.9
+```
+<img width="736" height="361" alt="image" src="https://github.com/user-attachments/assets/20236e53-533f-4b43-abed-59a359795b01" />
+
+
+Upon successful loading, you are ready to proceed with the flow.
+
+### 3. Explore Available Designs
+
+OpenLane comes with a **designs** folder containing many example projects. Locate and explore the available designs.
+
+```bash
+cd designs
+ls
+```
+<img width="864" height="619" alt="image" src="https://github.com/user-attachments/assets/fd2db74e-52f2-4e4a-b51f-72d3fe8f81a7" />
+
+
+The list shows all included design test cases—your own design should be placed here.
+
+### 4. Inspect a Design Directory
+
+Navigate into the target design directory (for example, `picorv32a`) and list its contents.
+
+```bash
+cd picorv32a
+ls
+```
+<img width="870" height="715" alt="image" src="https://github.com/user-attachments/assets/dd998267-9b50-495a-967e-076ce9287222" />
+
+
+You will see three primary files:
+
+- `src/` — Contains the Verilog source file and SDC information.
+- `config.tcl` — The PDK-specific configuration for this design.
+- `config.json` — Optional; can bypass some configuration defaults.
+
+The `src` directory typically contains the Verilog RTL file for the design along with its SDC (Synopsys Design Constraints).  
+<img width="868" height="769" alt="image" src="https://github.com/user-attachments/assets/13af3b09-d889-42b4-80de-917be0bc6cc5" />
+
+
+### 5. Examine Design Configuration
+
+Open `config.tcl` to check or modify design-specific settings, such as clock period or overridden parameters.
+
+Key configuration lines might look like:
+
+```tcl
+set ::env(CLOCK_PERIOD) 5.000
+```
+<img width="874" height="549" alt="image" src="https://github.com/user-attachments/assets/d0acb04e-33da-403b-b421-5d660d613e7a" />
+
+This sets the clock period (for example, $5$ ns) for the OpenLane flow, which takes precedence over default values.
+
+If you set a value such as:
+
+```tcl
+set ::env(CLOCK_PERIOD) 12
+```
+
+in another file or at a later stage, this last assignment gets the highest priority and will override previous values.
+
+### 6. Precedence in Configuration
+
+OpenLane uses the following precedence for design parameters:
+
+- Default value set by OpenLane.
+- Value in `config.tcl` (design-specific).
+- Direct commands within the session (highest priority).
+
+For example, if `config.tcl` specifies:
+
+```tcl
+set ::env(CLOCK_PERIOD) 20
+```
+
+but the interactive session or another script later sets
+
+```tcl
+set ::env(CLOCK_PERIOD) 12
+```
+
+then $12$ ns will be used.
+
+### 7. Prepare File System (Design Setup)
+
+Return to the OpenLane prompt and prepare the file system for the flow. This step creates necessary directories and data structures for your design:
+
+```tcl
+prep -design picorv32a
+```
+<img width="884" height="764" alt="image" src="https://github.com/user-attachments/assets/ee161951-902c-4fad-a856-01baa09ac5cb" />
+
+
+**What happens in this step:**
+
+- The preparation stage merges library (LEF) files.
+- It combines the cell-level and technology-level LEF files into one, so subsequent flow steps can easily access all necessary cell and layer definitions from a single place.
+- The directories and structure required by OpenLane for every flow stage are created.
+
+You may see references to scripts such as `mergeLef.py` running in the output.
+
+### 8. Verify Setup
+
+Check if the preparation produced new directories and expected files inside your design directory.
+
+```bash
+ls
+```
+<img width="885" height="337" alt="image" src="https://github.com/user-attachments/assets/7d85feae-ad67-4419-8e12-e2d043b39d19" />
+
+
+You should see newly created folders and possibly some generated configuration or log files.
 
 ---
 
+## Review files after design prep and run synthesis
