@@ -487,3 +487,197 @@ $T_{path} \leq T_{max};\ \text{DRC pass};\ \text{LVS pass}$
 ---
 
 ## OpenLANE Directory structure in detail
+
+## Lab Introduction
+
+This workshop guides you through the setup and exploration of the **OpenLane flow**, an open-source toolchain for digital hardware design. The aim is to automate the process from RTL description all the way to GDSII layout using open-source tools and the SkyWater 130nm PDK. Key steps include navigating directories, exploring PDK contents, and invoking the OpenLane workflow.
+
+## Lab Steps
+
+### 1. Start in Home Directory
+
+You will begin in your **Linux terminal** within your home directory.
+
+<img width="733" height="490" alt="image" src="https://github.com/user-attachments/assets/b6303f77-8551-4ce5-aaac-cfc497d1335c" />
+
+
+### 2. Change to Work Tools Directory
+
+Use the `cd` command to navigate to the `work/tools` directory.
+
+```bash
+cd work/tools
+```
+<img width="734" height="491" alt="image" src="https://github.com/user-attachments/assets/af4f1a21-628f-465f-aa10-275599df5fda" />
+
+
+### 3. List Contents Chronologically
+
+List all files and directories inside your current folder using `ls` with the `-ltr` switch (lists files in chronological order).
+
+```bash
+ls -ltr
+```
+<img width="732" height="485" alt="image" src="https://github.com/user-attachments/assets/131ceedf-d9b2-4472-90f7-02aab1921afc" />
+
+
+### 4. Get Command Help
+
+To see a command’s available options and their descriptions, append `--help` to any command. For example, to view help for `ls`:
+
+```bash
+ls --help
+```
+<img width="738" height="814" alt="image" src="https://github.com/user-attachments/assets/16cc8917-d262-4a32-b0d1-8e1cde752c3a" />
+
+
+### 5. Clear Terminal Output
+
+If your terminal becomes cluttered, use:
+
+```bash
+clear
+```
+
+### 6. Explore Directory Structure
+
+Navigate into the **openlane_working_dir** directory to access the OpenLane flow and PDK folders:
+
+```bash
+cd openlane_working_dir
+```
+<img width="575" height="24" alt="image" src="https://github.com/user-attachments/assets/188a655a-6e0c-4f5b-a200-307b16c24f2b" />
+
+
+Now list the folders:
+
+```bash
+ls
+```
+<img width="637" height="152" alt="image" src="https://github.com/user-attachments/assets/4ae1c5f1-067e-4ca7-a148-ebb6f869482f" />
+
+You will see `openlane` and `pdks` directories.
+
+### 7. Examine the PDKs Folder
+
+Change into the `pdks` directory:
+
+```bash
+cd pdks
+```
+<img width="664" height="46" alt="image" src="https://github.com/user-attachments/assets/abf68d91-5a1c-49a6-bb4a-89c91345435e" />
+
+
+List its contents:
+
+```bash
+ls
+```
+<img width="744" height="179" alt="image" src="https://github.com/user-attachments/assets/7373efe7-5632-4a08-9dc2-e77f8f106388" />
+
+
+You should see the folders: `skywater-pdk`, `open_pdks`, and `sky130A`.
+
+### 8. Explore SkyWater 130nm PDK
+
+Change to the `sky130A` directory (the SkyWater 130nm variant made compatible with OpenLane):
+
+```bash
+cd sky130A
+```
+![PLACEHOLDER: screenshot/terminal-output/schematic]
+
+Now list its contents:
+
+```bash
+ls
+```
+![PLACEHOLDER: screenshot/terminal-output/schematic]
+
+You should see `libs.ref` and `libs.tech` directories.
+
+- **libs.ref** contains process-specific files (timing, liberty, cell info).
+- **libs.tech** contains tool-specific files (layout engines, netgen, Magic overlays).
+
+### 9. Inspect libs.ref
+
+Go into `libs.ref` directory:
+
+```bash
+cd libs.ref
+```
+![PLACEHOLDER: screenshot/terminal-output/schematic]
+
+List the folders with `-ltr` for more information:
+
+```bash
+ls -ltr
+```
+![PLACEHOLDER: screenshot/terminal-output/schematic]
+
+Explore files such as timing libraries, `.lef` (cell/floorplan info), `.techlef` (technology definitions).
+
+#### Example: Timing Libraries
+
+You may see files named as process-voltage-temperature (PVT) corners, such as:
+
+- `slow.lib`
+- `fast.lib`
+
+These represent timing information for cells at slow and fast silicon process corners, voltages, and temperatures.
+
+#### Example: Technology LEF
+
+- `.techlef` files contain layer information.
+
+#### Example: Cell LEF
+
+- `.lef` files describe cell layouts.
+
+### 10. Inspect libs.tech
+
+Go back and enter `libs.tech`:
+
+```bash
+cd ..
+cd libs.tech
+```
+![PLACEHOLDER: screenshot/terminal-output/schematic]
+
+List the contents:
+
+```bash
+ls
+```
+![PLACEHOLDER: screenshot/terminal-output/schematic]
+
+Here you find overlays and tool compatibility files for engines like Magic, KLayout, and Netgen.
+
+### 11. Return to OpenLane Working Directory
+
+Go up four levels to reach OpenLane’s working directory:
+
+```bash
+cd ../../../..
+cd openlane
+```
+![PLACEHOLDER: screenshot/terminal-output/schematic]
+
+List contents to confirm location:
+
+```bash
+ls
+```
+![PLACEHOLDER: screenshot/terminal-output/schematic]
+
+Always ensure to run OpenLane from this directory.
+
+### 12. Invoking OpenLane
+
+To start the OpenLane tool, you will proceed from the `openlane` working directory. (Invocation details continue as per next transcript instructions.)
+
+![PLACEHOLDER: screenshot/terminal-output/schematic]
+
+---
+
+*Throughout your exploration, refer to each folder’s documentation for deeper study into specific timing or tech files as required for your design.*
