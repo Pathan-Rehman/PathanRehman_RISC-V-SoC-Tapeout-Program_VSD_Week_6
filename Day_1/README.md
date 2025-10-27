@@ -585,14 +585,16 @@ Change to the `sky130A` directory (the SkyWater 130nm variant made compatible wi
 ```bash
 cd sky130A
 ```
-![PLACEHOLDER: screenshot/terminal-output/schematic]
+<img width="782" height="196" alt="image" src="https://github.com/user-attachments/assets/554bb059-2509-4c83-9bdd-a9c562cc365a" />
+
 
 Now list its contents:
 
 ```bash
 ls
 ```
-![PLACEHOLDER: screenshot/terminal-output/schematic]
+<img width="779" height="227" alt="image" src="https://github.com/user-attachments/assets/f1030bc3-e318-4572-b367-f963632a9302" />
+
 
 You should see `libs.ref` and `libs.tech` directories.
 
@@ -606,14 +608,16 @@ Go into `libs.ref` directory:
 ```bash
 cd libs.ref
 ```
-![PLACEHOLDER: screenshot/terminal-output/schematic]
+<img width="821" height="246" alt="image" src="https://github.com/user-attachments/assets/967af367-1dc3-4574-9818-9ac9bd4f8d0a" />
+
 
 List the folders with `-ltr` for more information:
 
 ```bash
 ls -ltr
 ```
-![PLACEHOLDER: screenshot/terminal-output/schematic]
+<img width="853" height="508" alt="image" src="https://github.com/user-attachments/assets/d36e861e-c8d9-466a-8e1c-b07905303ce7" />
+
 
 Explore files such as timing libraries, `.lef` (cell/floorplan info), `.techlef` (technology definitions).
 
@@ -642,14 +646,13 @@ Go back and enter `libs.tech`:
 cd ..
 cd libs.tech
 ```
-![PLACEHOLDER: screenshot/terminal-output/schematic]
 
 List the contents:
 
 ```bash
 ls
 ```
-![PLACEHOLDER: screenshot/terminal-output/schematic]
+<img width="867" height="773" alt="image" src="https://github.com/user-attachments/assets/4774867a-269a-4ae3-afcc-05015d8dfc5b" />
 
 Here you find overlays and tool compatibility files for engines like Magic, KLayout, and Netgen.
 
@@ -661,23 +664,18 @@ Go up four levels to reach OpenLane’s working directory:
 cd ../../../..
 cd openlane
 ```
-![PLACEHOLDER: screenshot/terminal-output/schematic]
 
 List contents to confirm location:
 
 ```bash
 ls
 ```
-![PLACEHOLDER: screenshot/terminal-output/schematic]
 
 Always ensure to run OpenLane from this directory.
 
 ### 12. Invoking OpenLane
 
-To start the OpenLane tool, you will proceed from the `openlane` working directory. (Invocation details continue as per next transcript instructions.)
-
-![PLACEHOLDER: screenshot/terminal-output/schematic]
+To start the OpenLane tool, you will proceed from the `openlane` working directory.
 
 ---
 
-*Throughout your exploration, refer to each folder’s documentation for deeper study into specific timing or tech files as required for your design.*
