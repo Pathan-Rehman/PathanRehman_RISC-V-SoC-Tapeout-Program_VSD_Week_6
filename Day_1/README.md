@@ -39,7 +39,7 @@ This document introduces foundational concepts and terminology in open-source ha
   - Communication modules (e.g., SPI controllers)
   - Clocking elements (e.g., PLL: Phase-Locked Loop)
   - Analog interfaces (ADC, DAC)
-- These functional blocks are typically represented as separate areas or macros within the chip layout.  
+- These functional blogs are typically represented as separate areas or macros within the chip layout.  
   <img width="997" height="718" alt="image" src="https://github.com/user-attachments/assets/eebcdd8f-d6f5-46cb-aba1-2a5b987e9266" />
 
 
@@ -47,10 +47,10 @@ This document introduces foundational concepts and terminology in open-source ha
 
 - A **foundry** refers to the specialized manufacturing facility where chips are produced. Foundries contain deposition, lithography, and other fabrication equipment.
 
-- **Foundry IPs** (Intellectual Properties) are pre-designed and verified blocks (such as ADCs, DACs, memory modules) provided by the foundry for integration into custom chips. These blocks require significant engineering expertise to create and are shared as reusable intellectual property elements.
+- **Foundry IPs** (Intellectual Properties) are pre-designed and verified blogs (such as ADCs, DACs, memory modules) provided by the foundry for integration into custom chips. These blogs require significant engineering expertise to create and are shared as reusable intellectual property elements.
 
 - The distinction between "macros" and "IPs":
-  - **Macros**: Typically refer to standard digital logic blocks.
+  - **Macros**: Typically refer to standard digital logic blogs.
   - **IPs**: More complex, often mixed-signal or specialized circuits, requiring advanced design knowledge.
 
 - Effective chip design requires continuous communication with the foundry, typically through standardized interface files provided by the foundry, enabling the translation of design intent into manufacturable hardware.  
@@ -63,8 +63,8 @@ This document introduces foundational concepts and terminology in open-source ha
 - The term **package** refers to the entire external housing of the chip, not just the silicon die.
 - **Wire bonds** and **pads** are physical mechanisms for interfacing between the external board and internal chip logic.
 - The **core** of the chip contains the main processing and logical functions; the periphery involves communication and I/O interfaces.
-- **System on Chip (SoC)** architecture groups essential components (memory, analog blocks, communication modules) for integrated functionality.
-- **Foundry and IP** are central to modern chip design, with foundries supplying both the physical manufacturing capability and foundational building blocks for design integration.
+- **System on Chip (SoC)** architecture groups essential components (memory, analog blogs, communication modules) for integrated functionality.
+- **Foundry and IP** are central to modern chip design, with foundries supplying both the physical manufacturing capability and foundational building blogs for design integration.
 - Successful hardware design and fabrication rely on standardized communication between designers (engineers) and foundry operations, often mediated by shared interface files and design standards.  
 - Mastery of these fundamentals opens up advanced work in hardware design, SoC integration, and semiconductor manufacturing.
 
@@ -91,7 +91,7 @@ This introduction explains the foundational role of the **Instruction Set Archit
 - Applications (e.g., in C) must be translated so that processors can execute them. The flow is:
     - **Source Code** (C, etc.) $\rightarrow$ **Assembly Language** (RISC-V assembly) $\rightarrow$ **Machine Code** (binary instructions)
     - Machine code is composed of binary representations: strings of $0$ and $1$; sometimes expressed as hexadecimal for readability.
-- The translation process ensures that the logic authored by the programmer becomes a stream of hardware-level commands.
+- The translation process ensures that the logic authored by the programmer becomes a stream of hardware-level cmds.log.
 
 
 ### RTL and Hardware Implementation
@@ -322,7 +322,7 @@ $T_{clk} \geq \max(\text{setup time}, \text{combinational delay}, \text{hold tim
 
 - The ASIC design flow is a sequential, interdependent process including specification, RTL modeling, functional verification, synthesis, floorplanning, placement, clock tree synthesis, routing, layout verification, and tape-out.
 
-- Standard cells are modular building blocks with predefined electrical and physical characteristics, simplifying synthesis and placement.
+- Standard cells are modular building blogs with predefined electrical and physical characteristics, simplifying synthesis and placement.
 
 - Power and clock distribution networks are crucial for circuit reliability, necessitating careful planning to reduce IR drop, electromigration, and timing mismatches.
 
@@ -342,8 +342,8 @@ Open-source ASIC development leverages publicly available Process Design Kits (P
 
 The ASIC (Application-Specific Integrated Circuit) design flow is a systematic process that transforms a functional concept into a physical chip. It generally proceeds through these stages:
 
-- **Specification and Architecture**: Define the chip’s purpose, performance targets, and architectural blocks, including memory, control, and datapaths.
-- **RTL Design**: Functional description is written in a hardware description language (HDL) at the Register Transfer Level (RTL), outlining how signal flows between registers and functional blocks.
+- **Specification and Architecture**: Define the chip’s purpose, performance targets, and architectural blogs, including memory, control, and datapaths.
+- **RTL Design**: Functional description is written in a hardware description language (HDL) at the Register Transfer Level (RTL), outlining how signal flows between registers and functional blogs.
 - **RTL Verification**: Simulation tools confirm that the RTL code performs as intended. Verification includes functional correctness and testbench-driven coverage analysis.
 - **Synthesis**: Convert RTL to a gate-level representation, mapping functional code to standard cell libraries corresponding to the chosen fabrication process.
 - **Gate-Level Verification**: Ensure synthesized netlist matches the original specifications and functions under intended timing constraints.
@@ -440,7 +440,7 @@ $A_{design},\ t_{delay},\ \text{metrics} \rightarrow \text{synthesis strategies}
 
 ### Physical Implementation
 - This phase involves **floorplanning**, macro and cell placement, power network creation, clock tree synthesis, placement optimization, and both global and detailed routing.
-- Tools automate layout tasks: arranging cells, connecting signals, synthesizing clocks, and resolving placement for optimal timing and area.
+- Tools automate layout tasks: arranging cells, connecting signals, synthesizing clogs, and resolving placement for optimal timing and area.
 
 <img width="1411" height="671" alt="image" src="https://github.com/user-attachments/assets/41ccabc3-512c-4b71-a850-ce2327550aff" />
 
@@ -454,7 +454,7 @@ $A_{design},\ t_{delay},\ \text{metrics} \rightarrow \text{synthesis strategies}
 
 ### Antenna Effect Handling
 - Long metal wire segments may act as antennas during fabrication, collecting charge that risks gate damage. There are two mitigation strategies:
-  - **Bridging technique**: temporarily connects the wire to higher metal layers.
+  - **Bridging technique**: tmporarily connects the wire to higher metal layers.
   - **Insertion of antenna diodes**: allows charge to dissipate, protecting transistor gates.
 - OpenLane includes a preventive approach by inserting a “fake” antenna diode cell during initial placement, replaced by a real diode if violations are discovered in later checks.
 
@@ -623,12 +623,12 @@ Explore files such as timing libraries, `.lef` (cell/floorplan info), `.techlef`
 
 #### Example: Timing Libraries
 
-You may see files named as process-voltage-temperature (PVT) corners, such as:
+You may see files named as process-voltage-tmperature (PVT) corners, such as:
 
 - `slow.lib`
 - `fast.lib`
 
-These represent timing information for cells at slow and fast silicon process corners, voltages, and temperatures.
+These represent timing information for cells at slow and fast silicon process corners, voltages, and tmperatures.
 
 #### Example: Technology LEF
 
@@ -769,7 +769,7 @@ OpenLane uses the following precedence for design parameters:
 
 - Default value set by OpenLane.
 - Value in `config.tcl` (design-specific).
-- Direct commands within the session (highest priority).
+- Direct cmds.log within the session (highest priority).
 
 For example, if `config.tcl` specifies:
 
@@ -788,6 +788,8 @@ then $12$ ns will be used.
 ### 7. Prepare File System (Design Setup)
 
 Return to the OpenLane prompt and prepare the file system for the flow. This step creates necessary directories and data structures for your design:
+
+Note: Run the below command in openlane directory
 
 ```tcl
 prep -design picorv32a
@@ -818,3 +820,179 @@ You should see newly created folders and possibly some generated configuration o
 ---
 
 ## Review files after design prep and run synthesis
+
+This lab walks you through the OpenLane automated RTL-to-GDSII flow for open-source hardware, focusing on initial setup, directory structure, and launching the synthesis stage. The aim is to familiarize you with the folder layout, tmporary and output files, key configuration, and how to monitor changes to parameters during execution. The main steps include navigating the `runs` directory, examining generated files, understanding configuration, and initiating synthesis.
+
+## Lab Steps
+
+### 1. Navigate to the Runs Directory
+
+After setup, your project will have a `runs` directory, with a subfolder named by date (e.g., `12th_August`). Change into this directory to view the structure required by OpenLane.
+
+```bash
+cd runs/27-10_13-46
+```
+
+You can list the contents to see the standard folder layout:
+
+```bash
+tree
+```
+```
+vsduser@pathanrehman:~/Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/runs/27-10_13-46$ tree
+.
+├── cmds.log
+├── config.tcl
+├── logs
+│   ├── 0-prep_runtime.txt
+│   ├── cts
+│   ├── cvc
+│   ├── floorplan
+│   ├── flow_summary.log
+│   ├── klayout
+│   ├── lvs
+│   ├── magic
+│   ├── placement
+│   ├── routing
+│   └── synthesis
+├── OPENLANE_VERSION
+├── PDK_SOURCES
+├── reports
+│   ├── cts
+│   ├── cvc
+│   ├── floorplan
+│   ├── klayout
+│   ├── lvs
+│   ├── magic
+│   ├── placement
+│   ├── routing
+│   └── synthesis
+├── results
+│   ├── cts
+│   │   └── merged_unpadded.lef -> ../../tmp/merged_unpadded.lef
+│   ├── cvc
+│   │   └── merged_unpadded.lef -> ../../tmp/merged_unpadded.lef
+│   ├── floorplan
+│   │   └── merged_unpadded.lef -> ../../tmp/merged_unpadded.lef
+│   ├── klayout
+│   │   └── merged_unpadded.lef -> ../../tmp/merged_unpadded.lef
+│   ├── lvs
+│   │   └── merged_unpadded.lef -> ../../tmp/merged_unpadded.lef
+│   ├── magic
+│   │   └── merged_unpadded.lef -> ../../tmp/merged_unpadded.lef
+│   ├── placement
+│   │   └── merged_unpadded.lef -> ../../tmp/merged_unpadded.lef
+│   ├── routing
+│   │   └── merged_unpadded.lef -> ../../tmp/merged_unpadded.lef
+│   └── synthesis
+│       └── merged_unpadded.lef -> ../../tmp/merged_unpadded.lef
+└── tmp
+    ├── cts
+    │   └── merged_unpadded.lef -> ../../tmp/merged_unpadded.lef
+    ├── cvc
+    │   └── merged_unpadded.lef -> ../../tmp/merged_unpadded.lef
+    ├── floorplan
+    │   └── merged_unpadded.lef -> ../../tmp/merged_unpadded.lef
+    ├── klayout
+    │   └── merged_unpadded.lef -> ../../tmp/merged_unpadded.lef
+    ├── lvs
+    │   └── merged_unpadded.lef -> ../../tmp/merged_unpadded.lef
+    ├── magic
+    │   └── merged_unpadded.lef -> ../../tmp/merged_unpadded.lef
+    ├── merged.lef
+    ├── merged_unpadded.lef
+    ├── met_layers_list.txt
+    ├── placement
+    │   └── merged_unpadded.lef -> ../../tmp/merged_unpadded.lef
+    ├── routing
+    │   └── merged_unpadded.lef -> ../../tmp/merged_unpadded.lef
+    ├── synthesis
+    │   └── merged_unpadded.lef -> ../../tmp/merged_unpadded.lef
+    ├── tracks_copy.info
+    ├── trimmed.lib
+    └── trimmed.lib.exclude.list
+
+40 directories, 30 files
+```
+The output will show directories such as `tmp`, `results`, `reports`, and `logs`. Initially, only the `tmp` folder contains files; all others are empty until processing begins.
+
+### 2. Explore the tmp Folder
+
+The `tmp` folder holds intermediate files generated during the flow. For example, after merging, you might find a file like `merged.lef` (created by `merged.lef.py`). Inspect its contents to see layer and cell-level information.
+
+```bash
+cat tmp/merged.lef
+```
+
+This file contains detailed layout information, such as wire-level data (at the top) and appended cell-level information (e.g., macro definitions).
+
+<img width="741" height="868" alt="image" src="https://github.com/user-attachments/assets/b79bdd3d-1032-496d-b443-b8c089ca99e1" />
+
+
+### 3. Understand the Results, Reports, and logs Folders
+
+- **results**: Contains output files for each stage (e.g., `synthesis`, `placement`, `flow`). Initially empty; populated as each stage completes.
+- **reports**: Holds timing and other analysis reports if STC files are defined in your configuration. Also empty at the start.
+- **logs**: Contains lock files for each step to prevent concurrent execution. The `config.tcl` file here (and sometimes in the `design` directory) is particularly important.
+
+To view the current state of these folders:
+
+```bash
+ls -l results
+ls -l reports
+ls -l logs
+```
+
+<img width="734" height="874" alt="image" src="https://github.com/user-attachments/assets/bb2cec12-3bf3-44e2-b47d-9207c1a73534" />
+
+
+### 4. Examine Conflict Article File
+
+The `config.tcl` file shows which default parameters are being used in the current run, including PDK settings, track information, synthesis library, and timing libraries (min/max, transition). It is updated when configuration changes are made, providing a quick way to verify that your edits are reflected in the flow.
+
+```bash
+cat config.tcl
+```
+
+For example, if you change a parameter like `CORE_UTILIZATION` to 50 in your config and re-run the flow planning stage, this file will reflect the new value.
+
+<img width="733" height="870" alt="image" src="https://github.com/user-attachments/assets/97f200f8-57b0-4a43-9b18-8e4434208430" />
+
+
+### 5. Review cmds.log File
+
+The `cmds.log` file logs all cmds.log executed during the flow. It is updated as steps are completed. Initially, it may be empty or minimal.
+
+```bash
+cat cmds.log
+```
+
+<img width="726" height="660" alt="image" src="https://github.com/user-attachments/assets/2a41d1a7-e9e8-4219-9017-b76fe90e9497" />
+
+
+### 6. Launch Synthesis
+
+With the environment prepared, initiate the synthesis stage, which includes RTL synthesis and ABC optimization. This process typically takes 3–5 minutes.
+
+```bash
+run_synthesis 
+```
+
+While synthesis runs, you can monitor progress in the terminal or by checking the `results/synthesis` directory as files are generated.
+
+<img width="733" height="882" alt="image" src="https://github.com/user-attachments/assets/6537c9cc-925e-4375-b97f-0c982709ae84" />
+
+
+### 7. Reference OpenLane Documentation
+
+While the flow runs, review the official OpenLane documentation for further guidance. Search for “OpenLane GitHub” to find the repository, which contains usage instructions, examples, and issue tracking.
+
+---
+
+**Note:**  
+Always check the `config.tcl` and `cmds.log` files after each stage to ensure your configuration is correctly applied and to review the executed workflow. tmporary and output files in `tmp` and `results` provide detailed insight into the process and should be inspected for debugging or validation.
+
+--- 
+
+## OpenLANE Project Git Link Description
+
