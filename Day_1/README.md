@@ -1,3 +1,15 @@
+# Table of contents
+
+- [Introduction to QFN-48 Package, chip, pads, core, die and IPs](#introduction-to-qfn-48-package-chip-pads-core-die-and-ips)
+- [Introduction to RISC-V](#introduction-to-risc-v)
+- [From Software Applications to Hardware](#from-software-applications-to-hardware)
+- [Introduction To All Components Of Open-Source Digital Asic Design](#introduction-to-all-components-of-open-source-digital-asic-design)
+- [Simplified RTL2GDS flow](#simplified-rtl2gds-flow)
+- [Introduction to OpenLANE and Strive chipsets](#introduction-to-openlane-and-strive-chipsets)
+- [OpenLANE Directory structure in detail](#openlane-directory-structure-in-detail)
+- [Design Preparation Step](#design-preparation-step)
+- [Review files after design prep and run synthesis](#review-files-after-design-prep-and-run-synthesis)
+- [Steps To Characterize Synthesis Results](#steps-to-characterize-synthesis-results)
 # Introduction to QFN-48 Package, chip, pads, core, die and IPs
 
 This document introduces foundational concepts and terminology in open-source hardware and chip design, focusing on understanding electronic boards, the internal structure of chips, and the critical role of foundries. It is intended as an entry-level guide for students and newcomers to the hardware design field.
