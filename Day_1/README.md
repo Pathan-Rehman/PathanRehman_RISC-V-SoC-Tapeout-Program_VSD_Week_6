@@ -1,4 +1,4 @@
-## Introduction to QFN-48 Package, chip, pads, core, die and IPs
+# Introduction to QFN-48 Package, chip, pads, core, die and IPs
 
 This document introduces foundational concepts and terminology in open-source hardware and chip design, focusing on understanding electronic boards, the internal structure of chips, and the critical role of foundries. It is intended as an entry-level guide for students and newcomers to the hardware design field.
 
@@ -70,7 +70,7 @@ This document introduces foundational concepts and terminology in open-source ha
 
 ---
 
-##  Introduction to RISC-V
+#  Introduction to RISC-V
 
 This introduction explains the foundational role of the **Instruction Set Architecture (ISA)**—focusing on RISC-V—in computer hardware and software design. ISA serves as the central language between software applications and hardware, outlining how instructions are formatted, interpreted, and executed within a processor. The flow from high-level application code to executable machine binaries involves several stages and interfaces, ultimately allowing programs to interact with physical silicon implementations.
 
@@ -128,7 +128,7 @@ This introduction explains the foundational role of the **Instruction Set Archit
 - **User Perspective:** For most users, executing a program appears seamless. The underlying complexity—translating software logic through layers of abstraction down to transistor-level operations—remains hidden.
 
 ---
-## From Software Applications to Hardware
+# From Software Applications to Hardware
 
 This documentation focuses on the theoretical aspects of how application software interacts with hardware through the system software layer. It explains the flow from application software to being converted into binary instructions that the hardware can understand. Key components include the operating system, compiler, and assembler, each playing a crucial role in this process.
 
@@ -162,7 +162,7 @@ This documentation focuses on the theoretical aspects of how application softwar
 
 ---
 
-## Introduction To All Components Of Open-Source Digital Asic Design
+# Introduction To All Components Of Open-Source Digital Asic Design
 
 Open Lane is an open-source, Python-based platform designed to automate the flow of digital Application-Specific Integrated Circuit (ASIC) implementation, supporting customizable workflows and integration of various open-source Electronic Design Automation (EDA) tools. The platform facilitates the entire ASIC design process, from high-level hardware descriptions down to manufacturing-ready physical layouts, and is a major enabler for open-source silicon development. The recent release of open-source Process Design Kits (PDKs), such as the SkyWater 130nm PDK, completes the open-source toolchain by providing essential fabrication technology data to the community.
 
@@ -225,7 +225,7 @@ Open Lane is an open-source, Python-based platform designed to automate the flow
 - With all three elements—open-source RTL, EDA, and PDK—now available, the creation of 100% open-source ASICs is feasible for a broad range of designers and organizations.
 
 ---
-## Simplified RTL2GDS flow
+# Simplified RTL2GDS flow
 
 This document outlines the theoretical foundation of the **ASIC (Application-Specific Integrated Circuit) design flow**, detailing each stage from the initial RTL model to final mask layouts in GDSII format. It covers conceptual steps such as synthesis, floorplanning, placement, clock tree synthesis, routing, and verification, emphasizing how each phase contributes to the manufacturable silicon chip.
 
@@ -332,7 +332,7 @@ $T_{clk} \geq \max(\text{setup time}, \text{combinational delay}, \text{hold tim
 
 ---
 
-## Introduction to OpenLANE and Strive chipsets
+# Introduction to OpenLANE and Strive chipsets
 
 Open-source ASIC development leverages publicly available Process Design Kits (PDKs) and design automation flows to create custom chips. The reference methodology described is called **Open Lane**, which is an open-source toolchain for ASIC implementation designed for high automation, minimal human intervention, and broad compatibility with open silicon platforms. It targets the SkyWater 130nm process and supports multiple chip architectures, memory configurations, and modes of operation. The overall objective is to enable fully automated and verifiable chip design from RTL to final layout, with emphasis on design space exploration and transparent licensing.
 
@@ -486,7 +486,7 @@ $T_{path} \leq T_{max};\ \text{DRC pass};\ \text{LVS pass}$
 
 ---
 
-## OpenLANE Directory structure in detail
+# OpenLANE Directory structure in detail
 
 ## Lab Introduction
 
@@ -677,7 +677,7 @@ Always ensure to run OpenLane from this directory.
 
 To start the OpenLane tool, you will proceed from the `openlane` working directory.
 ---
-## Design Preparation Step
+# Design Preparation Step
 
 This lab guides you through performing an **interactive OpenLane flow** on a sample RISC-V core design. Key steps include launching the interactive session, inspecting and setting up the design folder, configuring design parameters, preparing the file system, and merging library files required for synthesis.
 
@@ -819,7 +819,7 @@ You should see newly created folders and possibly some generated configuration o
 
 ---
 
-## Review files after design prep and run synthesis
+# Review files after design prep and run synthesis
 
 This lab walks you through the OpenLane automated RTL-to-GDSII flow for open-source hardware, focusing on initial setup, directory structure, and launching the synthesis stage. The aim is to familiarize you with the folder layout, tmporary and output files, key configuration, and how to monitor changes to parameters during execution. The main steps include navigating the `runs` directory, examining generated files, understanding configuration, and initiating synthesis.
 
@@ -1071,7 +1071,7 @@ Clear understanding of these modes enhances efficiency and error prevention in d
 
 ---
 
-## Steps To Characterize Synthesis Results
+# Steps To Characterize Synthesis Results
 
 This lab focuses on post-synthesis analysis in a digital hardware workflow, specifically aiming to compute the **flop ratio**, verify the synthesis output, and inspect related synthesis statistics and reports. The key steps are:
 
