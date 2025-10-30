@@ -823,3 +823,115 @@ Once the files are loaded in Magic, the floorplan visualization will display:
 <img width="715" height="715" alt="image" src="https://github.com/user-attachments/assets/206f6ea3-7119-44fb-a666-97ef45d8da00" />
 
 Use Magic's navigation tools (zoom, pan) to inspect different regions of the floorplan and verify that the configuration parameters have been correctly applied during floorplanning.
+---
+
+# Review floorplan layout in Magic
+This lab focuses on navigating and analyzing the layout window of an integrated circuit design using keyboard shortcuts, mouse actions, and on-screen inspection tools. The aim is to:
+- Center and fit the layout on screen.
+- Zoom into layout portions and inspect object properties.
+- Identify pin placement and layers.
+- Examine device boundary structures and special cells (TAP, standard cells).
+- Explore the effect of configuration changes on the layout.
+
+## Lab Steps
+
+### 1. Center and Fit the Layout Window
+
+- **Select** the entire layout:
+  - Press `S` on your keyboard.
+  - The whole layout will be **highlighted**.
+  
+ <img width="722" height="717" alt="image" src="https://github.com/user-attachments/assets/910b3868-c3be-4bb2-83b7-94a78edd3b4c" />
+
+
+- **Fit** the selected layout to your display:
+  - Press `V` on your keyboard.
+  - The layout will now fill the screen area.
+  
+ <img width="693" height="710" alt="image" src="https://github.com/user-attachments/assets/0ef42793-721a-4a4c-87ed-264741303542" />
+
+
+### 2. Zooming and Navigating in the Layout
+
+- **Zoom into a Region:**
+  - Do a **left mouse click** at the starting corner of your zoom box.
+  - Do a **right mouse click** to define the opposite corner.
+  - Press `Z` on your keyboard.
+  - The selected area will zoom in.
+  
+  <img width="495" height="590" alt="image" src="https://github.com/user-attachments/assets/91789054-ac4a-44a3-93a4-01913cee24ac" />
+
+
+- **Repeat zoom** by pressing `Z` again to incrementally zoom further.
+  
+  <img width="529" height="718" alt="image" src="https://github.com/user-attachments/assets/640b835b-5297-4566-98ab-a78372bc0058" />
+
+
+### 3. Inspecting Pin Placement and Layer Information
+
+- **Pin Mode Information:**
+  - Confirm that pin mode is set (pin mode value ‘1’ places IO pins equidistant).
+  - Observe input/output pins arranged equidistantly around the boundary.
+  
+  ![PLACEHOLDER: screenshot/terminal-output/schematic]
+
+- **Check Pin Layer:**
+  - Move your mouse cursor over an input or output pin (no click).
+  - Press `S` to select the object.
+  - A secondary **properties or Tekkon window** will appear, displaying the layer (e.g., "metal 3" for horizontal pins).
+  
+  ![PLACEHOLDER: screenshot/terminal-output/schematic]
+
+- **Check Vertical Pin Layer:**
+  - Move over a vertical pin and press `S`.
+  - The window should show the layer as "metal 4".
+  
+  ![PLACEHOLDER: screenshot/terminal-output/schematic]
+
+### 4. Identify Device Boundaries and Special Cells
+
+- **D Capsules (Boundary Endcaps):**
+  - View the layout edge to see D capsules aligned along the side rows, marking the device boundary.
+  
+  ![PLACEHOLDER: screenshot/terminal-output/schematic]
+
+- **TAP Cells:**
+  - Zoom in closer on the layout to spot TAP cells.
+  - TAP cells **connect the N-well to VDD and substrate to ground** to prevent latch-up in CMOS devices.
+  - These cells appear in a **diagonally equidistant arrangement**. Check the lab README/config file for the relevant switch controlling the TAP cell distance.
+  
+  ![PLACEHOLDER: screenshot/terminal-output/schematic]
+
+### 5. Recognize Floorplan Limitations and Identify Standard Cells
+
+- **Floorplan Note:** 
+  - The floor plan stage **does not handle standard cell placement**. However, some standard cells may appear in corners.
+  
+  ![PLACEHOLDER: screenshot/terminal-output/schematic]
+
+- **Locate Standard Cells in Lower Corners:**
+  - Look at the **lower left** (or right) region marked by dashed lines.
+  - Use left click, right click, then zoom, and arrow keys to navigate closer.
+  - Identify boxes corresponding to standard cells (e.g., "sky130 buffer", "clock buffer", "OR gate").
+  - These standard cells are clustered in one region.
+  
+  ![PLACEHOLDER: screenshot/terminal-output/schematic]
+
+### 6. Experiment with Layout Configuration
+
+- **Change IO Pin Setting:**  
+  - Adjust ‘input/output pin’ setting from 1 to 0 to alter placement.
+  - Always make changes in the design-related configuration file for flexibility and traceability.
+  
+  ![PLACEHOLDER: screenshot/terminal-output/schematic]
+
+### 7. Refocus or Center Layout After Changes
+
+- **Re-center and Fit Again:**
+  - Press `S`, then `V` to highlight all and fit the layout again at any stage.
+  
+  ![PLACEHOLDER: screenshot/terminal-output/schematic]
+
+---
+
+After completing these steps, you may close the layout window as needed and explore further with other display and configuration options for deeper familiarity.
