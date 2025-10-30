@@ -669,7 +669,8 @@ Check the contents to locate the folder corresponding to the current date (e.g.,
 ls -ltr
 ```
 
-![PLACEHOLDER: screenshot showing runs folder contents with date-based directories]
+<img width="877" height="320" alt="image" src="https://github.com/user-attachments/assets/c49cd152-2d8f-48e9-845b-3e8df3a69e6e" />
+
 
 ### Step 2: Verify Configuration Parameter Precedence
 
@@ -680,7 +681,8 @@ cd logs
 cd floorplan
 ```
 
-![PLACEHOLDER: screenshot showing logs directory structure]
+<img width="876" height="865" alt="image" src="https://github.com/user-attachments/assets/bd02b7d4-2776-40f8-9b02-91488ec23929" />
+
 
 ### Step 3: Examine IO Placer Log File
 
@@ -688,12 +690,14 @@ Open the IO placer log file to verify that design-level configuration parameters
 
 ```bash
 # Open the io_placer.log file (or similar)
-cat io_placer.log
+cat ioPlacer.log
 ```
 
 Search for metal layer information using shift+G to navigate within the file viewer.
 
-![PLACEHOLDER: screenshot showing io_placer.log with vertical and horizontal metal layer specifications]
+<img width="791" height="478" alt="image" src="https://github.com/user-attachments/assets/88a4e114-d225-4595-9788-a3c52bb28062" />
+
+
 
 The log should display:
 - **Vertical metal layer**: 5 (set by design config)
@@ -707,8 +711,6 @@ Navigate to the design folder and examine the config.tcl file to verify the sour
 cd ../../design
 cat config.tcl
 ```
-
-![PLACEHOLDER: screenshot showing config.tcl with metal layer and core utilization parameters]
 
 Verify the configuration contains:
 - **Vertical metal**: 4 (which becomes 4 + 1 = 5 in the floorplan)
@@ -724,7 +726,6 @@ cd ../runs/[DATE]/config.tcl
 cat config.tcl
 ```
 
-![PLACEHOLDER: screenshot showing run-specific config.tcl with parameter values and priority notes]
 
 Note the priority hierarchy (from highest to lowest priority):
 1. Run-specific config.tcl
@@ -743,7 +744,8 @@ cd floorplan
 ls -la
 ```
 
-![PLACEHOLDER: screenshot showing results/floorplan directory with DEF file]
+<img width="883" height="369" alt="image" src="https://github.com/user-attachments/assets/59e9a008-3703-4b1c-8542-7c1c2b9a843a" />
+
 
 ### Step 7: Examine the DEF File
 
@@ -760,6 +762,7 @@ Locate the die area definition in the DEF file. The syntax is:
 ```
 DIEAREA (X1 Y1) (X2 Y2) ;
 ```
+<img width="790" height="198" alt="image" src="https://github.com/user-attachments/assets/5c7744ae-5151-4c74-828d-bbf38f97dfab" />
 
 Where:
 - **(X1, Y1)** = lower left corner coordinates (typically 0, 0)
@@ -788,8 +791,6 @@ Chip width = (X2 - X1) ÷ 1000 micrometers
 
 Chip height = (Y2 - Y1) ÷ 1000 micrometers
 
-![PLACEHOLDER: screenshot showing DEF units specification and coordinate calculations]
-
 ### Step 9: Open Floorplan in Magic Layout Editor
 
 Launch Magic to visualize the floorplan layout. First, identify the tech file location and construct the Magic command.
@@ -803,30 +804,14 @@ The tech file is typically located at a path similar to:
 Navigate to the results directory containing the DEF file and run Magic:
 
 ```bash
-magic -T [TECH_FILE_PATH] &
+magic -T /home/vsduser/Desktop/work/tools/openlane_working_dir/pdks/sky130A/libs.tech/sky130A.tech lef read ../../tmp/merged.lef def read picorv32a.floorplan.def &
+
 ```
 
-For example:
+<img width="881" height="875" alt="image" src="https://github.com/user-attachments/assets/d79a48fb-15b3-4fe0-bac2-0bcbc92b692a" />
 
-```bash
-magic -T ../../tech/sky130_open_pdk_public_release_tech_file.tech &
-```
 
-![PLACEHOLDER: screenshot showing Magic command in terminal]
-
-### Step 10: Load the Floorplan Layout
-
-In Magic, load the merged LEF and DEF files. The merged LEF file (merge.lef) is typically located in the temp folder, two levels up from the current directory.
-
-```bash
-# Within Magic console or script:
-lef read ../../temp/merge.lef
-def read merge.def
-```
-
-![PLACEHOLDER: screenshot showing Magic loading LEF and DEF files]
-
-### Step 11: Visualize the Floorplan
+### Step 10: Visualize the Floorplan
 
 Once the files are loaded in Magic, the floorplan visualization will display:
 
@@ -835,6 +820,6 @@ Once the files are loaded in Magic, the floorplan visualization will display:
 - Die boundaries
 - IO placement around the perimeter
 
-![PLACEHOLDER: screenshot showing Magic window with floorplan visualization displaying cells, metal layers, and die area]
+<img width="715" height="715" alt="image" src="https://github.com/user-attachments/assets/206f6ea3-7119-44fb-a666-97ef45d8da00" />
 
 Use Magic's navigation tools (zoom, pan) to inspect different regions of the floorplan and verify that the configuration parameters have been correctly applied during floorplanning.
