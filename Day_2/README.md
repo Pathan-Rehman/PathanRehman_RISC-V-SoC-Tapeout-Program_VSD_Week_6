@@ -873,41 +873,46 @@ This lab focuses on navigating and analyzing the layout window of an integrated 
   - Confirm that pin mode is set (pin mode value ‘1’ places IO pins equidistant).
   - Observe input/output pins arranged equidistantly around the boundary.
   
-  ![PLACEHOLDER: screenshot/terminal-output/schematic]
+  <img width="457" height="601" alt="image" src="https://github.com/user-attachments/assets/3d0deffd-bd32-46b5-8209-5f777c90c898" />
+
 
 - **Check Pin Layer:**
   - Move your mouse cursor over an input or output pin (no click).
   - Press `S` to select the object.
   - A secondary **properties or Tekkon window** will appear, displaying the layer (e.g., "metal 3" for horizontal pins).
   
-  ![PLACEHOLDER: screenshot/terminal-output/schematic]
+ <img width="891" height="734" alt="image" src="https://github.com/user-attachments/assets/91187de3-1214-4cff-a482-abf267ade064" />
+<img width="987" height="459" alt="image" src="https://github.com/user-attachments/assets/f35c4dc8-ca1f-491f-ad36-d94579917598" />
+
 
 - **Check Vertical Pin Layer:**
   - Move over a vertical pin and press `S`.
   - The window should show the layer as "metal 4".
   
-  ![PLACEHOLDER: screenshot/terminal-output/schematic]
+  <img width="580" height="624" alt="image" src="https://github.com/user-attachments/assets/586d1c96-b763-4eb9-9b61-2c71a459f1a8" />
+<img width="940" height="728" alt="image" src="https://github.com/user-attachments/assets/444b6336-bd06-492e-8533-f3157b1f362d" />
+
 
 ### 4. Identify Device Boundaries and Special Cells
 
 - **D Capsules (Boundary Endcaps):**
   - View the layout edge to see D capsules aligned along the side rows, marking the device boundary.
   
-  ![PLACEHOLDER: screenshot/terminal-output/schematic]
+ <img width="785" height="733" alt="image" src="https://github.com/user-attachments/assets/53a8b11f-b7b4-4b08-9bd3-68b1f2db4295" />
+
 
 - **TAP Cells:**
   - Zoom in closer on the layout to spot TAP cells.
   - TAP cells **connect the N-well to VDD and substrate to ground** to prevent latch-up in CMOS devices.
   - These cells appear in a **diagonally equidistant arrangement**. Check the lab README/config file for the relevant switch controlling the TAP cell distance.
   
-  ![PLACEHOLDER: screenshot/terminal-output/schematic]
+  <img width="282" height="708" alt="image" src="https://github.com/user-attachments/assets/e24b1ae9-fe9a-4494-a420-96ecdba179f6" />
+
 
 ### 5. Recognize Floorplan Limitations and Identify Standard Cells
 
 - **Floorplan Note:** 
   - The floor plan stage **does not handle standard cell placement**. However, some standard cells may appear in corners.
-  
-  ![PLACEHOLDER: screenshot/terminal-output/schematic]
 
 - **Locate Standard Cells in Lower Corners:**
   - Look at the **lower left** (or right) region marked by dashed lines.
@@ -915,7 +920,7 @@ This lab focuses on navigating and analyzing the layout window of an integrated 
   - Identify boxes corresponding to standard cells (e.g., "sky130 buffer", "clock buffer", "OR gate").
   - These standard cells are clustered in one region.
   
-  ![PLACEHOLDER: screenshot/terminal-output/schematic]
+  <img width="869" height="502" alt="image" src="https://github.com/user-attachments/assets/9be8ec69-6adb-46ff-9d5c-2277202a4bc4" />
 
 ### 6. Experiment with Layout Configuration
 
@@ -923,14 +928,14 @@ This lab focuses on navigating and analyzing the layout window of an integrated 
   - Adjust ‘input/output pin’ setting from 1 to 0 to alter placement.
   - Always make changes in the design-related configuration file for flexibility and traceability.
   
-  ![PLACEHOLDER: screenshot/terminal-output/schematic]
 
 ### 7. Refocus or Center Layout After Changes
 
 - **Re-center and Fit Again:**
   - Press `S`, then `V` to highlight all and fit the layout again at any stage.
   
-  ![PLACEHOLDER: screenshot/terminal-output/schematic]
+  <img width="664" height="665" alt="image" src="https://github.com/user-attachments/assets/7872dbdf-c9cb-49b6-89eb-e5ecc46d509e" />
+
 
 ---
 
