@@ -646,3 +646,195 @@ This flexibility allows you to optimize the design progressively as you move tow
 - I/O metal layers are specified one layer below their actual usage in the flow
 - Placement target density controls initial cell distribution for congestion management
 - The floor plan stage must be successfully completed before proceeding to placement and routing stages
+
+---
+
+# Review floorplan files and steps to view floorplan
+
+This lab demonstrates the verification and visualization of floorplan configuration in an open-source hardware design flow. The objective is to confirm that design-specific configuration parameters override system defaults, and then visualize the resulting floorplan layout. The lab involves navigating the runs folder, examining log files and configuration files to verify parameter precedence, inspecting the DEF (Design Exchange Format) file to understand chip dimensions, and finally opening the floorplan in Magic for visual inspection.
+
+## Lab Steps
+
+### Step 1: Navigate to the Runs Folder
+
+Navigate to the runs folder to access the latest generated design files.
+
+```bash
+cd runs
+```
+
+Check the contents to locate the folder corresponding to the current date (e.g., 10th September).
+
+```bash
+ls -ltr
+```
+
+![PLACEHOLDER: screenshot showing runs folder contents with date-based directories]
+
+### Step 2: Verify Configuration Parameter Precedence
+
+Move into the logs directory for the current run to examine the floorplan logs.
+
+```bash
+cd logs
+cd floorplan
+```
+
+![PLACEHOLDER: screenshot showing logs directory structure]
+
+### Step 3: Examine IO Placer Log File
+
+Open the IO placer log file to verify that design-level configuration parameters have overridden system defaults. Specifically, check the metal layer assignments.
+
+```bash
+# Open the io_placer.log file (or similar)
+cat io_placer.log
+```
+
+Search for metal layer information using shift+G to navigate within the file viewer.
+
+![PLACEHOLDER: screenshot showing io_placer.log with vertical and horizontal metal layer specifications]
+
+The log should display:
+- **Vertical metal layer**: 5 (set by design config)
+- **Horizontal metal layer**: 3 (set by design config)
+
+### Step 4: Compare with Design Configuration File
+
+Navigate to the design folder and examine the config.tcl file to verify the source configuration values.
+
+```bash
+cd ../../design
+cat config.tcl
+```
+
+![PLACEHOLDER: screenshot showing config.tcl with metal layer and core utilization parameters]
+
+Verify the configuration contains:
+- **Vertical metal**: 4 (which becomes 4 + 1 = 5 in the floorplan)
+- **Horizontal metal**: 3 (which becomes 3 + 1 = 4 in the floorplan)
+- **Core utilization**: 65%
+
+### Step 5: Check Configuration Priority in Run-Specific Config
+
+Navigate to the run configuration file to understand the parameter precedence hierarchy.
+
+```bash
+cd ../runs/[DATE]/config.tcl
+cat config.tcl
+```
+
+![PLACEHOLDER: screenshot showing run-specific config.tcl with parameter values and priority notes]
+
+Note the priority hierarchy (from highest to lowest priority):
+1. Run-specific config.tcl
+2. Design config.tcl
+3. System defaults
+
+For example, core utilization should show the value of 50 at the run level, which overrides the 65% from the design config.tcl.
+
+### Step 6: Navigate to Floorplan Results
+
+Move to the results directory to access the DEF file containing the floorplan data.
+
+```bash
+cd ../results
+cd floorplan
+ls -la
+```
+
+![PLACEHOLDER: screenshot showing results/floorplan directory with DEF file]
+
+### Step 7: Examine the DEF File
+
+Open and inspect the DEF (Design Exchange Format) file to understand the chip dimensions and cell placements.
+
+```bash
+cat *.def
+```
+
+![PLACEHOLDER: screenshot showing DEF file header and die area specification]
+
+Locate the die area definition in the DEF file. The syntax is:
+
+```
+DIEAREA (X1 Y1) (X2 Y2) ;
+```
+
+Where:
+- **(X1, Y1)** = lower left corner coordinates (typically 0, 0)
+- **(X2, Y2)** = upper right corner coordinates
+
+For example:
+```
+DIEAREA (0 0) (500000 400000) ;
+```
+
+### Step 8: Calculate Die Dimensions
+
+Use the database unit specification to convert DEF coordinates to actual chip dimensions.
+
+The DEF file contains a units statement:
+
+```
+UNITS DISTANCE MICRONS 1000 ;
+```
+
+This indicates that **1 micron = 1000 database units**.
+
+To calculate actual dimensions in micrometers, divide the coordinates by 1000:
+
+Chip width = (X2 - X1) ÷ 1000 micrometers
+
+Chip height = (Y2 - Y1) ÷ 1000 micrometers
+
+![PLACEHOLDER: screenshot showing DEF units specification and coordinate calculations]
+
+### Step 9: Open Floorplan in Magic Layout Editor
+
+Launch Magic to visualize the floorplan layout. First, identify the tech file location and construct the Magic command.
+
+The tech file is typically located at a path similar to:
+
+```
+.../tech/sky130_open_pdk_public_release_tech_file.tech
+```
+
+Navigate to the results directory containing the DEF file and run Magic:
+
+```bash
+magic -T [TECH_FILE_PATH] &
+```
+
+For example:
+
+```bash
+magic -T ../../tech/sky130_open_pdk_public_release_tech_file.tech &
+```
+
+![PLACEHOLDER: screenshot showing Magic command in terminal]
+
+### Step 10: Load the Floorplan Layout
+
+In Magic, load the merged LEF and DEF files. The merged LEF file (merge.lef) is typically located in the temp folder, two levels up from the current directory.
+
+```bash
+# Within Magic console or script:
+lef read ../../temp/merge.lef
+def read merge.def
+```
+
+![PLACEHOLDER: screenshot showing Magic loading LEF and DEF files]
+
+### Step 11: Visualize the Floorplan
+
+Once the files are loaded in Magic, the floorplan visualization will display:
+
+- All placed cells and their orientations
+- Metal layers and routing tracks
+- Die boundaries
+- IO placement around the perimeter
+
+![PLACEHOLDER: screenshot showing Magic window with floorplan visualization displaying cells, metal layers, and die area]
+
+Use Magic's navigation tools (zoom, pan) to inspect different regions of the floorplan and verify that the configuration parameters have been correctly applied during floorplanning.
