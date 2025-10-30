@@ -163,3 +163,132 @@ These cells are physically placed at fixed locations on the chip before automate
 - **Blackboxing** abstracts module internal details, exposing only IO pins for top-level interconnection, crucial for managing complexity in large designs.
 - **IP reuse** reduces development cost and time by allowing blocks to be implemented once but instantiated multiple times within a circuit.
 - **Fixed placement of preplaced cells** guarantees that critical blocks retain their location for optimal physical and timing characteristics, unaffected by automated tools during placement and routing.
+
+---
+# De-coupling capacitors
+
+Preplaced cells are essential building blocks in digital hardware design, implemented as reusable logic modules (e.g., memories, IP blocks) that are instantiated multiple times within a chip. Their locations are fixed prior to automated placement and routing, ensuring optimal connectivity and predictable physical behavior. Effective integration of preplaced cells includes placing them strategically according to the overall design scenario and augmenting them with decoupling capacitors to ensure robust power delivery and noise immunity.
+
+
+## Core Concepts
+
+### Preplaced Cells (Macros, IPs, Memories)
+
+- **Definition**: Preplaced cells refer to complex logic blocks—such as memories, clocking cells, or IP modules—that are designed once and reused multiple times in a chip.
+- **Purpose**: These cells centralize complex functionality and enhance design reuse, reducing redundant effort and enabling modular design strategy.
+- **Placement Characteristics**: Their locations are defined before general cell placement and routing. Once set, these positions are fixed and remain untouched by subsequent automated design tools.
+
+<img width="1303" height="845" alt="image" src="https://github.com/user-attachments/assets/79b86501-4190-4322-91d3-53d5ac6f7ced" />
+
+
+### Design-Driven Location Assignment
+
+- **Design Scenario**: Placement of preplaced cells aligns with system-level connectivity. For example, blocks interacting heavily with input pins are positioned close to the input edge of the chip to minimize signal latency and congestion.
+- **Immutability**: After placement, these block locations do not move throughout the rest of the design flow, ensuring stable timing and predictable power distribution.
+
+<img width="1544" height="882" alt="image" src="https://github.com/user-attachments/assets/03061b4b-176a-4086-9221-f16097a4d5ca" />
+
+
+### Decoupling Capacitors and Power Integrity
+
+- **Purpose**: Decoupling capacitors are placed around preplaced cells to maintain stable voltage levels during circuit switching events, counteracting voltage drops caused by resistance and inductance in long supply wires.
+- **Charging Dynamics**: When a digital circuit switches from logic 0 to logic 1, its internal capacitance demands a surge of current, which is ideally supplied by proximate decoupling capacitors to avoid voltage sag at the logic gate.
+- **Voltage Drop and Noise Margin**: The supply voltage delivered over physical wire exhibits a reduction ($V_{DD}'$) due to resistance and inductance. If the voltage at a logic gate drops below the defined noise margin threshold, signal integrity is at risk. 
+- **Noise Margin Diagram**: 
+  - Logic '0' is represented by voltages between $V_{OL}$ and $V_{IL}$.
+  - Logic '1' is voltages between $V_{IH}$ and $V_{OH}$.
+  - The region between $V_{IL}$ and $V_{IH}$ is undefined, and signals falling here can result in unpredictable circuit behavior.
+- **Supply Assurance**: By placing decoupling capacitors close to preplaced cells, the path resistance and resulting voltage drop are minimized, preserving the full $V_{DD}$ at critical switching moments.
+
+<img width="1272" height="788" alt="image" src="https://github.com/user-attachments/assets/8a1767c8-69e8-4673-8ecb-4b533e9e442c" />
+<img width="1560" height="745" alt="image" src="https://github.com/user-attachments/assets/8330c0ff-ee95-4220-92f7-08553b826fa3" />
+<img width="1545" height="736" alt="image" src="https://github.com/user-attachments/assets/50bed69d-2cd0-42a8-b11c-06950f1f3b48" />
+
+## Key Points
+
+- **Preplaced cells** are complex, reusable logic blocks instantiated with fixed locations, which streamlines design, ensures consistency, and supports large hierarchical designs.
+- **Fixed placement**: Once defined, the positions of preplaced cells are not modified during subsequent automated placement and routing steps.
+- **Strategic positioning** is informed by connectivity to primary inputs/outputs and other high-traffic areas, which enhances both performance and routability.
+- **Decoupling capacitors** are critical adjuncts, locally supplying charge during switching events and ensuring that core logic operates within defined noise margins.
+- The interplay between **voltage drop, supply impedance, local capacitance, and noise margin** underpins the need for carefully engineered power delivery in proximity to preplaced cells.
+- **Global power planning** and grid design (discussed separately) extend these principles to the chip-wide level, ensuring overall power integrity in addition to local delivery.
+
+<img width="1072" height="870" alt="image" src="https://github.com/user-attachments/assets/05a1d503-365a-4791-8142-0fa09c9c5428" />
+---
+
+# Power planning
+
+This documentation covers theoretical foundations and key concepts relevant to power planning in modern open-source hardware, focusing on the management of current demands across multiple circuit elements, the limitations of decoupling capacitors, phenomena such as ground bounce and voltage droop, and the use of distributed power meshes as a robust solution for voltage stability in integrated circuits.
+
+## Core Concepts
+
+### Current Demand and the Role of Decoupling Capacitors
+
+Each electronic element or block within a circuit requires current to function. A **decoupling capacitor** is often incorporated to locally supply charge and mitigate voltage fluctuations caused by these varying current requirements. Decoupling capacitors help smooth out rapid transient demands by storing charge close to the load, ensuring local voltage stability during fast switching events.
+
+
+### Scaling and Power Distribution in Complex Chips
+
+When a given macro or block is repeated multiple times on a chip, the cumulative current demand increases proportionally. Direct decoupling for every element is infeasible due to area and cost constraints. Consequently, many elements rely on the central power supply or power distribution network, increasing the importance of effective **power planning** to deliver stable voltage across the entire chip.
+
+
+### Signal Integrity and Voltage Drop
+
+Signal lines (e.g., a 16-bit bus) require clean and consistent voltage levels to maintain signal integrity from driver to load. When the power supply point is physically distant from the signal path, the resistance and inductance of the interconnects may cause a **voltage drop**. As a result, the voltage delivered to the line ($V_{actual}$) will be less than the nominal supply voltage ($V_{DD}$):
+
+$V_{actual} = V_{DD} - I \cdot R_{line}$
+
+where $I$ is the instantaneous current demand and $R_{line}$ is the resistance of the supply path.
+
+<img width="1077" height="825" alt="image" src="https://github.com/user-attachments/assets/c782526e-8e2c-4bf6-808d-fa0887556251" />
+
+
+### Capacitive Switching and Power Rail Disturbances
+
+Each bit line of a bus can be modeled as a capacitor. When a bus connected to an inverter switches state (all bits transition from 1 to 0 or 0 to 1), all associated capacitors discharge or charge simultaneously. This simultaneous switching results in large current spikes on either the power or the ground rails. 
+
+- **Ground Bounce:** When many capacitors discharge to ground at once, the ground potential can temporarily rise above 0V, forming a "bump" or bounce. If this exceeds the designed noise margin, signal levels may enter undefined states.
+- **Voltage Droop:** If many capacitors simultaneously charge from the supply rail, the supply voltage may momentarily sag below its nominal value—a phenomenon known as voltage droop.
+
+If these effects exceed allowable thresholds, signal reliability is compromised.
+
+<img width="1262" height="786" alt="image" src="https://github.com/user-attachments/assets/4a6f88d5-a53f-4b16-8f79-1b47544825f2" />
+<img width="1269" height="777" alt="image" src="https://github.com/user-attachments/assets/b0974b5b-9415-4f95-aead-4a6672cdedc7" />
+
+### Challenges with Single-Point Power Delivery
+
+Distributing power from a single supply point causes significant voltage gradients and increases the risk of the above problems, particularly as chip size and current demand rise. The single supply must source all the current, resulting in drops and disturbances that propagate through the entire distribution network.
+
+<img width="1280" height="765" alt="image" src="https://github.com/user-attachments/assets/43634267-5f95-4070-b7bf-6f8d14f1a40b" />
+<img width="1073" height="855" alt="image" src="https://github.com/user-attachments/assets/d359243b-0523-479c-90e4-df2799d89df5" />
+
+
+### Distributed Power Mesh Networks
+
+The adoption of **power meshes**—interconnected grids of VDD and VSS (ground) lines running horizontally and vertically across the chip—enables each local region to draw current from the nearest supply rather than from a distant source.
+
+Advantages:
+- Markedly reduces voltage drop and ground bounce.
+- Improves local voltage regulation.
+- Enhances the scalability and robustness of large and complex chips.
+
+Any logic block or interconnect can efficiently source or sink current to the nearest point on the mesh, leveraging both vertical and horizontal network structure for minimal path resistance.
+
+<img width="1122" height="878" alt="image" src="https://github.com/user-attachments/assets/64e15a72-e898-4f13-bc93-7a46694bc80a" />
+<img width="1087" height="811" alt="image" src="https://github.com/user-attachments/assets/851387c5-c0dd-4c93-a2e1-c7a1b24f7ddf" />
+
+## Key Points
+
+- **Each circuit element requires a predictable and stable local power supply for reliable operation.**
+- **Decoupling capacitors** serve to locally buffer charge but cannot feasibly be deployed for every element in large-scale designs.
+- Large, simultaneous switching events (such as on bus lines) can induce voltage anomalies: **ground bounce** and **voltage droop**.
+- The magnitude of voltage drops or bounces is proportional to the total current being switched and the impedance of the power path: $V_{drop} = I_{switch} \cdot Z_{path}$.
+- If these disturbances exceed the noise margin, digital circuits may operate unpredictably or erroneously.
+- **Distributed power mesh networks** (grids of interconnected VDD and VSS lines) fundamentally mitigate these risks by reducing average current path lengths and distributing the load across multiple supply points.
+- Modern VLSI chips utilize such meshes, leading to multiple power pins and entry points distributed throughout the silicon to maintain tight voltage regulation and reduce parasitic effects.
+- Effective power planning and the deployment of power meshes are necessary to ensure both local and global voltage stability, signal integrity, and overall reliability in high-performance, densely packed integrated circuits.
+
+---
+# Pin placement and logical cell placement blockage
+
+
