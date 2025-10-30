@@ -114,7 +114,8 @@ $Utilization\ Factor = \frac{Area\ occupied\ by\ netlist}{Total\ core\ area}$
 
 For example, if a netlist takes up $4$ square units in a $4 \times 4 = 16$ square unit core, the utilization factor is $4 / 16 = 0.25$, or $25\%$. This means only $25\%$ of the core is used, while the remaining $75\%$ is available, often reserved for routing and potential optimizations.
 
-![PLACEHOLDER: diagram/slide/concept-visual]
+<img width="1403" height="822" alt="image" src="https://github.com/user-attachments/assets/d4d7734b-12e1-4e1f-96dc-f71603be57e2" />
+
 
 **Aspect Ratio:**  
 The aspect ratio defines the shape of the core and is calculated as:
@@ -123,13 +124,10 @@ $Aspect\ Ratio = \frac{Height}{Width}$
 
 For a square chip, $Aspect\ Ratio = 1$. Maintaining certain aspect ratios can be critical for performance and manufacturability.
 
-![PLACEHOLDER: diagram/slide/concept-visual]
 
 ### Layering and Routing
 
 Unused area in the core is not wasted. It provides space for routing signal wires between placed components. Routing often occurs across multiple layers above the placement layer, allowing for more intricate connectivity without increasing the planar area.
-
-![PLACEHOLDER: diagram/slide/concept-visual]
 
 ### Modular Circuit Design and Preplaced Cells
 
@@ -140,17 +138,21 @@ A large combinational block (e.g., 100k gates) may be split into smaller indepen
 
 This abstraction means that, from the perspective of the top netlist, the internal logic is invisible, and only the connectivity via IO pins matters.
 
-![PLACEHOLDER: diagram/slide/concept-visual]
+<img width="1400" height="739" alt="image" src="https://github.com/user-attachments/assets/676df7b3-bcf0-4d45-95ad-d198314ed55d" />
+<img width="704" height="837" alt="image" src="https://github.com/user-attachments/assets/5a8af175-43f6-4fac-bb94-1a37dd613ba5" />
+
 
 **Reusability:**  
 Once a module is defined and black-boxed, it can be instantiated multiple times within a design. There is no need to duplicate the logic physically; the block is implemented once and reused wherever needed. This is key for components like memories, arithmetic units, or other intellectual property (IP) blocks.
 
-![PLACEHOLDER: diagram/slide/concept-visual]
+<img width="1136" height="833" alt="image" src="https://github.com/user-attachments/assets/e2c13f8a-e710-4e91-868f-1bd8456191be" />
+
 
 **Preplaced Cell Placement:**  
 These cells are physically placed at fixed locations on the chip before automated placement and routing. Their positions remain unchanged throughout further design flows, ensuring predictable timing and connectivity. The placement tools recognize these as fixed, immovable obstacles.
 
-![PLACEHOLDER: diagram/slide/concept-visual]
+<img width="1243" height="741" alt="image" src="https://github.com/user-attachments/assets/71c38991-a30d-41ef-babb-a6a80bba3d2a" />
+
 
 ## Key Points
 
@@ -161,5 +163,3 @@ These cells are physically placed at fixed locations on the chip before automate
 - **Blackboxing** abstracts module internal details, exposing only IO pins for top-level interconnection, crucial for managing complexity in large designs.
 - **IP reuse** reduces development cost and time by allowing blocks to be implemented once but instantiated multiple times within a circuit.
 - **Fixed placement of preplaced cells** guarantees that critical blocks retain their location for optimal physical and timing characteristics, unaffected by automated tools during placement and routing.
-
-![PLACEHOLDER: diagram/slide/concept-visual]
