@@ -291,4 +291,352 @@ Any logic block or interconnect can efficiently source or sink current to the ne
 ---
 # Pin placement and logical cell placement blockage
 
+This documentation introduces the **theory and conceptual framework** behind pin placement and connectivity in digital circuit design, using a multi-section flip-flop-based design as a case study. It covers the relationship between netlist connectivity, pin placement strategies, floorplanning, and the critical role of clock signal integrity for high-speed sequential circuits.
 
+![PLACEHOLDER: diagram/slide/concept-visual]
+
+---
+
+## Core Concepts
+
+### Pin Placement in Circuit Design
+
+**Pin placement** is the process of assigning physical locations to input, output, and clock pins on the boundary of an integrated circuit (IC) die. The primary goal is to optimize overall circuit performance, minimize wiring complexity, and ensure robust operation. This is typically handled after the logical circuit design and netlist definition, forming a bridge between the functional (front end) and physical (back end) domains of hardware design.
+
+### Netlist and Connectivity
+
+A **netlist** defines the connectivity of logical gates and components within a digital circuit. It specifies:
+- Which cells, such as flip-flops or logic gates, are present.
+- How these cells are interlinked via signals and ports (e.g., clocks, data inputs/outputs).
+
+This connectivity is usually described in hardware description languages (HDLs) like Verilog or VHDL. The netlist is essential for guiding both pin placement and subsequent automated placement and routing steps.
+
+<img width="1247" height="893" alt="image" src="https://github.com/user-attachments/assets/fc8d2b36-13c1-4c20-aaad-462394b5f1e3" />
+
+
+### Clock Domains and Inter-Clock Timing
+
+A **clock domain** is a section of a circuit governed by a specific clock signal. Multiple clock domains may exist, driving different flip-flops or logic blocks independently. The scenario where flip-flops are driven by different clocks (e.g., flip-flop 1 by 'clock 1', flip-flop 2 by 'clock 2') is central to **inter-clock timing analysis**. This analysis ensures correct data transfer and synchronization when crossing between domains.
+
+<img width="912" height="857" alt="image" src="https://github.com/user-attachments/assets/f2d42dab-c6bd-4423-99e5-22495568cdc1" />
+
+
+### Floorplanning and Pin Arrangement
+
+The **floorplan** is an abstract representation of the chip, detailing block placements and reserved areas for pins:
+- Input ports are often placed on the left, output ports on the right, but placements may vary by design needs.
+- Physical constraints or block arrangements may dictate pin locations for signal integrity and routing efficiency.
+- Port ordering is determined by the proximity to functional blocks, not necessarily by logical sequence.
+- Clock pins are physically larger to ensure minimal resistance and high signal integrity because they drive many cells continually.
+
+<img width="1416" height="855" alt="image" src="https://github.com/user-attachments/assets/0a084366-67bd-4a87-8a57-f85df84bc23b" />
+
+### Pin Resistance and Signal Integrity
+
+In digital circuits, especially those with high fanout or critical timing paths, **clock pins** must have:
+- The lowest possible resistance paths to minimize signal degradation.
+- Larger physical size to reduce electrical resistance, ensuring robust and reliable clock distribution throughout the chip.
+
+This principle supports high speed, low-latency signal propagation, which is vital for synchronous operations.
+
+$R = \frac{\rho L}{A}$
+
+Where:
+- $R$ is resistance,
+- $\rho$ is resistivity,
+- $L$ is wire length,
+- $A$ is cross-sectional area.
+
+Increasing $A$ (by making clock pins larger) decreases $R$.
+
+
+### Logical Blockage and Tool Guidance
+
+After pin positions are finalized, **logical placement blockages** are defined to prevent automated tools from inadvertently placing cells in reserved pin regions. This ensures pins remain unobstructed for connectivity and signal integrity, streamlining the subsequent physical design steps.
+
+<img width="1136" height="840" alt="image" src="https://github.com/user-attachments/assets/e4ee1aa5-d523-41a9-bee2-af28e722831a" />
+
+---
+
+## Key Points
+
+- **Pin placement optimizes physical connectivity**, minimizes routing complexities, and enhances performance.
+- The **netlist** forms the basis for mapping logical connectivity to physical locations.
+- **Clock domain interactions** (inter-clock timing) are a major source of timing challenges in multi-clock designs.
+- **Floorplanning places ports** (inputs/outputs) according to proximity to relevant functional blocks and routing efficiency, not just logical sequence.
+- **Clock pins use larger pads** to lower electrical resistance and ensure robust clock signal distribution.
+- **Placement blockages** are defined to reserve areas around pins, guiding automated place-and-route tools.
+- **Front-end and back-end teams** must coordinate—the front end defines netlist connectivity, the back end executes pin placement and physical constraints.
+
+---
+# Steps to run floorplan using OpenLANE
+
+This lab covers the floor plan stage of the physical design flow in open-source hardware design. The floor plan stage follows synthesis and involves setting up the chip layout by defining the die area, core area, aspect ratio, utilization factor, and placement of input/output cells. Additionally, this stage includes Power Distribution Network (PDN) creation and macro placement. The lab will guide you through configuring floor plan parameters, understanding the configuration hierarchy, and executing the floor plan flow using open-source tools.
+
+**Aim:** Learn to configure and execute the floor plan stage of the design flow, including understanding switches, configuration files, and parameter settings.
+
+**Key Steps:**
+- Review synthesis flow completion
+- Understand floor plan configuration parameters and switches
+- Examine design-specific and system-default configuration files
+- Set core utilization, aspect ratio, and I/O metal layer parameters
+- Execute the floor plan flow and verify successful completion
+
+## Lab Steps
+
+### Step 1: Review Previous Work and Floor Plan Context
+
+The floor plan stage begins after the synthesis flow has been completed. From the previous session, you should have completed:
+- Design setup
+- Synthesis flow
+- Flop count verification
+- Clock percentage analysis
+
+![PLACEHOLDER: screenshot/terminal-output/schematic]
+
+### Step 2: Understand Floor Plan Objectives
+
+Floor plan involves the following key activities:
+
+- **Die and Core Area Definition:** Setting the overall chip boundaries and usable core area
+- **Aspect Ratio Configuration:** Defining the height-to-width ratio of the core
+- **Utilization Factor:** Specifying how densely cells should be packed
+- **Input/Output Cell Placement:** Positioning I/O cells around the core periphery
+- **Power Distribution Network (PDN):** Creating power and ground distribution structures
+- **Macro Placement:** Positioning large pre-designed blocks
+
+Standard cell placement occurs in a later stage and is not performed during floor planning.
+
+### Step 3: Access Configuration Files
+
+Navigate to the OpenLane configuration directory:
+
+```bash
+cd openlane/configuration
+pwd
+ls -la
+```
+
+![PLACEHOLDER: screenshot/terminal-output/schematic]
+
+Open and review the README file to understand the available variables for each design stage.
+
+```bash
+cat README.md
+```
+
+### Step 4: Understand Global Configuration Variables
+
+The configuration hierarchy defines parameter precedence. Review the variables section in the README, which includes:
+
+- **Global Variables:** Design name, Verilog files
+- **Synthesis Variables:** Library files, driving cell, design rule constraints (transition max, span out, max capacitive load), minimum and maximum libraries for static timing analysis
+- **Floor Plan Variables:** Core utilization, aspect ratio, core margin, I/O metal layers, PDN parameters
+- **Placement Variables:** Target density and related settings
+
+### Step 5: Review Floor Plan Specific Switches
+
+Key floor plan configuration parameters include:
+
+**FP_CORE_UTIL (Floor Plan Core Utilization)**
+
+This parameter defines the core utilization percentage—the ratio of total cell area to total core area. Default value is 50%.
+
+```
+FP_CORE_UTIL = 50
+```
+
+![PLACEHOLDER: screenshot/terminal-output/schematic]
+
+**FP_ASPECT_RATIO (Aspect Ratio)**
+
+This parameter sets the height-to-width ratio of the core. Default value is 1 (square core).
+
+```
+FP_ASPECT_RATIO = 1
+```
+
+**FP_CORE_MARGIN (Core Margin)**
+
+This parameter specifies the offset between the die boundary and the core boundary. Default value is 3.6 units.
+
+```
+FP_CORE_MARGIN = 3.6
+```
+
+**FP_IO_HMETAL and FP_IO_VMETAL (I/O Metal Layers)**
+
+These parameters define the horizontal and vertical metal layers used for I/O placement. They are specified as follows:
+
+```
+FP_IO_HMETAL = 3
+FP_IO_VMETAL = 4
+```
+
+Note: In the OpenLane flow, the actual metal layer used will be one layer higher than specified (e.g., if FP_IO_VMETAL is 4, metal layer 5 will be used; if FP_IO_HMETAL is 3, metal layer 4 will be used).
+
+**FP_PDN_* (Power Distribution Network Parameters)**
+
+These variables configure the PDN. The PDN_CORE_NET specifies the decoupling capacitors to be used during floor planning.
+
+```
+FP_PDN_CORE_NET = <capacitor_specification>
+```
+
+### Step 6: Understand Placement Configuration Parameters
+
+**PL_TARGET_DENSITY (Placement Target Density)**
+
+This parameter controls how closely or how spread out cells should be packed during initial placement:
+- Value of 1: Design is very tightly packed with minimal free space
+- Value close to 0: Design is spread out with more free space
+
+Default is set close to 0 for initial loose packing. This allows for congestion analysis before gradually tightening the design toward closure.
+
+```
+PL_TARGET_DENSITY = 0.x
+```
+
+### Step 7: Examine GPIO Mode Configuration
+
+**FP_PIN_ORDER_CFG (Pin Order Configuration)**
+
+The GPIO_MODE parameter controls pin positioning around the core:
+- Mode 1: Pin positions are random but at equal distances
+- Mode 0: Pin positions are not equally spaced
+
+This configuration affects how input/output cells are distributed around the core perimeter.
+
+```
+GPIO_MODE = 1
+```
+
+![PLACEHOLDER: screenshot/terminal-output/schematic]
+
+### Step 8: Navigate to Design Directory
+
+Change to your design-specific directory:
+
+```bash
+cd <design_directory>
+ls -ltr
+```
+
+![PLACEHOLDER: screenshot/terminal-output/schematic]
+
+### Step 9: Review Design-Specific Configuration Files
+
+You should see two design-specific configuration files:
+- `config.tcl`
+- `sky130.tcl`
+
+These files override system default settings. The configuration precedence is:
+
+1. System defaults (lowest priority)
+2. `config.tcl` (design-specific overrides)
+3. `sky130.tcl` (technology-specific overrides) (highest priority)
+
+### Step 10: Examine config.tcl File
+
+Open the design configuration file:
+
+```bash
+cat config.tcl
+```
+
+![PLACEHOLDER: screenshot/terminal-output/schematic]
+
+Review the following sections:
+
+**Design Name and Source Files**
+
+```tcl
+set ::env(DESIGN_NAME) <design_name>
+set ::env(VERILOG_FILES) <path_to_verilog_files>
+set ::env(SDC_FILES) <path_to_sdc_files>
+```
+
+**Clock Configuration**
+
+```tcl
+set ::env(CLOCK_NET) <clock_signal_name>
+set ::env(CLOCK_PORT) <clock_port_name>
+```
+
+**Floor Plan Parameters**
+
+```tcl
+set ::env(FP_CORE_UTIL) 65
+set ::env(FP_IO_VMETAL) 4
+set ::env(FP_IO_HMETAL) 3
+```
+
+These settings override the system defaults. In this example:
+- Core utilization is set to 65% (overriding the default 50%)
+- I/O vertical metal is set to 4 (which will use metal layer 5 in the flow)
+- I/O horizontal metal is set to 3 (which will use metal layer 4 in the flow)
+
+### Step 11: Compare System Defaults with Design Configuration
+
+From the system default configuration (`openlane/configuration/floorplan.tcl`):
+- `FP_CORE_UTIL` default: 50
+- `FP_IO_VMETAL` default: 2 (resulting in metal layer 3)
+- `FP_IO_HMETAL` default: 3 (resulting in metal layer 4)
+
+From the design-specific configuration (`config.tcl`):
+- `FP_CORE_UTIL`: 65
+- `FP_IO_VMETAL`: 4 (resulting in metal layer 5)
+- `FP_IO_HMETAL`: 3 (resulting in metal layer 4)
+
+### Step 12: Execute the Floor Plan Flow
+
+Run the floor plan stage using the run_flow_plan command:
+
+```bash
+run_floorplan
+```
+
+![PLACEHOLDER: screenshot/terminal-output/schematic]
+
+The tool will process the configuration parameters and generate the floor plan layout based on the specified settings.
+
+### Step 13: Monitor Execution and Review Output
+
+During execution, you may see warnings such as obsolete statement warnings. These warnings can typically be disregarded as they refer to outdated syntax that is no longer required.
+
+```
+[WARNING] <message>: The source statement is obsolete and no longer required
+```
+
+![PLACEHOLDER: screenshot/terminal-output/schematic]
+
+### Step 14: Verify Successful Completion
+
+Upon successful completion, the floor plan flow will finish without errors. The absence of error messages indicates that the floor plan stage has been completed successfully.
+
+```bash
+# Check for successful completion
+echo $?
+```
+
+![PLACEHOLDER: screenshot/terminal-output/schematic]
+
+### Step 15: Understanding Configuration Flexibility
+
+The floor plan stage, like the overall PNR (Place and Route) flow, is iterative:
+
+- **Initial Stages:** Parameters are set to prioritize congestion analysis with looser packing (lower target density)
+- **Later Stages:** Parameters are adjusted to focus on timing closure with tighter packing
+- **Designer Control:** You decide which parameters to activate at each iteration based on design requirements
+
+This flexibility allows you to optimize the design progressively as you move toward final closure.
+
+---
+
+**Key Takeaways:**
+
+- Floor plan configuration uses a three-level precedence hierarchy: system defaults, design-specific config, and technology-specific overrides
+- Core utilization determines cell packing density
+- I/O metal layers are specified one layer below their actual usage in the flow
+- Placement target density controls initial cell distribution for congestion management
+- The floor plan stage must be successfully completed before proceeding to placement and routing stages
