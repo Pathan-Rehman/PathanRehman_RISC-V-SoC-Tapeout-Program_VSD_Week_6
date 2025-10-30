@@ -392,8 +392,6 @@ The floor plan stage begins after the synthesis flow has been completed. From th
 - Flop count verification
 - Clock percentage analysis
 
-![PLACEHOLDER: screenshot/terminal-output/schematic]
-
 ### Step 2: Understand Floor Plan Objectives
 
 Floor plan involves the following key activities:
@@ -417,7 +415,8 @@ pwd
 ls -la
 ```
 
-![PLACEHOLDER: screenshot/terminal-output/schematic]
+<img width="728" height="576" alt="image" src="https://github.com/user-attachments/assets/a346324c-8c45-4a79-b336-3c3e31678c02" />
+
 
 Open and review the README file to understand the available variables for each design stage.
 
@@ -446,7 +445,8 @@ This parameter defines the core utilization percentage—the ratio of total cell
 FP_CORE_UTIL = 50
 ```
 
-![PLACEHOLDER: screenshot/terminal-output/schematic]
+<img width="876" height="439" alt="image" src="https://github.com/user-attachments/assets/6a0ee5d5-6bea-4829-9eef-6cae2adc51dc" />
+
 
 **FP_ASPECT_RATIO (Aspect Ratio)**
 
@@ -497,6 +497,9 @@ Default is set close to 0 for initial loose packing. This allows for congestion 
 PL_TARGET_DENSITY = 0.x
 ```
 
+<img width="875" height="852" alt="image" src="https://github.com/user-attachments/assets/b2c25001-0119-4d3b-8ca7-092e21c956c0" />
+
+
 ### Step 7: Examine GPIO Mode Configuration
 
 **FP_PIN_ORDER_CFG (Pin Order Configuration)**
@@ -511,18 +514,19 @@ This configuration affects how input/output cells are distributed around the cor
 GPIO_MODE = 1
 ```
 
-![PLACEHOLDER: screenshot/terminal-output/schematic]
 
 ### Step 8: Navigate to Design Directory
 
 Change to your design-specific directory:
 
 ```bash
-cd <design_directory>
+cd ../designs/picorv32a
 ls -ltr
 ```
 
-![PLACEHOLDER: screenshot/terminal-output/schematic]
+<img width="880" height="859" alt="image" src="https://github.com/user-attachments/assets/c6d13bc9-8ece-4eb1-a651-eb2d885ee461" />
+<img width="872" height="310" alt="image" src="https://github.com/user-attachments/assets/12ff3728-08d4-4fb3-91e4-384b87111d6c" />
+
 
 ### Step 9: Review Design-Specific Configuration Files
 
@@ -544,23 +548,23 @@ Open the design configuration file:
 cat config.tcl
 ```
 
-![PLACEHOLDER: screenshot/terminal-output/schematic]
+<img width="872" height="565" alt="image" src="https://github.com/user-attachments/assets/ae89b55f-a966-495e-85a9-74381374f979" />
 
 Review the following sections:
 
 **Design Name and Source Files**
 
 ```tcl
-set ::env(DESIGN_NAME) <design_name>
-set ::env(VERILOG_FILES) <path_to_verilog_files>
-set ::env(SDC_FILES) <path_to_sdc_files>
+set ::env(DESIGN_NAME) "picorv32a"
+set ::env(VERILOG_FILES) "./designs/picorv32a/src/picorv32a.v"
+set ::env(SDC_FILES) "./designs/picorv32a/src/picorv32a.sdc"
 ```
 
 **Clock Configuration**
 
 ```tcl
-set ::env(CLOCK_NET) <clock_signal_name>
-set ::env(CLOCK_PORT) <clock_port_name>
+set ::env(CLOCK_NET) "5.000"
+set ::env(CLOCK_PORT) "clk"
 ```
 
 **Floor Plan Parameters**
@@ -596,7 +600,8 @@ Run the floor plan stage using the run_flow_plan command:
 run_floorplan
 ```
 
-![PLACEHOLDER: screenshot/terminal-output/schematic]
+<img width="879" height="855" alt="image" src="https://github.com/user-attachments/assets/23f660ee-71bd-4bca-a1a7-aeef9aea477a" />
+
 
 The tool will process the configuration parameters and generate the floor plan layout based on the specified settings.
 
@@ -608,18 +613,19 @@ During execution, you may see warnings such as obsolete statement warnings. Thes
 [WARNING] <message>: The source statement is obsolete and no longer required
 ```
 
-![PLACEHOLDER: screenshot/terminal-output/schematic]
+<img width="889" height="617" alt="image" src="https://github.com/user-attachments/assets/8f2cfc4b-f207-4a30-9d7c-d8f32f39997f" />
+
 
 ### Step 14: Verify Successful Completion
 
 Upon successful completion, the floor plan flow will finish without errors. The absence of error messages indicates that the floor plan stage has been completed successfully.
 
 ```bash
-# Check for successful completion
-echo $?
+[INFO]: PDN generation was successful.
 ```
 
-![PLACEHOLDER: screenshot/terminal-output/schematic]
+<img width="877" height="76" alt="image" src="https://github.com/user-attachments/assets/971c92e6-77a6-4025-a8a3-61bb5fbed9e6" />
+
 
 ### Step 15: Understanding Configuration Flexibility
 
