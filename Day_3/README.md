@@ -547,3 +547,114 @@ You should see the layout for your custom inverter, ready for further actions li
 # Inception of Layout – CMOS fabrication process
 
 # Create Active regions
+
+This section introduces the theoretical basis for the 16-mask (16M) process in semiconductor manufacturing, focusing on **substrate selection**, **substrate doping and resistivity**, the **formation of active regions**, and the critical concepts of **isolation using LOCOS (Local Oxidation of Silicon)**. Core fabrication ideas—including the use of materials like silicon dioxide, silicon nitride, and photoresist—are explained, with an emphasis on the underlying principles and reasons for each step. No implementation or procedural code is included.
+
+---
+
+## Core Concepts
+
+### Substrate Selection
+
+The fabrication process begins with choosing a **substrate**, which serves as the foundational material upon which the entire integrated circuit is built. The most common substrate in modern semiconductor devices is **P-type silicon**, characterized by its specific electrical and physical properties:
+- **High resistivity**: Determines how easily electric currents can pass through the material.
+- **Doping level**: Defined as the concentration of impurity atoms deliberately introduced to control the substrate’s electrical behavior. For P-type silicon, a typical doping concentration is $10^{15}$ atoms per cubic centimeter.
+- **Crystal orientation**: A critical parameter that defines the atomic arrangement on the surface, affecting further fabrication steps and device performance.
+
+The choice of doping level ensures that the substrate's doping is lower than that used subsequently for well formation (to maintain electrical separation between wells and substrate).
+
+<img width="867" height="452" alt="image" src="https://github.com/user-attachments/assets/c5082078-8f48-4a66-a3c3-8fefc4a9d4cf" />
+
+---
+
+### Doping
+
+**Doping** is the intentional introduction of impurity atoms (dopants) into the silicon substrate to modify its electrical properties. For P-type silicon, this means introducing elements (like boron) that create “holes” (positive charge carriers) in the lattice.
+- The substrate doping level must remain **less than the well doping** for proper device isolation in later steps.
+
+<img width="949" height="454" alt="image" src="https://github.com/user-attachments/assets/9d75f0cc-2a40-4773-b401-f54062038760" />
+
+---
+
+### Formation of Active Regions
+
+Active regions are defined areas in the substrate where transistors (such as PMOS and NMOS) will be fabricated. These regions are isolated from each other to prevent electrical interference:
+
+- **Active regions:** Physically distinct pockets within the substrate, reserved for building individual transistors.
+- **Purpose of isolation:** Prevents electrical crosstalk between transistors, ensuring correct circuit functionality.
+
+Creating these regions involves patterning and masking techniques to control where fabrication steps affect the substrate.
+
+![PLACEHOLDER: diagram/slide/concept-visual]
+
+---
+
+### Isolation Using Silicon Dioxide and Silicon Nitride
+
+To isolate active regions, layers of insulating materials are grown/deposited:
+
+1. **Silicon Dioxide Layer**: Grown thermally on the substrate (e.g., 40 nanometers thick). Acts as an **electrical insulator**.
+2. **Silicon Nitride Layer**: Deposited on top of the silicon dioxide (e.g., 80 nanometers thick). Serves as a **protection and masking layer** in following steps.
+
+These layers together prepare the substrate for precise patterning and selective oxidation.
+
+![PLACEHOLDER: diagram/slide/concept-visual]
+
+---
+
+### Photolithography and Photoresist
+
+**Photolithography** is a key patterning process relying on a light-sensitive material called **photoresist**:
+
+- **Photoresist**: A polymer film deposited (e.g., 1 micron thick) and then exposed to ultraviolet (UV) light through a patterned mask.
+    - **Masks**: Define where the light hits and therefore where subsequent etching or processing occurs.
+    - **Exposure/Reactions**: UV light exposure causes chemical changes in the photoresist, so only specific regions are affected during subsequent development (washing/etching).
+
+- **Protected vs. Exposed Areas**: The mask shields some regions from light (thus “protecting” them), while others remain exposed and can be chemically altered.
+
+This process precisely transfers patterns to the substrate, outlining where wells and active regions will form.
+
+![PLACEHOLDER: diagram/slide/concept-visual]
+
+---
+
+### Etching and Removal
+
+After photolithography:
+- **Etching**: Selectively removes the silicon nitride only from areas not protected by photoresist, exposing the underlying silicon dioxide.
+- **Photoresist Removal**: Eliminates the remaining resist, leaving the protected silicon nitride to act as a durable mask during the next oxidation step.
+
+This step ensures only targeted regions are exposed to further processing.
+
+![PLACEHOLDER: diagram/slide/concept-visual]
+
+---
+
+### Local Oxidation of Silicon (LOCOS)
+
+**LOCOS** is a critical technique for creating precise isolation between transistors:
+- The wafer is exposed to high-temperature oxidation, growing a thick field oxide ($SiO_2$) only in unmasked areas.
+- Regions under the silicon nitride mask remain protected, inhibiting oxide growth and thus defining the “active regions”.
+
+A unique geometric effect called **“bird’s beak”** occurs at the edge of growing oxides, slightly intruding under the mask.
+
+**Electrical Isolation**: The resulting thick oxide physically and electrically separates neighboring transistor regions to prevent leakage or crosstalk.
+
+- **Field Regions**: With thick oxide, function as insulators.
+- **Active Regions**: Protected from oxidation, reserved for transistor fabrication.
+
+![PLACEHOLDER: diagram/slide/concept-visual]
+
+---
+
+## Key Points
+
+- The **substrate** is almost always **P-type silicon** due to its favorable electrical properties and compatibility with modern device fabrication.
+- **Doping concentration** for the substrate is commonly set at $10^{15}\ \text{cm}^{-3}$ to ensure optimal separation from higher-doped well regions.
+- **Photolithography** and **masking** techniques enable precise patterning of the substrate for subsequent processing.
+- **Isolation** between transistors is achieved by LOCOS, which grows thick oxide in designated areas, leaving others undisturbed for device fabrication.
+- The term **"bird’s beak"** refers to the encroachment of the oxidation front at the boundary of the silicon nitride mask, a byproduct of the LOCOS process.
+- **Successful electrical devices** critically depend on the integrity of these isolation and patterning techniques to ensure individual transistor performance and prevent undesired interaction.
+- The development of **active and isolation regions** sets the foundation for all subsequent steps in the 16M process, including well formation for PMOS and NMOS transistors.
+
+![PLACEHOLDER: diagram/slide/concept-visual]
