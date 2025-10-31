@@ -1645,3 +1645,157 @@ These comprehensive models are critical for assembling higher-level digital bloc
 # General timing characterization parameters
 
 # Timing threshold definitions
+
+This document introduces the theoretical concepts and syntax used in timing characterization, specifically for digital circuits utilizing inverters and buffers. Core definitions include timing thresholds, slew rate metrics, and propagation delay, all essential parameters for timing analysis and simulation in characterization software.
+
+## Core Concepts
+
+### Timing Characterization Syntax and Variables
+
+Timing characterization relies on a set of defined variables and thresholds that describe the behavior of digital waveforms at different stages in a circuit (e.g., inverter outputs, buffer outputs). These variables are critical inputs for characterization software, influencing further computations such as delays, current estimates, and overall performance metrics.
+
+<img width="618" height="436" alt="image" src="https://github.com/user-attachments/assets/1ccc9519-f4a8-4da4-8189-e9f9648ab874" />
+
+
+### Timing Threshold Definitions
+
+#### Threshold Points on a Waveform
+
+Digital waveforms undergo transitions between logic states, and specific percentage levels of the supply voltage are used as **thresholds** to mark these state changes. Core thresholds include:
+
+- **Slew Low Threshold**: A value near the lower supply limit, typically ~$0.2V_{DD}$ or 20% of the supply voltage, defining the start of a rising transition.
+- **Slew High Threshold**: A value near the upper supply limit, often ~$0.8V_{DD}$ or 80% of the supply voltage, defining the end of a rising transition.
+- The same thresholds apply to falling transitions but refer to falling from high to low, with **slew low fall** and **slew high fall** thresholds.
+
+These thresholds are consistently applied to both input and output waveforms and form the basis of slew and delay calculations.
+
+<img width="865" height="473" alt="image" src="https://github.com/user-attachments/assets/811dd1d0-fca8-4425-9c3e-373635e0de53" />
+<img width="860" height="436" alt="image" src="https://github.com/user-attachments/assets/0e8d278a-ce60-41f6-8181-7b87803dc027" />
+
+
+#### Slew Calculation
+
+Slew, or transition rate, is calculated using the time difference between the two threshold crossings:
+- For a rising edge:
+  $slew_{rise} = t_{(high~threshold)} - t_{(low~threshold)}$
+  
+  Example: If 20% and 80% are used,
+  $slew_{rise} = t_{80\%} - t_{20\%}$
+
+This metric quantifies how fast the signal transitions and is key for noise analysis, power estimation, and reliability predictions.
+
+<img width="846" height="460" alt="image" src="https://github.com/user-attachments/assets/9832b78f-4662-4ca0-9f7d-785b9a0f287d" />
+
+
+#### Application to Falling Edges
+
+The same thresholding logic applies for falling edges, with time measurements reversed since the waveform transitions from high to low:
+- $slew_{fall} = t_{(low~threshold)} - t_{(high~threshold)}$
+
+### Delay Thresholds
+
+#### Input and Output Thresholds
+
+Delays are measured between corresponding points on separate waveforms:
+- **In Rise Threshold**: The 50% point ($0.5V_{DD}$) on the input's rising edge.
+- **Out Rise Threshold**: The 50% point on the output's rising edge.
+- Likewise, **In Fall Threshold** and **Out Fall Threshold** refer to 50% points during falling transitions.
+
+These 50% points are standard because they represent the midpoint of a logic transition, minimizing ambiguity due to waveform slew.
+
+<img width="845" height="468" alt="image" src="https://github.com/user-attachments/assets/2070d847-7109-4fc1-9227-8c737a22633c" />
+<img width="846" height="514" alt="image" src="https://github.com/user-attachments/assets/a7ca21b5-88ec-4180-bbe0-64ba8230f788" />
+<img width="829" height="503" alt="image" src="https://github.com/user-attachments/assets/ab799602-813f-4dd3-8ce1-b6a727c5abcf" />
+<img width="827" height="512" alt="image" src="https://github.com/user-attachments/assets/ac1a7188-90f1-48a6-b777-bc95f75971ef" />
+
+
+#### Propagation Delay Concept
+
+Propagation delay quantifies how long a signal takes to travel through a logic element (such as an inverter or buffer). It is calculated as:
+- For rising transitions:
+  $ t_{delay,~rise} = t_{out,~rise~(50\%)} - t_{in,~rise~(50\%)} $
+
+- For falling transitions:
+  $ t_{delay,~fall} = t_{out,~fall~(50\%)} - t_{in,~fall~(50\%)} $
+
+This delay is crucial for evaluating circuit timing, setup and hold margins, and overall system performance.
+
+## Key Points
+
+- **Thresholds** define key points on waveforms (e.g., 20%, 50%, 80% of $V_{DD}$) used to consistently characterize behavior during signal transitions.
+- **Slew rate** measures the speed of signal transitions and requires both low and high threshold points.
+- **Input/Output thresholds** for rising or falling waveforms are usually set at the 50% mark and serve as reference points for measuring delays.
+- **Propagation delay** is the time difference between input and output threshold crossings and forms a fundamental parameter in timing analysis.
+- The definitions and metrics outlined here serve as **fundamental building blocks** for further timing characterization, simulation, and performance prediction in digital design.
+  
+---
+# Propagation delay and transition time
+
+This documentation covers the theoretical aspects of **propagation delay** and **transition (slew) time** in digital circuit timing characterization. It addresses their definitions, calculation methods, the importance of threshold choices, and key design considerations such as wire delays and their effects on accurate delay measurement.
+
+## Core Concepts
+
+### Propagation Delay
+
+**Propagation delay** is the time interval between a change at the input of a circuit and the corresponding change observed at its output. This value is essential in determining circuit performance and in ensuring reliable timing across digital systems.
+
+- The general formula for propagation delay is:
+  $$
+  delay = t_{output\,threshold} - t_{input\,threshold}
+  $$
+  
+- Thresholds are specific voltage points—commonly expressed as a percentage of $V_{DD}$ (e.g., 50%)—used to determine when the input or output waveform is considered to have transitioned.
+
+<img width="842" height="482" alt="image" src="https://github.com/user-attachments/assets/acd6ea08-2531-4104-9a13-b264d9404bcb" />
+
+
+#### Importance of Threshold Choice
+
+- Selecting **inconsistent or non-standard thresholds** can result in observing a *negative* propagation delay, which does not physically make sense and usually indicates poor measurement practice.
+- Standard practice is to use the 50% point of $V_{DD}$ for both input and output as the threshold. However, both points must be selected carefully and consistently.
+
+<img width="856" height="456" alt="image" src="https://github.com/user-attachments/assets/1efb4f8d-30a1-45de-b702-30b28ed3c89f" />
+
+
+#### Effects of Physical Circuit Characteristics
+
+- Large distances or poor layout between gates (e.g., long wires) introduce additional delay components. This can distort waveform shapes and even (with correct thresholds) sometimes produce apparent negative delays due to heavily skewed waveforms.
+
+<img width="864" height="465" alt="image" src="https://github.com/user-attachments/assets/1d66fc33-06c7-48b0-909d-0fdaa10203c5" />
+<img width="857" height="463" alt="image" src="https://github.com/user-attachments/assets/7d800adb-1654-4f09-9d58-5f7f4eb714a1" />
+
+
+### Transition (Slew) Time
+
+**Transition time** (or **slew**) measures how quickly a signal rises or falls between two voltage thresholds.
+
+- For rising transitions:
+  $$
+  {slew_{rise}} = t_{high\,threshold} - t_{low\,threshold}
+  $$
+- For falling transitions:
+  $$
+  {slew_{fall}} = t_{high\,threshold} - t_{low\,threshold}
+  $$
+
+- Typical industrial thresholds for slew measurement are 20% and 80% of $V_{DD}$. For example, if $V_{DD} = 1.8\,V$, then 20% is $0.36\,V$ and 80% is $1.44\,V$.
+
+<img width="664" height="302" alt="image" src="https://github.com/user-attachments/assets/6ae715ac-b173-4326-8d5c-e432e04ac08d" />
+<img width="656" height="290" alt="image" src="https://github.com/user-attachments/assets/605b6023-7c3c-4531-9d32-f561575472ad" />
+<img width="265" height="283" alt="image" src="https://github.com/user-attachments/assets/ffafa304-c6c8-4ed5-aff2-c1fb90ce7e71" />
+<img width="868" height="379" alt="image" src="https://github.com/user-attachments/assets/82fb2e55-3c2d-43c6-bbee-0414e3ee47b3" />
+
+
+- The formula is always $high - low$ for both rising and falling cases, ensuring a positive value for transition time.
+
+## Key Points
+
+- **Propagation delay** is calculated as the difference between when the output and input waveforms cross specified thresholds: $delay = t_{out,th} - t_{in,th}$.
+  
+- **Standardization** in threshold selection (typically 50% of $V_{DD}$) is essential to avoid incorrect or negative delay values.
+
+- **Negative delay values** may arise from either poor threshold selection or significant wire/waveform distortion, both of which indicate issues in measurement or design.
+
+- **Transition/slew time** quantifies how quickly a signal changes, using defined low and high thresholds (commonly 20% and 80% of $V_{DD}$).
+
+- Correct circuit characterization requires attention to both accurate threshold selection and the underlying physical design, as both can dramatically impact observed timing metrics.
