@@ -1713,10 +1713,10 @@ These 50% points are standard because they represent the midpoint of a logic tra
 
 Propagation delay quantifies how long a signal takes to travel through a logic element (such as an inverter or buffer). It is calculated as:
 - For rising transitions:
-  $ t_{delay,~rise} = t_{out,~rise~(50\%)} - t_{in,~rise~(50\%)} $
+  $t_{delay,~rise} = t_{out,~rise~(50\%)} - t_{in,~rise~(50\%)}$
 
 - For falling transitions:
-  $ t_{delay,~fall} = t_{out,~fall~(50\%)} - t_{in,~fall~(50\%)} $
+  $t_{delay,~fall} = t_{out,~fall~(50\%)} - t_{in,~fall~(50\%)}$
 
 This delay is crucial for evaluating circuit timing, setup and hold margins, and overall system performance.
 
@@ -1740,9 +1740,7 @@ This documentation covers the theoretical aspects of **propagation delay** and *
 **Propagation delay** is the time interval between a change at the input of a circuit and the corresponding change observed at its output. This value is essential in determining circuit performance and in ensuring reliable timing across digital systems.
 
 - The general formula for propagation delay is:
-  $$
-  delay = t_{output\,threshold} - t_{input\,threshold}
-  $$
+  $delay = t_{output\,threshold} - t_{input\,threshold}$
   
 - Thresholds are specific voltage points—commonly expressed as a percentage of $V_{DD}$ (e.g., 50%)—used to determine when the input or output waveform is considered to have transitioned.
 
@@ -1770,13 +1768,9 @@ This documentation covers the theoretical aspects of **propagation delay** and *
 **Transition time** (or **slew**) measures how quickly a signal rises or falls between two voltage thresholds.
 
 - For rising transitions:
-  $$
-  {slew_{rise}} = t_{high\,threshold} - t_{low\,threshold}
-  $$
+  ${slew_{rise}} = t_{high\,threshold} - t_{low\,threshold}$
 - For falling transitions:
-  $$
-  {slew_{fall}} = t_{high\,threshold} - t_{low\,threshold}
-  $$
+  ${slew_{fall}} = t_{high\,threshold} - t_{low\,threshold}$
 
 - Typical industrial thresholds for slew measurement are 20% and 80% of $V_{DD}$. For example, if $V_{DD} = 1.8\,V$, then 20% is $0.36\,V$ and 80% is $1.44\,V$.
 
