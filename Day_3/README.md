@@ -585,7 +585,7 @@ Active regions are defined areas in the substrate where transistors (such as PMO
 
 Creating these regions involves patterning and masking techniques to control where fabrication steps affect the substrate.
 
-![PLACEHOLDER: diagram/slide/concept-visual]
+<img width="922" height="452" alt="image" src="https://github.com/user-attachments/assets/34ccfe7f-b32c-446a-abe3-b4a0fa87ce0e" />
 
 ---
 
@@ -598,7 +598,7 @@ To isolate active regions, layers of insulating materials are grown/deposited:
 
 These layers together prepare the substrate for precise patterning and selective oxidation.
 
-![PLACEHOLDER: diagram/slide/concept-visual]
+<img width="943" height="450" alt="image" src="https://github.com/user-attachments/assets/733cd142-8b90-40cc-aee9-ce08f30e1f19" />
 
 ---
 
@@ -614,7 +614,7 @@ These layers together prepare the substrate for precise patterning and selective
 
 This process precisely transfers patterns to the substrate, outlining where wells and active regions will form.
 
-![PLACEHOLDER: diagram/slide/concept-visual]
+<img width="940" height="448" alt="image" src="https://github.com/user-attachments/assets/b4df2736-bb4a-4360-ab4d-e9576fce1a14" />
 
 ---
 
@@ -626,7 +626,10 @@ After photolithography:
 
 This step ensures only targeted regions are exposed to further processing.
 
-![PLACEHOLDER: diagram/slide/concept-visual]
+<img width="948" height="458" alt="image" src="https://github.com/user-attachments/assets/84476f94-4eb9-47ad-90c7-1887d3a6b2d0" />
+<img width="934" height="380" alt="image" src="https://github.com/user-attachments/assets/847c4d9b-39c5-407a-be30-1db211a119a0" />
+<img width="923" height="377" alt="image" src="https://github.com/user-attachments/assets/28122334-3a3b-4d07-b2ef-4b490989d023" />
+
 
 ---
 
