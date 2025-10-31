@@ -1,3 +1,29 @@
+# Table of contents
+
+- [Chip Floor planning considerations](#chip-floor-planning-considerations)
+- [Utilization factor and aspect ratio](#utilization-factor-and-aspect-ratio)
+- [Concept of pre-placed cells](#concept-of-pre-placed-cells)
+- [De-coupling capacitors](#de-coupling-capacitors)
+- [Power planning](#power-planning)
+- [Pin placement and logical cell placement blockage](#pin-placement-and-logical-cell-placement-blockage)
+- [Steps to run floorplan using OpenLANE](#steps-to-run-floorplan-using-openlane)
+- [Review floorplan files and steps to view floorplan](#review-floorplan-files-and-steps-to-view-floorplan)
+- [Review floorplan layout in Magic](#review-floorplan-layout-in-magic)
+- [Library Binding and Placement](#library-binding-and-placement)
+- [Netlist binding and initial place design](#netlist-binding-and-initial-place-design)
+- [Optimize placement using estimated wire-length and capacitance](#optimize-placement-using-estimated-wire-length-and-capacitance)
+- [Final placement optimization](#final-placement-optimization)
+- [Need for libraries and characterization](#need-for-libraries-and-characterization)
+- [Congestion aware placement using RePlAce](#congestion-aware-placement-using-replace)
+- [Cell design and characterization flows](#cell-design-and-characterization-flows)
+- [Inputs for cell design flow](#inputs-for-cell-design-flow)
+- [Circuit design step](#circuit-design-step)
+- [Layout design step](#layout-design-step)
+- [Typical characterization flow](#typical-characterization-flow)
+- [General timing characterization parameters](#general-timing-characterization-parameters)
+- [Timing threshold definitions](#timing-threshold-definitions)
+- [Propagation delay and transition time](#propagation-delay-and-transition-time)
+
 # Chip Floor planning considerations
 ---
 # Utilization factor and aspect ratio
