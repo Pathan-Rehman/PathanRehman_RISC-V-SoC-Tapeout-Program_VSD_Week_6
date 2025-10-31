@@ -630,7 +630,6 @@ This step ensures only targeted regions are exposed to further processing.
 <img width="934" height="380" alt="image" src="https://github.com/user-attachments/assets/847c4d9b-39c5-407a-be30-1db211a119a0" />
 <img width="923" height="377" alt="image" src="https://github.com/user-attachments/assets/28122334-3a3b-4d07-b2ef-4b490989d023" />
 
-
 ---
 
 ### Local Oxidation of Silicon (LOCOS)
@@ -646,7 +645,9 @@ A unique geometric effect called **“bird’s beak”** occurs at the edge of g
 - **Field Regions**: With thick oxide, function as insulators.
 - **Active Regions**: Protected from oxidation, reserved for transistor fabrication.
 
-![PLACEHOLDER: diagram/slide/concept-visual]
+<img width="947" height="450" alt="image" src="https://github.com/user-attachments/assets/d71c96d4-8b98-48ad-b273-72b8fb873119" />
+<img width="944" height="447" alt="image" src="https://github.com/user-attachments/assets/643b110a-e8cd-4ccd-9d41-896e56f1e3d8" />
+<img width="930" height="372" alt="image" src="https://github.com/user-attachments/assets/1f418aad-31ca-480f-af99-723f1388a41f" />
 
 ---
 
@@ -659,5 +660,5 @@ A unique geometric effect called **“bird’s beak”** occurs at the edge of g
 - The term **"bird’s beak"** refers to the encroachment of the oxidation front at the boundary of the silicon nitride mask, a byproduct of the LOCOS process.
 - **Successful electrical devices** critically depend on the integrity of these isolation and patterning techniques to ensure individual transistor performance and prevent undesired interaction.
 - The development of **active and isolation regions** sets the foundation for all subsequent steps in the 16M process, including well formation for PMOS and NMOS transistors.
-
-![PLACEHOLDER: diagram/slide/concept-visual]
+---
+# 
