@@ -1,4 +1,4 @@
-# Labs for CMOS inverter ngspice simulations
+<img width="733" height="268" alt="image" src="https://github.com/user-attachments/assets/674c2691-a8e1-459f-9804-59693b973b4e" /># Labs for CMOS inverter ngspice simulations
 
 # IO placer revision
 
@@ -216,3 +216,334 @@ For example, the output load capacitor would be defined as connected between the
 
 ---
 # SPICE simulation lab for CMOS inverter
+
+This documentation explains the theoretical principles and connectivity behind the SPICE deck for a **CMOS inverter**. It covers the structure and roles of PMOS and NMOS transistors within the inverter, the connection of typical components such as load capacitors and voltage sources, the concept and purpose of voltage transfer characteristics, and the significance of transistor sizing (width and length) in determining inverter behavior.
+
+<img width="916" height="451" alt="image" src="https://github.com/user-attachments/assets/0c2e9aaa-35a5-420f-b210-fc43b62884c5" />
+
+
+## Core Concepts
+
+### CMOS Inverter Structure
+
+A CMOS inverter consists of a PMOS transistor and an NMOS transistor, connected in series between the supply voltage ($V_{DD}$) and ground. The output is taken from the common connection point between the PMOS drain and NMOS drain. The gate terminals of both transistors are tied together as the input. The substrate (body) connections for PMOS and NMOS are typically connected to $V_{DD}$ and ground, respectively.
+
+<img width="404" height="363" alt="image" src="https://github.com/user-attachments/assets/09046795-fa52-4c43-b9d7-65b53507e99f" />
+
+
+### Signal Nodes and Connectivity
+
+- **PMOS Connections**:
+  - Drain: Connected to the output node
+  - Gate: Connected to input node
+  - Source/Substrate: Connected to $V_{DD}$
+- **NMOS Connections**:
+  - Drain: Connected to output node
+  - Gate: Connected to input node
+  - Source/Substrate: Connected to ground (node zero)
+
+This specific arrangement produces inverting logic behavior: high input yields low output, and vice versa.
+
+
+### Load Capacitance and Input/Output Voltages
+
+The output node is typically loaded with a capacitor to simulate real circuit loads. The load capacitor ($C_{load}$) is connected between the output and ground and influences the dynamic response (slew rate, delay) of the inverter. The input and supply voltages are specified to establish operating conditions, commonly tying them to reference values, such as 2.5V.
+
+
+### Voltage Transfer Characteristics (VTC)
+
+The **voltage transfer characteristics** plot the output voltage ($V_{out}$) against the swept input voltage ($V_{in}$). This curve reveals the inverter's switching threshold and defines its digital transition region. To generate VTC:
+- Sweep $V_{in}$ from $0 \text{ V}$ to $V_{DD}$ (e.g., $2.5 \text{ V}$), in defined steps (e.g., $0.05 \text{ V}$).
+- Measure $V_{out}$ for each $V_{in}$.
+
+This process is essential for analyzing inverter behavior, noise margins, and switching performance.
+
+
+### SPICE Model Files
+
+SPICE model files encapsulate the parameters governing transistor behavior. For each device type (NMOS and PMOS), the model includes critical process-dependent attributes such as:
+- Oxide thickness ($t_{ox}$)
+- Threshold voltage ($V_{th}$)
+- Channel dimensions (Width $W$, Length $L$)
+- Mobility and process coefficients ($K_1$, $K_2$, $K_3$, etc.)
+
+These parameters reflect the fabrication technology (e.g., 250nm process), and are referenced by model names such as 'NMOS' and 'PMOS'.
+
+### Sizing and W/L Ratio
+
+The inverter's static and dynamic behavior is strongly affected by the dimensions of the PMOS and NMOS channels:
+- $W$: Channel width
+- $L$: Channel length
+- $W/L$: Ratio influencing drive strength
+
+For balanced operation, designers may set $W_{PMOS}/L_{PMOS} = W_{NMOS}/L_{NMOS}$, but commonly $W_{PMOS}$ is increased relative to $W_{NMOS}$ (e.g., 2.5$\times$) to account for lower carrier mobility in PMOS, shifting the switching point and improving symmetric voltage transfer.
+
+Example calculation:
+$W_{PMOS} = 2.5 \times W_{NMOS}$
+
+<img width="739" height="121" alt="image" src="https://github.com/user-attachments/assets/5419cc30-abc6-4dcf-bf12-1fc79701cc7a" />
+<img width="529" height="333" alt="image" src="https://github.com/user-attachments/assets/0a9695e5-4854-4b8c-97a2-268836027b12" />
+<img width="387" height="236" alt="image" src="https://github.com/user-attachments/assets/31b13349-1fbb-4efa-bd86-81f0a2355cd4" />
+<img width="686" height="481" alt="image" src="https://github.com/user-attachments/assets/ce2845d9-583e-4937-bf0c-db077836bad1" />
+
+## Key Points
+
+- **CMOS inverter operation relies on complementary switching of PMOS and NMOS:** high input turns off PMOS and turns on NMOS, pulling output low; low input turns on PMOS and turns off NMOS, pulling output high.
+- **Transistor connectivity defines logic inversion:** drain connected to output, gates to input, sources/substrates to supply and ground.
+- **Load capacitance accurately reflects output dynamics and is essential for transfer characteristic analysis.**
+- **SPICE simulation involves sweeping $V_{in}$ to observe $V_{out}$:** $V_{in}$ is incremented in steps, output voltage is recorded, and VTC plotted.
+- **Transistor sizing (W/L ratio) is tuned for optimal inverter switching performance:** A wider PMOS typically shifts VTC for improved noise margins and balanced output.
+- **SPICE model files embed all key process parameters, defining detailed device behavior for accurate simulation.**
+
+---
+# Switching Threshold Vm
+
+This documentation focuses on the **theoretical analysis of SPICE simulations for CMOS inverters**, particularly examining the impact of transistor sizing (PMOS vs NMOS) and the concept of **switching threshold**. Two key scenarios are considered: one where PMOS and NMOS have equal width-to-length (W/L) ratios, and another where PMOS is sized 2.5 times larger than NMOS. The analysis demonstrates the robustness of CMOS logic and explores how device sizing affects inverter characteristics such as switching threshold and current flow.
+
+<img width="786" height="511" alt="image" src="https://github.com/user-attachments/assets/029c5bd5-a094-4760-b675-08a889ee09fb" />
+
+
+## Core Concepts
+
+### CMOS Inverter Sizing
+
+- **Device Sizing Scenarios:**
+  - **Equal W/L Ratios:** PMOS and NMOS have identical width and length, resulting in identical W/L ratios.
+  - **Larger PMOS:** PMOS width is increased to be 2.5 times the NMOS width, while lengths remain equal. This changes the PMOS W/L ratio relative to NMOS.
+
+- **Calculation of W/L Ratios:**
+  - For NMOS: $W_{N} / L = 0.375 / 0.25 = 1.5$
+  - For PMOS: $W_{P} / L = 1.9375 / 0.25 = 7.75$ (where $W_P = 2.5 \times W_N$)
+
+- **Significance:** Different W/L ratios are chosen to contrast SPICE simulation results and highlight how sizing affects inverter performance.
+
+<img width="900" height="453" alt="image" src="https://github.com/user-attachments/assets/42ae3330-16fc-44b0-b33e-85e6c4fdbea4" />
+
+### Robustness of CMOS Inverter
+
+- **Waveform Similarity:** The qualitative shapes of output waveforms for both sizing cases are almost identical despite minor glitches. The essential switching behavior is preserved across different device sizes.
+
+- **Key Feature:** CMOS inverters maintain fundamental logic—when input is 0, output is high, and when input is high, output is low—across a broad range of sizing configurations.
+
+- **Application:** This intrinsic robustness is a principal reason CMOS is widely used for digital logic design.
+
+<img width="895" height="446" alt="image" src="https://github.com/user-attachments/assets/1a262c79-d320-463c-b13a-523b979183a8" />
+
+
+### Switching Threshold
+
+- **Definition:** The switching threshold is the input voltage ($V_{M}$) where the output voltage equals the input voltage ($V_{in} = V_{out}$).
+  
+- **Geometric Interpretation:** On the voltage transfer curve, the threshold is found at the intersection point where the output equals the input, typically visualized by drawing a 45° line ($V_{out} = V_{in}$).
+
+- **Typical Observations:**
+  - For equal W/L: Switching threshold found near 0.98 V.
+  - For larger PMOS: Switching threshold shifts upward, near 1.2 V (not centered), reflecting the impact of width ratio on inverter symmetry.
+
+- **Critical Region:** At the switching threshold, both PMOS and NMOS operate in the *saturation region* and are essentially turned on.
+
+<img width="893" height="465" alt="image" src="https://github.com/user-attachments/assets/75062773-0ad8-4104-9ed3-e21b8e309daf" />
+<img width="900" height="475" alt="image" src="https://github.com/user-attachments/assets/7c4991e7-fda1-4e40-b417-a3c949ef9573" />
+
+### Saturation Region and Current Flow
+
+- **Saturation Region:** At threshold, the gate-source voltage ($V_{GS}$) substantially exceeds the threshold voltage, driving both transistors into saturation.
+  
+- **Current Behavior:**
+  - Both transistors conduct, potentially causing substantial current from power to ground (short-circuit condition).
+  - Drain currents have inverse directions:
+    - PMOS: $I_{DSP}$
+    - NMOS: $I_{DSN}$
+  - At the threshold point: $I_{DSP} = -I_{DSN}$
+
+- **Equations:**
+  - Operating point condition: $V_{GS} \gg V_{TH}$
+  - Threshold operation: $V_{GS} = V_{DS}$
+
+<img width="803" height="491" alt="image" src="https://github.com/user-attachments/assets/69dc1cf0-93fe-46e5-a138-3fc9979ecee7" />
+
+
+### Analytical Relationships
+
+- **Threshold Calculation:**
+  - Knowing $W_N / L$ and $W_P / L$, the switching threshold $V_M$ can be analytically derived.
+  - Conversely, to set a desired $V_M$, appropriate values for device sizing can be chosen.
+
+- **Physical Significance:** Control over threshold by sizing enables optimization for different applications (speed, power, noise margin).
+
+<img width="882" height="513" alt="image" src="https://github.com/user-attachments/assets/a1358267-53ce-4dc7-99c9-2255f55c2bcd" />
+
+
+## Key Points
+
+- **CMOS inverters remain robust across diverse sizing choices.**
+- **Switching threshold ($V_M$) is a critical parameter determined by transistor sizing; it can be tuned via $W/L$ ratios.**
+- **At threshold, both PMOS and NMOS are in saturation, creating a region of potentially high current flow.**
+- **The direction and magnitude of currents in PMOS and NMOS are opposite but equal at the switching point ($I_{DSP} = -I_{DSN}$).**
+- **Threshold and robustness analysis are foundational for optimizing logic gate design in physical circuits.**
+
+---
+# Static and dynamic simulation of CMOS inverter
+
+This section explores the concept of **switching threshold** in CMOS inverters, its robustness against variations in PMOS/NMOS sizing, and fundamental methods to analyze delay characteristics using theoretical and simulation-driven approaches. The importance of the switching threshold, the construction and interpretation of DC transfer characteristics, and the core methodology behind transient (dynamic) analysis are covered.
+
+<img width="869" height="474" alt="image" src="https://github.com/user-attachments/assets/f24f5a4f-3120-4adf-8898-5a86749041e9" />
+
+
+## Core Concepts
+
+### Switching Threshold in CMOS Inverters
+
+- The **switching threshold** is the input voltage at which the output voltage of a CMOS inverter transitions between logic levels (high-to-low or low-to-high).
+- At this threshold, the voltage at the input equals the voltage at the output: $V_{in} = V_{out}$.
+- A common graphical technique to find the switching threshold is to plot the DC transfer characteristic and superimpose a $45^\circ$ line (i.e., $V_{in} = V_{out}$). The intersection point gives the threshold voltage.
+- The robustness of the threshold refers to how stable this value remains when PMOS or NMOS transistor dimensions are changed.
+- In device terms, the **switching threshold** influences noise margins and affects the overall reliability of digital logic circuits.
+
+
+### DC Transfer Characteristics
+
+- The **DC transfer characteristic** of a CMOS inverter plots output voltage ($V_{out}$) versus input voltage ($V_{in}$) under steady-state (DC) conditions.
+- This curve typically shows a sharp transition from $V_{DD}$ (logic high) to $0$ V (logic low), centered around the switching threshold.
+- The slope of this curve at the switching threshold is an important metric, as it relates to the inverter's noise immunity.
+- Comparing how this characteristic shifts as PMOS and NMOS sizes are changed provides insight into inverter robustness and balancing.
+
+<img width="580" height="469" alt="image" src="https://github.com/user-attachments/assets/eebbdde4-deae-4543-9c19-19818f681712" />
+
+
+### Delay in CMOS Inverters
+
+- **Delay** in a CMOS inverter refers to the time taken for the output to respond to changes in the input.
+- Two important types:
+  - **Rise Delay ($t_{PLH}$):** Time taken for the output to rise from low to high (usually measured at the $50\%$ points).
+  - **Fall Delay ($t_{PHL}$):** Time taken for the output to fall from high to low (also at the $50\%$ points).
+- Delay is determined by the intrinsic device capacitance, the drive strength (dependent on PMOS/NMOS sizing), and the load being switched.
+- Delay values can be extracted by noting the time difference between the input and output waveforms crossing the $50\%$ voltage level in transient simulation.
+
+$delay = t_{out,50\%} - t_{in,50\%}$
+
+<img width="565" height="413" alt="image" src="https://github.com/user-attachments/assets/5f2ad26b-966b-463d-89c1-d33761b57228" />
+<img width="707" height="498" alt="image" src="https://github.com/user-attachments/assets/e0660434-245f-4038-a097-87cfa1b62813" />
+
+
+### Transient (Dynamic) Analysis
+
+- **Transient analysis** studies circuit response over time to dynamic input conditions, such as a pulse or step.
+- In simulations, an input pulse (often with specified rise and fall times, width, and period) is applied, and the inverter’s output is monitored.
+- Key parameters for the input pulse:
+  - **Rise time ($t_{rise}$)**
+  - **Fall time ($t_{fall}$)**
+  - **Pulse width**
+  - **Period**
+
+These parameters shape how quickly the input transitions and thus affect observed timing results.
+
+- The transient simulation records output voltage over time, allowing measurement of **propagation delays**.
+
+<img width="923" height="515" alt="image" src="https://github.com/user-attachments/assets/aa4eccc2-b9e9-44b1-838d-c541656b1467" />
+
+
+## Key Points
+
+- **Switching Threshold**: The input voltage where $V_{in} = V_{out}$; found using the intersection of the DC transfer curve and the $45^\circ$ line.
+- **Robustness Assessment**: By sweeping PMOS/NMOS widths, the switching threshold’s stability gives insight into circuit robustness against sizing variations.
+- **Delay Measurement**: Propagation delays are computed as the difference in time stamps where input and output signals cross $50\%$ of their logic swing.
+- **Dynamic Simulation**: Transient analysis enables direct visualization of timing behavior (rise/fall delays) in response to realistic input pulses.
+- **Importance for Design**: Both threshold and delay are central to noise margins, signal integrity, and overall digital performance in open-source hardware.
+
+---
+# Lab steps to git clone vsdstdcelldesign
+
+This lab guides you through using a custom inverter cell within the OpenLane design workflow. The aim is to clone a dedicated GitHub repository containing the necessary inverter files and SKY130 model libraries, configure your environment, set up the technology file, and visualize the inverter layout with Magic. Each step and command is documented to give a reproducible workflow for open-source hardware design.
+
+## Lab Steps
+
+### 1. Clone the Custom Repository
+
+<img width="1919" height="870" alt="image" src="https://github.com/user-attachments/assets/dfdf3795-94e4-4bb4-bb77-de501de96c89" />
+
+
+Begin by cloning the provided GitHub repository, which contains the custom inverter designs and necessary model libraries.
+
+```sh
+git clone https://github.com/nickson-jose/vsdstdcelldesign
+```
+<img width="737" height="252" alt="image" src="https://github.com/user-attachments/assets/75481f31-6016-4540-8f86-66c37a051e73" />
+
+
+This creates a folder named `vsdstdcelldesign` in your current working directory.
+
+### 2. Verify Repository Contents
+
+Navigate into the cloned directory and inspect the files to ensure all resources, including Mac files and model libraries, are present.
+
+```sh
+cd vsdstdcelldesign
+ls
+```
+<img width="737" height="332" alt="image" src="https://github.com/user-attachments/assets/8326955e-7536-4a07-8bde-282a453aace1" />
+
+
+You should see inverter `.mag` files, library folders, and model files similar to what you saw in the GitHub web interface.
+
+### 3. Locate the Magic Tech File
+
+Before opening layout files, ensure you have the appropriate Magic technology file (`.tech`) in your working directory. The file is typically inside another project or PDK folder.
+
+Navigate to the directory containing the tech file (replace paths as appropriate):
+
+```sh
+cd /home/vsduser/Desktop/work/tools/openlane_working_dir/pdks/sky130A/libs.tech/magic
+ls *.tech
+```
+<img width="733" height="268" alt="image" src="https://github.com/user-attachments/assets/da87576c-ef95-4790-a340-bf6697e6797d" />
+
+
+Identify the required technology file, e.g., `sky130A.tech`.
+
+### 4. Copy the Magic Tech File
+
+Copy the required tech file from its location into your current project directory.
+
+```sh
+cp /home/vsduser/Desktop/work/tools/openlane_working_dir/pdks/sky130A/libs.tech/magic/sky130A.tech /home/vsduser/Desktop/work/tools/openlane_working_dir/openlane/vsdstdcelldesign
+```
+<img width="730" height="164" alt="image" src="https://github.com/user-attachments/assets/521fcb25-ff1b-4146-a391-f4b4fb30f4fe" />
+
+
+Verify that the tech file is now in your working directory:
+
+```sh
+ls
+```
+
+Ensure you see `sky130A.tech` listed.
+
+### 5. Open the Inverter Layout in Magic
+
+Launch Magic using the local tech file and open the inverter schematic or layout file (`.mag`). The `&` at the end of the command frees the terminal for additional commands.
+
+```sh
+magic -T sky130A.tech sky130_inv.mag &
+```
+- Replace `sky130_inv.mag` with your inverter’s `.mag` file if it has a different name.
+
+<img width="977" height="642" alt="image" src="https://github.com/user-attachments/assets/37771079-39e6-4a4e-9b21-9c8212bc21f3" />
+
+
+### 6. Explore the Layout in Magic
+
+Once Magic opens:
+
+- Move your cursor to the layout window.
+- Use the `s` key to select.
+- Use the `v` key to centralize or zoom into the selected area.
+
+<img width="866" height="680" alt="image" src="https://github.com/user-attachments/assets/75f05b25-ea13-417d-ad58-5fc6784cb22f" />
+
+You should see the layout for your custom inverter, ready for further actions like extraction or post-layout simulation.
+
+---
+# Inception of Layout – CMOS fabrication process
+
+# Create Active regions
