@@ -1300,3 +1300,348 @@ This lab focuses on the **placement stage** in digital design using open-source 
    - Note: The **Power Distribution Network (PDN)** is not yet created. In this flow, PDN generation happens after placement and CTS, before routing.
 
 ---
+# Cell design and characterization flows
+
+# Inputs for cell design flow
+This documentation provides a comprehensive theoretical overview of the cell design flow in integrated circuit (IC) development, with an emphasis on the concept and role of standard cells, standard cell libraries, and the foundational elements provided by foundries. It gives a high-level understanding of how standard cells are prepared for use in digital design, the types of information housed in cell libraries, and the key inputs required to design a basic cell such as an inverter.
+
+<img width="581" height="481" alt="image" src="https://github.com/user-attachments/assets/5817a31d-da80-42e6-8a13-8e2ca9dbb5e3" />
+
+
+## Core Concepts
+
+### Standard Cells
+
+- **Standard cells** are basic logic gates or functional blocks (e.g., AND gates, OR gates, inverters, buffers, flip-flops) used repeatedly in digital IC design.
+- These cells are pre-designed, characterized, and stored in a **library** for reuse in placing and routing digital designs.
+
+<img width="854" height="469" alt="image" src="https://github.com/user-attachments/assets/75606831-aa5a-49cc-8231-116bf8ebedc2" />
+
+
+### Standard Cell Library
+
+- The **library** is a foundational component in the IC design flow, analogous to a bookshelf containing a wide variety of books—here, it contains standard cells and possibly other blocks such as decoupling capacitors, macros, and IPs.
+- Libraries contain cells with:
+  - **Different functionalities:** e.g., logic gates, storage elements.
+  - **Different sizes:** This refers to *drive strengths*, where a physically larger cell can source/sink more current, hence better drive longer or heavily loaded wires.
+  - **Different threshold voltages ($V_{t}$):** Cells that differ in $V_{t}$ are optimized for different performance/leakage trade-offs. For example, a cell with lower $V_{t}$ switches faster but may leak more.
+
+<img width="845" height="533" alt="image" src="https://github.com/user-attachments/assets/68e50d62-fc01-479f-9105-f4306448f6ce" />
+
+
+### Physical and Electrical Characteristics
+
+- **Physical size:** Affects drive strength, generally with larger devices providing greater output current.
+- **Threshold voltage ($V_{t}$):** Influences both speed and leakage power. Lower $V_{t}$ means faster switching but more leakage; higher $V_{t}$ means slower switching but less leakage.
+- Libraries may contain otherwise identical cells that differ only in $V_{t}$ or drive strength, supporting flexible design optimization.
+
+<img width="844" height="518" alt="image" src="https://github.com/user-attachments/assets/5261d841-965e-4b31-8b96-d1de8f8a4de7" />
+
+
+### Cell Representation for EDA Tools
+
+- Each cell is represented not just by its schematic symbol but also by:
+  - **Physical shape:** For placement/layout.
+  - **Timing characteristics:** Delay, setup/hold times.
+  - **Drive strength and load capabilities.**
+  - **Power consumption data:** Both static and dynamic.
+
+EDA (Electronic Design Automation) tools use these attributes to optimize the placement, timing closure, and power characteristics of the final chip.
+
+### Cell Design Flow Overview
+
+The cell design flow can be divided into three main categories:
+1. **Inputs:** Requirements and constraints provided by the foundry and users.
+2. **Cell Design:** Application of rules and models to create a functional cell.
+3. **Outputs:** Characterized models used by EDA tools.
+
+This explanation focuses on the **inputs** involved in designing a cell such as an inverter.
+
+<img width="804" height="549" alt="image" src="https://github.com/user-attachments/assets/def229b8-5643-4798-98e1-a5c582481e6c" />
+
+
+#### Inputs to Cell Design
+
+- **Process Design Kits (PDK):**
+  - Provided by the semiconductor foundry.
+  - Includes:
+    - **Design Rule Check (DRC) and Layout Versus Schematic (LVS) rules:** Dictate layout restrictions (e.g., minimum/maximum widths, spacing, overlaps) to ensure manufacturability and correct function.
+    - Required for custom layout and standard cell development.
+
+- **SPICE Model Parameters:**
+  - Also from the foundry.
+  - Provide electrical models for transistor behavior used in simulation and characterization.
+  - Include key physical/electrical parameters, such as:
+    - **Oxide thickness** ($t_{ox}$), e.g., $t_{ox} = 5.8\,nm$
+    - **Nominal threshold voltages** ($V_{t}$), e.g., $V_{t} = 0.5\,V$
+    - **Capacitance values:** (e.g., $C_{ox}$, $C_{gs}$, $C_{gd}$, etc.)
+    - **Substrate and process-specific constants**
+
+  Example SPICE equations:
+  - Threshold voltage:
+    - $V_{T} = V_{T0} + \gamma \left( \sqrt{|2\phi_B + V_{SB}|} - \sqrt{|2\phi_B|} \right)$
+  - Oxide capacitance:
+    - $C_{ox} = \frac{\varepsilon_{ox}}{t_{ox}}$
+
+- **Library and User-Defined Specifications:**
+  - Custom requirements, functional specifications, and any additional constraints or targets for the cell.
+
+<img width="868" height="551" alt="image" src="https://github.com/user-attachments/assets/10012b2e-2bf9-4908-a3ee-82393d683928" />
+
+
+#### Design Rule Examples
+
+- **Poly width minimum:** $2\lambda$
+- **Poly extension over active area:** $3\lambda$
+- **Poly to active spacing:** $1\lambda$
+
+*These rules help ensure manufacturability and reliable device operation. There are typically thousands of such rules in a full process design kit.*
+
+<img width="861" height="548" alt="image" src="https://github.com/user-attachments/assets/8b82516d-f1d5-4f01-b843-d12abbc3d906" />
+
+## Key Points
+
+- **Standard cells and libraries** are fundamental building blocks for digital IC design, enabling modular design reuse.
+- Libraries contain functionally diverse, size-varied, and electrically distinct versions of each standard cell for design flexibility.
+- **Drive strength** and **threshold voltage ($V_{t}$)** are critical characteristics used to tailor standard cell performance to the needs of the chip.
+- The **cell design flow** relies heavily on detailed inputs from the foundry:
+  - **Physical design/spacing rules** (DRC, LVS)
+  - **SPICE models and parameters** for accurate electrical characterization.
+- Each cell must be thoroughly described for placement, timing, drive/power, and verified against foundry-provided rules and models.
+- The process ensures that custom or standard cells are manufacturable, meet performance targets, and are compatible with automated design tools.
+
+---
+# Circuit design step
+
+This document explains the theoretical foundations behind user-defined specifications in standard cell library development for open-source hardware design. Key concepts discussed include the relationship between physical design parameters and circuit performance requirements, as well as the primary design stages of standard cell creation: circuit design, layout design, and characterization.
+
+## Core Concepts
+
+### User-Defined Specifications in Standard Cell Libraries
+
+User-defined specifications drive the development of standard cell libraries by dictating the physical and electrical properties cells must meet to integrate successfully into semiconductor design environments.
+
+- **Cell Height** is determined by the separation between the power rail (VDD) and the ground rail (VSS). The library developer is responsible for maintaining this height based on the provided specifications.
+
+  <img width="841" height="535" alt="image" src="https://github.com/user-attachments/assets/bcc9806b-3e22-48be-a8c1-681047a49c83" />
+
+
+- **Cell Width** is related to the drive strength required by the user. Drive strength indicates a cell’s ability to drive electrical load.
+  - Low drive strength ($\text{Drive Strength} = 1$) makes a cell less capable of controlling large wire loads.
+  - High drive strength (e.g., $\text{Drive Strength} = 10$) allows the cell to drive longer or heavily loaded wires.
+
+
+- **Supply Voltage** is specified at the top level. The standard cell must be designed to operate at this specified voltage, influencing transistor sizing and ensuring correct noise margins. Typical values might include $V_{dd} = 1.2\,V$, and the threshold voltage needs to be considered for noise immunity.
+
+  <img width="835" height="534" alt="image" src="https://github.com/user-attachments/assets/468d54ae-d66c-4786-ab4e-c9aa39f284b2" />
+
+
+- **Metal Layer Requirements** define which layers (e.g., Poly, Metal1, Metal3) are used for different cell components (e.g., power, ground, signal contacts). Specific design constraints can require certain connections or contacts to occupy particular metal layers for routing or process compatibility.
+
+  <img width="851" height="542" alt="image" src="https://github.com/user-attachments/assets/ebeab1b1-3e24-43a9-b90b-107e00b01bc2" />
+
+
+- **Pin Locations**: The physical placement of cell pins (inputs/outputs) often needs to respect guidelines, such as proximity to power and ground rails, to ease integration with downstream physical design tools.
+
+  <img width="837" height="535" alt="image" src="https://github.com/user-attachments/assets/90f60e3e-0ea5-4f02-981f-16ca71b58af8" />
+
+
+- **Drawn Gate Length**: The gate length of MOS transistors may have slight process-provided variations (e.g., for 130nm technology, typical variation might be drawn lengths of $125\,nm$ or $135\,nm$), often explicitly set by user or process constraints.
+
+  <img width="825" height="534" alt="image" src="https://github.com/user-attachments/assets/75cc1efd-dbe4-4b54-bd48-7eba5f29d0c1" />
+
+
+## Key Points
+
+- **Spec Driven Design**: The library developer must carefully interpret and implement all user-defined specifications so that cells promote successful integration through every stage of the chip design flow.
+
+  <img width="319" height="487" alt="image" src="https://github.com/user-attachments/assets/b88214cc-34c5-478e-9272-1fc9fb46cdd4" />
+
+
+- **Design Process Stages**:
+  - **Circuit Design** involves two core steps:
+    1. **Functional Implementation**: Defining the logic function the cell will implement.
+    2. **Transistor Sizing**: Modelling PMOS and NMOS transistors, primarily optimizing width-to-length ($W/L$) ratios to meet electrical specifications like drive strength and switching threshold.
+       - Example relationship: $W_p = 2.5 \times W_n$, where $W_p$ and $W_n$ are widths for PMOS and NMOS, respectively.
+       - The drain current requirement must be met:
+         
+         $I_{D, p} + I_{D, n} = 0$
+         
+         The switching threshold voltage is set to a target value (e.g., $V_{th} = 1.2\,V$) based on the application.
+
+    <img width="801" height="522" alt="image" src="https://github.com/user-attachments/assets/2ee0805b-da99-478c-9cb1-71fd7d943e40" />
+<img width="843" height="534" alt="image" src="https://github.com/user-attachments/assets/b06f4127-42b8-4904-a90b-529c4ae59736" />
+
+
+  - **Layout Design** translates the circuit-level transistor dimensions and connectivity into physical mask layouts. Steps include:
+    - Arranging series and parallel PMOS/NMOS networks derived from the logic structure.
+    - Mapping the exact dimensions and locations as dictated by the $W/L$ ratios and physical constraints from user-defined specs.
+
+    <img width="804" height="504" alt="image" src="https://github.com/user-attachments/assets/48244725-05fd-43b1-b0a5-3085707afc74" />
+
+  - **Characterization** (mentioned as a future elaboration) ensures the cell's timing, noise margin, and other properties meet requirements under realistic conditions.
+
+- **Integration into Top-Level Design Flow**: Adhering to specifications ensures the cells are compatible with higher-level steps such as clock tree synthesis, placement, and routing, thus avoiding physical design conflicts.
+
+---
+# Layout design step
+
+This section elaborates on the theoretical process of digital layout design for standard cells, emphasizing the translation from circuit function to physical layout, and the requirements imposed by both foundry rules and user specifications. Key steps include network graph derivation, Euler path extraction, stick diagram generation, and the final production of manufacturable layouts adhering to design rule checks (DRC). Parasitic extraction and cell characterization follow to ensure timing, noise, and power compliance.
+
+## Core Concepts
+
+### Function-to-Transistor Network Mapping
+
+The initial theoretical step involves implementing a specified logic function using connections of PMOS and NMOS transistors. Each given function corresponds to a specific transistor configuration, forming the foundation for all later physical abstractions.
+
+<img width="810" height="333" alt="image" src="https://github.com/user-attachments/assets/c5783ffe-de4c-4ccd-9990-b813dd88cd03" />
+
+
+### Network Graphs and Euler Path
+
+After mapping the function, separate PMOS and NMOS network graphs are constructed. These graphs represent the connectivity of transistor sources and drains as dictated by the logic function.
+
+An Euler path is then sought in each network graph. An Euler path is a sequence through a graph that visits each edge exactly once. In layout design, finding such a path enables a more compact arrangement of transistors, optimal for area and performance.
+
+- *Euler path*: A path through a graph where each edge is visited only once.
+
+<img width="477" height="317" alt="image" src="https://github.com/user-attachments/assets/a897100d-38cc-4765-9058-c659011127bd" />
+
+
+### Stick Diagram Generation
+
+With the Euler path established, a stick diagram is produced. This abstract representation shows the sequence of gate and diffusion connections as simplified lines and contacts, encoding the order derived from the Euler path.
+
+- Input sequence (e.g., ACEF, DNB) guides polygate placement and interconnections.
+- Sources, drains, and gates are abstracted, emphasizing topological relations over geometric detail.
+
+<img width="526" height="290" alt="image" src="https://github.com/user-attachments/assets/920e88ab-e950-4879-afdb-db34a22eadd5" />
+
+
+### Physical Layout Adhering to DRC and Specifications
+
+The stick diagram is translated into a detailed physical layout, observing strict Design Rule Check (DRC) guidelines provided by the semiconductor foundry. User-defined specifications such as gate length, contact locations, and pin placements are incorporated at this stage.
+
+- Multiple metal layers (metal 1, metal 2, etc.) and polysilicon are organized to match functional and manufacturing requirements.
+- The cell's physical dimensions (width, height) emerge from these constraints and optimization strategies.
+
+<img width="451" height="381" alt="image" src="https://github.com/user-attachments/assets/5494a06b-565c-4801-9a7a-12449d86924b" />
+
+
+### Layout Verification and Output Formats
+
+The resulting hand-drawn layout transitions to a digital form using layout editing tools (e.g., open-source tool "magic"). Outputs typically include the GDSII (GDS2) layout file, which contains all geometrical information necessary for fabrication.
+
+- GDSII format specifies component boundaries and facilitates manufacturing.
+- The layout must comply with all DRC rules to ensure manufacturability.
+
+### Parasitic Extraction and Cell Characterization
+
+Parasitic extraction derives the resistance and capacitance ($R$, $C$) of interconnects and devices directly from the drawn layout. This data is compiled into a SPICE netlist, integrating the extracted parasitic values.
+
+- Extracted parameters are key for precise simulation of timing and electrical behavior.
+
+Characterization uses the SPICE netlist to compute:
+
+- Timing metrics
+- Noise margins
+- Power consumption
+
+The results are captured in standard output files (e.g., LIB, .lib files), defining the functionality and performance of the cell for broader use in digital circuit synthesis.
+
+<img width="792" height="530" alt="image" src="https://github.com/user-attachments/assets/c2e31e8b-f07d-4f1e-bdfa-04f3d0c6212c" />
+
+
+## Key Points
+
+- **Logical function** is implemented using PMOS/NMOS transistor networks specifically arranged to realize that function.
+- **PMOS and NMOS network graphs** clarify transistor connections and provide a basis for area-optimized transistor placement.
+- **Euler path** in the network graph yields a single continuous transistor ordering, minimizing diffusion breaks and yielding compact layouts.
+- **Stick diagrams** abstract transistor and interconnect arrangements before formal layout, bridging logical topology and physical design.
+- **Design Rule Constraints (DRC)** and user specifications rigorously define feature sizes, contact/metal placements, and cell boundaries.
+- **Layout editing tools** (e.g., magic) convert abstract representations into fabrication-ready GDSII files.
+- **Parasitic extraction** ensures realistic modeling of circuit performance by accounting for layout-induced electrical effects ($R$, $C$).
+- **Cell characterization** translates physical properties into timing, noise, and power metrics required for higher-level digital design automation.
+
+---
+# Typical characterization flow
+
+This section covers the theoretical foundations and key ideas behind the cell-level characterization flow in custom digital design using open-source hardware tools. The focus is on understanding the role and nature of different inputs, the stepwise methodology followed in industry-standard flows, and the classification of resulting models used in timing, power, and noise analysis.
+
+## Core Concepts
+
+### Inputs to Characterization
+
+- **Layout**: A fully designed geometric representation of a cell, such as a buffer or inverter, typically created with open-source physical layout tools. Each component in the layout (like metal layers and contacts) corresponds to electrical properties including resistance and capacitance.
+
+  <img width="292" height="330" alt="image" src="https://github.com/user-attachments/assets/de6ccc22-5aeb-4a39-a26d-a2648c62eff3" />
+
+
+- **Cell Description**: Specifies how basic elements (e.g., inverters in a buffer) are interconnected, detailing their relationships and connection to power sources.
+
+  <img width="829" height="452" alt="image" src="https://github.com/user-attachments/assets/62c46762-dd57-4ed5-907a-58d1cd17fa99" />
+
+
+- **Extracted SPICE Netlist**: Produced from the layout, this netlist includes all electrical components (transistors, resistors, capacitors) derived from the physical geometry. Parasitive resistances and capacitances are included, enabling accurate simulation of real-world circuit behavior.
+
+  <img width="273" height="252" alt="image" src="https://github.com/user-attachments/assets/9d90b1a2-2dd1-491a-be88-6409a4c200f1" />
+
+
+- **Subcircuits and SPICE Models**: Subcircuits define reusable blocks such as inverters, instantiated multiple times in a design. SPICE device models (for NMOS and PMOS) represent the electrical characteristics of each transistor, capturing properties like threshold voltage ($V_{TH}$), doping, and process-specific behaviors.
+
+<img width="713" height="340" alt="image" src="https://github.com/user-attachments/assets/5ce74d32-2fb8-4df8-9123-ed55e62a4d5c" />
+
+
+### Characterization Flow: Stepwise Approach
+
+A typical industry-standard cell characterization flow consists of these ordered steps:
+
+1. **Read Model Files**: Import SPICE models for all device types (e.g., NMOS, PMOS), specifying their electrical characteristics.
+2. **Read Extracted SPICE Netlist**: Load the complete netlist, including parasitic resistances and capacitances, detailing physical layout effects.
+3. **Recognize Buffer Behavior**: Analyze the netlist to understand the logical and functional behavior of the cell (e.g., identify it as a buffer).
+4. **Read Subcircuits**: Import subcircuit descriptions for any instantiated building blocks (such as inverters).
+5. **Attach Power Sources**: Ensure all supply connections (e.g., $V_{DD}$, ground) are present and correctly tied to the cell.
+6. **Apply Stimulus**: Define the types of input stimuli to drive the simulation, essential for exercising and characterizing circuit response.
+7. **Specify Output Capacitance**: Configure external loading (e.g., a 10 fF output load) which may be varied for nonlinear delay or load-dependent measurements.
+8. **Add Simulation Commands**: Choose the analysis type (e.g., transient, DC), specifying simulation directives (e.g., `.tran`) required for the characterization.
+
+These steps are typically compiled into a configuration file supplied to characterization software.
+
+<img width="867" height="554" alt="image" src="https://github.com/user-attachments/assets/d0893a14-ccac-48ac-986f-4dddc1388b84" />
+<img width="862" height="524" alt="image" src="https://github.com/user-attachments/assets/416ff095-40f1-4ccc-8985-3cbaf5914a4e" />
+
+
+### Role of Characterization Software
+
+- The configuration file encapsulating all inputs is provided to a characterization tool (e.g., GUNA).
+- The software uses these inputs to perform simulations and extract *timing*, *noise*, and *power* data.
+- Generated models form the basis for further digital design flows and are essential for accurate design closure.
+
+<img width="873" height="540" alt="image" src="https://github.com/user-attachments/assets/d14d835c-ca8d-4043-bb3f-d931127844c3" />
+
+
+### Model Classification
+
+The resulting data from characterization flow is normally categorized as:
+
+- **Timing Characterization**: Determines delays, setup/hold times, and signal propagation characteristics of the cell under varying conditions.
+- **Power Characterization**: Quantifies the dynamic and static power consumption based on expected usage and switching patterns.
+- **Noise Characterization**: Assesses the cell's behavior in the presence of noise, indicating susceptibility or robustness.
+
+These comprehensive models are critical for assembling higher-level digital blocks and ensuring reliable design at system scale.
+
+<img width="852" height="253" alt="image" src="https://github.com/user-attachments/assets/20897fac-c2e9-412b-8987-0c67b75a33d4" />
+
+
+## Key Points
+
+- Accurate cell characterization relies on integrating layout, netlist extraction (including physical parasitics), libraries of subcircuits, and accurate SPICE models for devices.
+- The characterization flow is a formalized, stepwise process culminating in detailed functional, power, and noise models applicable in subsequent simulation and analysis.
+- Output models (often in the form of library files such as `.lib`) are divided by the type of analysis: timing, power, and noise.
+- All simulations depend fundamentally on the integrity of the device models and quality of the physically extracted netlist.
+- Stimulus and load selection are critical: choices made at this stage impact the representativeness and utility of generated timing and power models.
+
+---
+# General timing characterization parameters
+
+# Timing threshold definitions
