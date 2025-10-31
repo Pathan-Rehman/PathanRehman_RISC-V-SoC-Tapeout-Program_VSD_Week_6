@@ -1220,3 +1220,87 @@ At every step, the design process references **standard cells** (AND, OR, buffer
 ---
 # Congestion aware placement using RePlAce
 
+This lab focuses on the **placement stage** in digital design using open-source hardware tools. The main aim is to perform placement with an emphasis on congestion reduction rather than timing optimization. Placement consists of two distinct phases: **global placement** and **detailed placement**. In this lab, you will use relevant commands and tools to optimize wire length, legalize the placement of standard cells, and verify results visually. The process includes observing parameters such as **half perimeter wire length (HPWL)** and **overflow**, checking standard cell alignment, and viewing the design post-placement using visualization tools.
+
+## Lab Steps
+
+1. **Run Placement**
+
+   - Placement occurs in two stages:
+     - **Global Placement**: Coarse positioning aimed at reducing overall wire length.
+     - **Detailed Placement**: Legalizes cell positions, ensuring no overlaps and proper alignment within standard cell rows.
+  
+   - Start the placement run:
+     ```
+     openroad -run <placement-script.tcl>
+     ```
+     ![PLACEHOLDER: screenshot/terminal-output/schematic]
+
+2. **Monitor Algorithm and Output Metrics**
+
+   - During **global placement**, the key metric is **HPWL (half perimeter wire length)**. The goal is to minimize this value for better placement quality.
+   - Another critical parameter is **overflow**. Convergence is indicated when the overflow value decreases through iterations.
+     ```
+     # Example output
+     HPWL: 150000
+     Overflow: 1200
+     HPWL: 140000
+     Overflow: 800
+     ...
+     ```
+     ![PLACEHOLDER: screenshot/terminal-output/schematic]
+
+3. **Verify Legalization After Placement**
+
+   - In **detailed placement**, the process ensures that all standard cells are:
+     - Properly aligned inside standard cell rows.
+     - Have no overlaps.
+     - Legalized from physical and timing standpoints.
+     ![PLACEHOLDER: screenshot/terminal-output/schematic]
+
+4. **Visualize Placement with Magic Tool**
+
+   - Once placement is complete, view the resulting layout:
+     ```
+     magic -T <tech-file> <lef-file> <def-file>
+     ```
+     ![PLACEHOLDER: screenshot/terminal-output/schematic]
+
+   - Use Magic’s visualization features to inspect:
+     - Centralized standard cell clusters
+     - Correct placement of single cells (often observed in the lower left corner after floorplan)
+     - Alignment of TAP cells and IO pads as set by the floorplan
+     ![PLACEHOLDER: screenshot/terminal-output/schematic]
+
+   - Zoom in to check detailed placement of standard cells within their rows.
+     ![PLACEHOLDER: screenshot/terminal-output/schematic]
+
+5. **Review Standard Cell Placement and Boundary Conditions**
+
+   - Confirm:
+     - **No DRC (Design Rule Check) violations**
+     - Standard cells are correctly placed within rows and boundaries
+     - Decap cells are at the boundaries, TAP cells and IO pads are properly positioned per floorplan output
+     ![PLACEHOLDER: screenshot/terminal-output/schematic]
+
+6. **Save the Design State**
+
+   - Save visualization or DEF file for reference.
+     ```
+     save <output-name>.def
+     ```
+     ![PLACEHOLDER: screenshot/terminal-output/schematic]
+
+7. **Next Steps**
+
+   - The lab session concludes placement. User is encouraged to:
+     - Experiment with various placement switches and floorplan options.
+     - Answer MCQs related to placement concepts.
+     - Prepare for the next lab stage (e.g., Clock Tree Synthesis (CTS)).
+     
+   - Note: The **Power Distribution Network (PDN)** is not yet created. In this flow, PDN generation happens after placement and CTS, before routing.
+     ![PLACEHOLDER: screenshot/terminal-output/schematic]
+
+---
+
+**End of Lab Steps**
