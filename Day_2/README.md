@@ -1677,7 +1677,7 @@ These thresholds are consistently applied to both input and output waveforms and
 
 Slew, or transition rate, is calculated using the time difference between the two threshold crossings:
 - For a rising edge:
-  $slew_{rise} = t_{(high~threshold)} - t_{(low~threshold)}$
+  slew_{rise} = t_{(high~threshold)} - t_{(low~threshold)}
   
   Example: If 20% and 80% are used,
   $slew_{rise} = t_{80\%} - t_{20\%}$
