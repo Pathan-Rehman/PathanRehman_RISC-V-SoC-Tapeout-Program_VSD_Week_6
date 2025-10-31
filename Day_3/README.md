@@ -125,4 +125,94 @@ ls -l
 ```bash
 cd <openlane_project>
 ```
+---
+# SPICE deck creation for CMOS inverter
 
+This documentation explains the theoretical foundation behind voltage transfer characteristics in CMOS circuits and the foundational concepts of SPICE simulation as applied to CMOS inverters. It covers the symbolism and connectivity requirements for PMOS and NMOS devices, the reasoning behind component sizing, the significance of the load capacitor, and the definition and necessity of nodes within circuit netlists used by SPICE simulators.
+
+## Core Concepts
+
+### Voltage Transfer Characteristics of CMOS
+
+In CMOS circuits, the *voltage transfer characteristic* describes how the output voltage responds as the input voltage changes. This relationship is key to understanding how CMOS inverters switch states and operate in digital logic.
+
+<img width="916" height="432" alt="image" src="https://github.com/user-attachments/assets/b978c92c-742e-4bb2-80d6-054e10ed4c88" />
+
+
+### SPICE Simulation Overview
+
+**SPICE** (Simulation Program with Integrated Circuit Emphasis) simulators use mathematical models to approximate the electrical behavior of actual devices. Each component in a simulation (such as PMOS, NMOS, resistors, or capacitors) is defined by a mathematical model that captures its essential electrical characteristics. Simulators leverage these models to compute expected circuit behavior under specified conditions.
+
+<img width="920" height="448" alt="image" src="https://github.com/user-attachments/assets/3b429e4c-6604-493b-8623-86aef7b46e3b" />
+
+
+### Netlist and Connectivity
+
+A SPICE simulation is based on a *netlist*—a textual description detailing all circuit components, their interconnections, and the configuration of the simulation (e.g., stimulus, output points). The netlist must communicate:
+- The types and models of each device (e.g., PMOS, NMOS)
+- The specific circuit instantiation parameters (width, length, etc.)
+- All nodes (junctions where two or more components connect)
+- Input signals, supply voltages, and outputs
+
+The connectivity of the *substrate* terminal for MOSFETs must be explicitly defined, as it influences electrical characteristics like the threshold voltage.
+
+<img width="499" height="147" alt="image" src="https://github.com/user-attachments/assets/411c8f5a-9815-475c-b449-53829b750cac" />
+
+
+### Device Symbols and Substrate Pin
+
+The PMOS symbol typically features an arrow pointing outward, while the NMOS symbol points inward. This arrow direction encodes the current/conventional flow and device type. The substrate pin is a key terminal that connects to either the highest or lowest potential in the circuit (VDD for PMOS, VSS for NMOS), and its voltage can alter device behavior by changing the threshold voltage.
+
+<img width="149" height="316" alt="image" src="https://github.com/user-attachments/assets/7832dfa9-c27f-43c4-81b5-24096c004db8" />
+
+
+### Component Sizing in CMOS Inverters
+
+Sourcing and sizing:
+- The *channel length* ($L$) and *channel width* ($W$) determine the current-driving capability.
+- Typical values might be $W/L = 0.375/0.25$ for both PMOS and NMOS, but in standard practice, the PMOS is often made wider (e.g., $W_{PMOS} = 2 \times W_{NMOS}$) to balance the drive strength between p-channel and n-channel devices due to carrier mobility differences.
+- $W$ and $L$ are typically given in microns or nanometers, reflecting fabrication technology.
+
+For instance, $W = 375$ nm and $L = 250$ nm for both NMOS and PMOS in a demonstration, but more balanced inverters typically use a $W_{PMOS}$ twice or thrice that of the NMOS.
+
+<img width="409" height="333" alt="image" src="https://github.com/user-attachments/assets/ed72986d-0e40-4201-af9e-ea8a74eb28d9" />
+
+
+### Load Capacitance
+
+The *output load capacitor* represents the capacitance seen at the inverter output. Its value is crucial for determining dynamic response and must be chosen based on the aggregate input capacitance of the driven circuitry. The value (e.g., 10 femtofarads) impacts how quickly the output can change state.
+
+This capacitance is typically modeled as a lumped element, but in complex analysis, it derives from downstream gate capacitance and interconnect.
+
+<img width="162" height="164" alt="image" src="https://github.com/user-attachments/assets/22528b14-56c1-4943-9116-5031172c4fd8" />
+
+
+### Voltage Supply Scaling
+
+The choice of supply voltage ($V_{DD}$) is often proportional to technology scaling. For example, a channel length of 250 nm may correspond to a $V_{DD}$ value of 2.5 V; smaller channel lengths would demand proportionally smaller supply voltages to ensure device reliability and optimal operation.
+
+The input gate voltage is typically swept across the supply range during simulations to observe the inverter response.
+
+<img width="119" height="301" alt="image" src="https://github.com/user-attachments/assets/b73ddda0-9b61-4c94-87e2-d5e55964f4c4" />
+
+
+### Nodes and Node Naming
+
+A *node* is a point where device terminals connect—each component is defined between two or more named nodes. In SPICE, proper node identification is essential, as components are referenced in terms of their connecting nodes (e.g., IN, OUT, VDD, 0).
+
+For example, the output load capacitor would be defined as connected between the nodes OUT and 0 (ground).
+
+
+## Key Points
+
+- **SPICE Simulators** simulate electrical circuits using mathematical models attached to each component. These models approximate real-world device behavior.
+- **Netlist construction** is the essential first step in simulation, encoding every component, connection, node, and necessary parameter.
+- **PMOS and NMOS symbols** differ in arrow direction—the arrow out for PMOS, in for NMOS—encoding device type and current direction.
+- **Substrate connection** must be specified for every MOSFET, as the substrate (or body) determines threshold voltage and can affect device behavior.
+- **Component sizing** (i.e., width and length of MOSFETs) determines electrical strength. Typically, PMOS is sized wider than NMOS to balance drive strengths due to mobility differences.
+- **Load capacitance** is fundamental in digital circuits, representing the output node’s total capacitance. While sometimes assumed for simplicity (e.g., 10 fF), it typically requires calculation from circuit topology and is crucial for timing analysis.
+- **Voltage scaling** is tied to technology size; smaller geometries use lower supply voltages, commonly scaling $V_{DD}$ with channel length.
+- **Nodes** define the connectivity in SPICE models. Each part must clearly indicate which nodes (IN, OUT, VDD, 0, etc.) it connects between. Consistent naming ensures correct simulation behavior.
+
+---
+# SPICE simulation lab for CMOS inverter
