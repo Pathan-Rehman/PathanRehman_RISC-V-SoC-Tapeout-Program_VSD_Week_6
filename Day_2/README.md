@@ -1232,9 +1232,11 @@ This lab focuses on the **placement stage** in digital design using open-source 
   
    - Start the placement run:
      ```
-     openroad -run <placement-script.tcl>
+     run_placement
      ```
-     ![PLACEHOLDER: screenshot/terminal-output/schematic]
+     <img width="893" height="883" alt="image" src="https://github.com/user-attachments/assets/ac59b027-7501-49ff-a1f6-2be48b44c0e8" />
+<img width="894" height="674" alt="image" src="https://github.com/user-attachments/assets/f56fe55f-d8a5-4d00-81d9-5b7ef991c3f7" />
+
 
 2. **Monitor Algorithm and Output Metrics**
 
@@ -1248,7 +1250,6 @@ This lab focuses on the **placement stage** in digital design using open-source 
      Overflow: 800
      ...
      ```
-     ![PLACEHOLDER: screenshot/terminal-output/schematic]
 
 3. **Verify Legalization After Placement**
 
@@ -1256,24 +1257,27 @@ This lab focuses on the **placement stage** in digital design using open-source 
      - Properly aligned inside standard cell rows.
      - Have no overlaps.
      - Legalized from physical and timing standpoints.
-     ![PLACEHOLDER: screenshot/terminal-output/schematic]
 
 4. **Visualize Placement with Magic Tool**
 
    - Once placement is complete, view the resulting layout:
      ```
-     magic -T <tech-file> <lef-file> <def-file>
+     magic -T /home/vsduser/Desktop/work/tools/openlane_working_dir/pdks/sky130A/libs.tech/magic/sky130A.tech lef read ../../tmp/merged.lef def read picorv32a.placement.def &
      ```
-     ![PLACEHOLDER: screenshot/terminal-output/schematic]
+     <img width="718" height="710" alt="image" src="https://github.com/user-attachments/assets/b2f21a49-aad2-4143-88b1-43887ee12af8" />
+
 
    - Use Magic’s visualization features to inspect:
      - Centralized standard cell clusters
      - Correct placement of single cells (often observed in the lower left corner after floorplan)
      - Alignment of TAP cells and IO pads as set by the floorplan
-     ![PLACEHOLDER: screenshot/terminal-output/schematic]
+     <img width="1152" height="863" alt="image" src="https://github.com/user-attachments/assets/cb7dcfd1-6667-4c2a-b7fa-6bb9e00607ac" />
+<img width="881" height="711" alt="image" src="https://github.com/user-attachments/assets/f54ec05d-3a98-4215-87f6-be7b5c5e559e" />
+
 
    - Zoom in to check detailed placement of standard cells within their rows.
-     ![PLACEHOLDER: screenshot/terminal-output/schematic]
+     <img width="906" height="641" alt="image" src="https://github.com/user-attachments/assets/c7046e12-cdae-4e16-9622-a87044bffa79" />
+
 
 5. **Review Standard Cell Placement and Boundary Conditions**
 
@@ -1281,7 +1285,8 @@ This lab focuses on the **placement stage** in digital design using open-source 
      - **No DRC (Design Rule Check) violations**
      - Standard cells are correctly placed within rows and boundaries
      - Decap cells are at the boundaries, TAP cells and IO pads are properly positioned per floorplan output
-     ![PLACEHOLDER: screenshot/terminal-output/schematic]
+     <img width="1083" height="34" alt="image" src="https://github.com/user-attachments/assets/430bb562-ddf3-4d0e-9ad6-8332c3dcf521" />
+
 
 6. **Save the Design State**
 
@@ -1289,18 +1294,9 @@ This lab focuses on the **placement stage** in digital design using open-source 
      ```
      save <output-name>.def
      ```
-     ![PLACEHOLDER: screenshot/terminal-output/schematic]
 
 7. **Next Steps**
-
-   - The lab session concludes placement. User is encouraged to:
-     - Experiment with various placement switches and floorplan options.
-     - Answer MCQs related to placement concepts.
-     - Prepare for the next lab stage (e.g., Clock Tree Synthesis (CTS)).
      
    - Note: The **Power Distribution Network (PDN)** is not yet created. In this flow, PDN generation happens after placement and CTS, before routing.
-     ![PLACEHOLDER: screenshot/terminal-output/schematic]
 
 ---
-
-**End of Lab Steps**
