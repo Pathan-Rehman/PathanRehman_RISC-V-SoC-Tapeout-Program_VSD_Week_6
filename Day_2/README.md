@@ -1138,6 +1138,8 @@ This documentation covers the theoretical foundation and key concepts related to
 # Need for libraries and characterization
 
 This document outlines the **theoretical foundations** of integrated circuit (IC) design flow, with a focus on how each stage interacts with library characterization. The stages include logic synthesis, floorplanning, placement, clock tree synthesis, routing, and static timing analysis, culminating in the necessity for comprehensive gate characterization. Each stage relies on accurate cell models to achieve targeted functionality, timing, and manufacturability.
+
+
 <img width="674" height="73" alt="image" src="https://github.com/user-attachments/assets/9ea88100-0213-4102-afd8-9a2be019007b" />
 
 ---
