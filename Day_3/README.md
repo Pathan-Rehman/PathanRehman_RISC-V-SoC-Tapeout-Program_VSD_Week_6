@@ -1,4 +1,4 @@
-<img width="733" height="268" alt="image" src="https://github.com/user-attachments/assets/674c2691-a8e1-459f-9804-59693b973b4e" /># Labs for CMOS inverter ngspice simulations
+# Labs for CMOS inverter ngspice simulations
 
 # IO placer revision
 
