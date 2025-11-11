@@ -898,4 +898,255 @@ The Lightly Doped Drain (LDD) formation is a semiconductor device engineering te
 
 # Source – drain formation
 
+This documentation section covers the theoretical background and key concepts behind the **source and drain formation** in MOSFET fabrication, including the prevention of channeling effects, the function of screen oxide, the significance of ion implantation for forming heavily doped regions, and the annealing process. It explains how these processes establish the desired source/drain structures for both NMOS and PMOS devices, and discusses major operational modes and relevant physical effects.
 
+## Core Concepts
+
+### Channeling and Screen Oxide
+
+**Channeling** refers to the undesired deep penetration of implanted ions along crystallographic paths in a silicon substrate, which can occur if ions are aligned with rows of atoms, allowing them to travel further without significant scattering. To mitigate channeling, a thin **screen oxide** layer is grown over the substrate before ion implantation.
+
+- The **screen oxide** randomizes the trajectories of incoming ions, promoting more uniform and controlled doping profiles and ensuring that ions stay within intended regions.
+
+<img width="1338" height="626" alt="image" src="https://github.com/user-attachments/assets/5177258d-e611-4603-9a18-085abe93b185" />
+
+
+### Ion Implantation for Source and Drain Formation
+
+**Ion implantation** introduces dopants into defined regions of the silicon substrate to create heavily doped source and drain extensions.
+
+- For **NMOS** devices, arsenic (a Group V donor) is implanted to form n+ regions. Typically, high energies (e.g., 75 keV) are used for deep penetration of heavier ions.
+- For **PMOS** devices, boron (a Group III acceptor) is implanted to form p+ regions, requiring lower energies (e.g., 50 keV) due to the lighter atomic mass of boron.
+
+The process is precisely controlled using photolithography masks, exposing only the desired implantation areas.
+
+<img width="1220" height="674" alt="image" src="https://github.com/user-attachments/assets/3783489e-9c76-490b-90f8-67cae9a82d78" />
+<img width="1231" height="675" alt="image" src="https://github.com/user-attachments/assets/bedbef00-9f6b-4133-9884-b76e4cc2d447" />
+
+
+### Lightly Doped Drain (LDD) and Sidewall Spacers
+
+**LDD structures** are employed to manage electric field gradients near the drain, reducing hot-carrier effects and improving device reliability.
+
+- **Sidewall spacers** (typically made from silicon dioxide or nitride) are key to defining the separation between lightly and heavily doped regions, allowing sequential implantation for gradated doping concentrations.
+
+- This results in a source/drain profile with n- (or p-) lightly doped extensions adjoining the primary n+ (or p+) regions.
+
+<img width="1213" height="695" alt="image" src="https://github.com/user-attachments/assets/58947236-ede2-4d8c-a077-5db92b5041f9" />
+<img width="1071" height="488" alt="image" src="https://github.com/user-attachments/assets/97e640e9-a96b-4a37-b7e3-89b5f22eb829" />
+
+### High-Temperature Annealing
+
+Following ion implantation, the wafer undergoes **annealing**—a high-temperature process (often around 1000°C).
+
+- The annealing step:
+  - Activates the implanted dopants by moving them into substitutional positions within the lattice.
+  - Repairs crystal defects caused by the implantation process.
+  - Slightly drives the dopants further into the substrate, achieving the desired junction depth and dopant profile.
+    
+<img width="1368" height="712" alt="image" src="https://github.com/user-attachments/assets/92d944cd-7313-41b3-b2e6-4794f9acbf82" />
+
+### MOSFET Device Structure: Source, Drain, and CMOS Pairing
+
+The completed structure includes:
+- For **NMOS**: n+ source/drain, p-type substrate, and LDD n- regions.
+- For **PMOS**: p+ source/drain, n-type substrate, and LDD p- regions.
+
+These enable CMOS logic by pairing NMOS and PMOS devices, with each type requiring specific doping and masking steps.
+
+<img width="1076" height="464" alt="image" src="https://github.com/user-attachments/assets/659240c8-b799-4feb-8d7f-5d862d3db849" />
+
+
+## Key Points
+
+- **Channeling is mitigated by the introduction of screen oxide**—randomizing ion direction and ensuring shallow, controlled junctions.
+- **Photolithography masks define precise doping regions**, allowing selective formation of NMOS and PMOS transistors on the same substrate.
+- **Ion type and implant energy** differ depending on whether n- or p-type regions are created: arsenic (high energy) for NMOS, boron (lower energy) for PMOS.
+- **Sidewall spacers enable Lightly Doped Drain (LDD) regions**, reducing electric fields near the channel and improving performance and durability.
+- **High-temperature annealing activates dopants and repairs damage**, finalizing the electrical properties of the source and drain.
+- The overall process produces **heavily doped source/drain regions with lightly doped extensions**, critical for modern CMOS device performance and scaling.
+
+---
+
+# Local interconnect formation
+
+## Summary
+
+This section explains the theoretical foundations behind forming electrical contacts in semiconductor devices, focusing on their role, the materials involved, the physical processes used for deposition, and the distinction between local and higher-level interconnections. The concepts relate to how contacts enable electrical connectivity in integrated circuits, particularly for CMOS (complementary metal-oxide-semiconductor) technology.
+
+## Core Concepts
+
+### Role of Contacts in CMOS Devices
+
+- **Contacts** are the only accessible interface points for users to control the electrical behavior of PMOS and NMOS transistors.
+- They connect external circuits to the **source, drain,** and **gate** regions within each transistor.
+- The performance and reliability of a device depend critically on the materials and processes used to form these contacts.
+
+<img width="1067" height="453" alt="image" src="https://github.com/user-attachments/assets/c3a38aca-2a7d-4299-a75c-b847446076c0" />
+
+
+### Surface Preparation for Contacts
+
+- **Oxide layers** are deposited earlier during fabrication to prevent damage such as channeling, but must be selectively removed (etched) to expose regions for contact formation.
+- The etching process typically uses **hydrofluoric acid (HF)**, which removes the oxide isotropically, exposing the silicon surface at the desired regions.
+
+<img width="1353" height="619" alt="image" src="https://github.com/user-attachments/assets/06bf1e0b-0b2a-4686-acc1-3ea07be7d6fe" />
+
+
+### Metal Deposition via Sputtering
+
+- **Sputtering** is a physical vapor deposition method used to coat the exposed regions with a thin layer of metal, such as **titanium**.
+- The process involves bombarding a pure metal (titanium) with argon ions, causing titanium atoms to eject and deposit onto the substrate.
+- **Sputtering** provides good step coverage (uniformity) and is highly controlled, making it a preferred technique for depositing contacts.
+
+<img width="1313" height="626" alt="image" src="https://github.com/user-attachments/assets/a5465809-caab-491c-915b-f73a0e0a63d2" />
+<img width="1179" height="471" alt="image" src="https://github.com/user-attachments/assets/3529dfa7-6c0e-4381-973b-498a29c77263" />
+<img width="1306" height="622" alt="image" src="https://github.com/user-attachments/assets/b65512ce-8472-4257-a4a8-ca6782e0f631" />
+
+
+### Formation of Low-Resistivity Contacts
+
+- After deposition, **titanium** reacts at high temperature (typically 650–700°C) in a nitrogen ambient with the underlying silicon to form **titanium silicide (TiSi₂)**.
+- The key reaction is: $Ti + 2Si \rightarrow TiSi_2$
+- **Titanium silicide (TiSi₂)** offers low electrical resistance, improving current flow between the silicon and the wiring layers.
+- Simultaneously, titanium can react with nitrogen to form **titanium nitride (TiN)**, another conductive material often used for local interconnects due to its stability and specific resistivity.
+
+<img width="1327" height="617" alt="image" src="https://github.com/user-attachments/assets/e22d97fc-05b6-4d18-beee-6eb3bfaa1a59" />
+<img width="1313" height="616" alt="image" src="https://github.com/user-attachments/assets/017789d2-3569-4a9c-9cda-098f340ce7df" />
+
+
+### Local Interconnects vs Higher-Level Metalization
+
+- **Local interconnects**: Short-range connections (e.g., between the drain/source and adjacent gates) are formed using low-resistivity silicides and titanium nitride.
+- **Higher-level metalization**: Longer connections or connections brought out of the chip use higher-level metal layers, which may be different in composition and optimized for longer wiring paths.
+- Design decisions are required regarding which contacts are connected locally and which should be routed to higher metal layers for external connection.
+
+<img width="1066" height="720" alt="image" src="https://github.com/user-attachments/assets/91afa3e9-894b-4447-8b15-f72bc0a9544d" />
+<img width="1055" height="584" alt="image" src="https://github.com/user-attachments/assets/08545848-3e1e-4107-b886-0f438c21667f" />
+
+
+### Cleaning and Patterning
+
+- **Patterning** is achieved using photoresist and photolithography, followed by exposure to UV light and development.
+- **RCA cleaning** is used to remove unwanted or excess titanium nitride after patterning. RCA solution usually contains deionized water, ammonium hydroxide, and hydrogen peroxide.
+- Proper cleaning ensures only the required contact regions remain, supporting high device reliability and performance.
+
+<img width="881" height="300" alt="image" src="https://github.com/user-attachments/assets/c8565f62-0065-4a3c-9757-2b0b0aa4a345" />
+<img width="1258" height="673" alt="image" src="https://github.com/user-attachments/assets/4bdad670-9e6d-4664-983e-30e87ae6bc3f" />
+<img width="1061" height="659" alt="image" src="https://github.com/user-attachments/assets/be695eb2-3240-4770-89d2-f21ebc777663" />
+
+
+## Key Points
+
+- **Contacts** are essential interfaces that allow electrical access to the source, drain, and gate of transistors in CMOS devices.
+- **Oxide etching** with hydrofluoric acid exposes the regions where contacts will be made.
+- **Sputtering** of titanium forms the initial metal layer for contacts.
+- **Annealing** in nitrogen ambient at high temperatures causes titanium to react with silicon and nitrogen, forming **TiSi₂** and **TiN** respectively.
+- **TiSi₂** provides low resistance pathways suitable for local wiring; **TiN** is also used for local interconnects due to its conductive properties.
+- Selection of which contacts are connected locally versus routed to higher levels depends on circuit functionality (e.g., tying drains of PMOS/NMOS together or bringing outputs off-chip).
+- **Photolithography and RCA cleaning** processes ensure that only the necessary regions maintain conductive contacts after fabrication steps.
+
+---
+
+# Higher level metal formation
+
+This section elaborates on the theoretical aspects of higher-level metal formation within microelectronic fabrication, focusing on the need for planarization, dielectric deposition, barrier layers, and hierarchical interconnect design. The process ensures reliable metal interconnections across multiple layers by addressing surface topography, material stability, and electrical isolation.
+
+
+---
+
+## Core Concepts
+
+### Non-Planar Surface Topography & Planarization
+
+- After initial device fabrication steps, the wafer's surface is **non-planar**, containing "hills and valleys" due to underlying features.
+- Such non-flat surfaces are unsuitable for directly depositing metal interconnects, as this can cause discontinuities and reliability issues.
+- To address this, a **thick SiO₂ layer** is deposited as a dielectric. This oxide may be **doped with phosphorus** (for sodium ion barrier) or **boron** (to assist in high-temperature process control).
+- **Chemical Mechanical Polishing (CMP)** is used to planarize the surface, creating a uniformly flat layer upon which metal can be deposited.
+
+<img width="1305" height="705" alt="image" src="https://github.com/user-attachments/assets/db9a27f0-385d-405f-bdd0-fe67c040e088" />
+<img width="1306" height="678" alt="image" src="https://github.com/user-attachments/assets/a80a142f-6e43-4399-9ff0-5f03868df9dc" />
+<img width="1442" height="779" alt="image" src="https://github.com/user-attachments/assets/51ead3ef-6ea9-4914-877b-83c901a78983" />
+
+---
+
+### Contact Formation
+
+- To enable electrical connections between different metal or active device layers, **contact holes (vias)** are created in the planarized dielectric using **photolithography** and **etching**.
+- These vias require a sequence of **masking, exposure, development, and etching** steps, using specific "mask numbers" to designate process stages.
+- The completion of a via exposes the underlying layer for subsequent metal deposition.
+
+<img width="1061" height="644" alt="image" src="https://github.com/user-attachments/assets/3a710d60-74f6-4251-9f0e-af3baafd2c7f" />
+
+---
+
+### Barrier and Adhesion Layers
+
+- A **thin titanium nitride (TiN) layer** is deposited to:
+  - Promote strong adhesion between metal and SiO₂ dielectric
+  - Act as a diffusion barrier, preventing intermixing of metals from adjacent layers
+
+<img width="1139" height="643" alt="image" src="https://github.com/user-attachments/assets/3aa6f113-d38a-4a43-8394-d748786c687c" />
+
+
+---
+
+### Metal Deposition & Planarization
+
+- A **blanket tungsten layer** is deposited to fill the vias, providing robust low-resistance contacts.
+- Excess tungsten is removed by a second CMP step, leaving metal only within defined contact holes and resulting in a planar surface.
+
+<img width="1307" height="644" alt="image" src="https://github.com/user-attachments/assets/5da906d3-307b-4c71-8eec-21b68f821f66" />
+<img width="1295" height="657" alt="image" src="https://github.com/user-attachments/assets/2a018f3d-bd85-4b91-9370-0223292d3ef9" />
+
+
+---
+
+### Metal Interconnect Hierarchy
+
+- **Aluminum is deposited** over the planarized surface to serve as the first major metal interconnect layer.
+- Patterning of aluminum via photolithography and etching creates circuit connectivity at the desired locations.
+- To **create higher-level interconnects**, the process repeats:
+  - Deposit SiO₂ (or other dielectrics)
+  - Planarize (CMP)
+  - Pattern vias with corresponding mask
+  - Add barrier layer and fill with tungsten
+  - Deposit and pattern the next metal layer (often thicker at each level)
+
+<img width="1289" height="643" alt="image" src="https://github.com/user-attachments/assets/30baf23c-fa06-4d63-843c-070694ba3c74" />
+<img width="1386" height="751" alt="image" src="https://github.com/user-attachments/assets/ddbb3232-ffe9-4c40-a977-9c3bfd1fdc1c" />
+<img width="1342" height="669" alt="image" src="https://github.com/user-attachments/assets/8a1cef99-a7f8-4fc2-985a-647425333894" />
+<img width="1098" height="587" alt="image" src="https://github.com/user-attachments/assets/c48c9af7-1a08-4abe-b218-d4e6cda7666e" />
+<img width="1327" height="675" alt="image" src="https://github.com/user-attachments/assets/eced812c-8378-4e49-845e-74136d3e634a" />
+<img width="1350" height="690" alt="image" src="https://github.com/user-attachments/assets/b2ed48f3-f66c-42e5-a637-f8fe0ed1ccba" />
+<img width="1295" height="679" alt="image" src="https://github.com/user-attachments/assets/4da0dffb-70de-4433-a1d7-ce1a33dd20ce" />
+<img width="1297" height="707" alt="image" src="https://github.com/user-attachments/assets/7b66ef67-105e-4435-aad3-4a123e21ef3e" />
+
+---
+
+### Final Passivation and Protection
+
+- The final fabrication step often uses a strong dielectric layer (e.g., **Si₃N₄**) to cover and protect the entire chip surface.
+- This passivation prevents contamination and mechanical damage.
+- Contact holes are finally patterned through this protective layer to allow connections to package pins or external circuits.
+
+<img width="1557" height="828" alt="image" src="https://github.com/user-attachments/assets/ea2adebc-286f-4dbf-8667-b0d5b943a2fc" />
+<img width="1591" height="803" alt="image" src="https://github.com/user-attachments/assets/18bc0bf8-166c-449a-a6a6-4e44d21d283a" />
+<img width="1538" height="835" alt="image" src="https://github.com/user-attachments/assets/8d6d5169-fed4-432c-aa40-beb25fa36391" />
+<img width="1050" height="835" alt="image" src="https://github.com/user-attachments/assets/e51e8959-c482-4c80-bacf-626ccad8476e" />
+
+---
+
+## Key Points
+
+- **Planarization** is *crucial* for reliable multi-level metallization; it prevents discontinuities and supports high-density interconnects.
+- **Dielectric layers** (e.g., SiO₂, sometimes doped) provide electrical isolation and structural support between metal layers.
+- **Contact holes (vias)** are formed using photolithography and are essential for interlayer connectivity; each new level requires a new mask.
+- **Barrier layers** such as titanium nitride are critical for adhesion and to prevent unwanted diffusion between metal layers.
+- **Metal layers** are deposited sequentially, with thickness often increasing at higher hierarchical levels to accommodate more current and lower resistance.
+- **CMP** ensures each layer begins with a flat surface, maintaining process integrity through each metallization level.
+- The **final passivation layer** protects the finished chip from environmental factors and provides mechanical strength.
+
+---
+
+# Lab introduction to Sky130 basic layers layout and LEF using inverter
