@@ -1802,23 +1802,26 @@ From the command line, run:
 ```
 magic -d XR met3.mag
 ```
-![PLACEHOLDER: screenshot/terminal-output/schematic]
+<img width="848" height="742" alt="image" src="https://github.com/user-attachments/assets/68598079-680a-49d2-9894-003cf01c1440" />
+
 
 Alternatively, start Magic and use the menu:
 - Select **File** > **Open** and load the `met3.mag` file from the file dialog.
-![PLACEHOLDER: screenshot/terminal-output/schematic]
+<img width="719" height="716" alt="image" src="https://github.com/user-attachments/assets/303d4b37-043c-49e5-8ec8-e9ca5f791463" />
+
 
 #### Observe the Layout View
 
 You should see a layout window displaying several independent example geometries for Metal 3. Each example is labeled with a rule number corresponding to the Google SkyWater documentation. Areas with DRC errors will appear as white patches.
-![PLACEHOLDER: screenshot/terminal-output/schematic]
+<img width="891" height="884" alt="image" src="https://github.com/user-attachments/assets/11cc1362-9d91-4f65-8f80-7cae61b9c080" />
+
 
 ### 2. Exploring the Rule Documentation
 
 - Access the SkyWater rules documentation online.
 - Navigate to **Design Rules** > **Periphery Rules**.
 - Find the **M3** section using the table of contents to reference rule explanations.
-![PLACEHOLDER: screenshot/terminal-output/schematic]
+
 
 **Note:** Rules flagged with "CPU" refer to process variants not present in SkyWater Sky130 and can be ignored.
 
@@ -1833,7 +1836,8 @@ Most Magic commands can be entered through the console window. To reach the cons
 ```
 drc why
 ```
-![PLACEHOLDER: screenshot/terminal-output/schematic]
+<img width="651" height="340" alt="image" src="https://github.com/user-attachments/assets/76910805-2ce3-4e79-905f-cd934d2aa72b" />
+
 
 - Press **Return**. The violation rule at the cursor location will display in the console window.
 
@@ -1850,14 +1854,14 @@ To visualize how Magic creates contact cuts for VIA2:
 1. Draw a large area of M3 contact:
    - Use the `paint` command
      - Or, in the GUI, hover over the M3 contact icon and either click the middle mouse button or hit the `p` key.
-![PLACEHOLDER: screenshot/terminal-output/schematic]
+<img width="888" height="671" alt="image" src="https://github.com/user-attachments/assets/74ad0e23-2da6-4355-9560-8630f2427146" />
+
 
 2. With the cursor box still around the drawn area, open the console (`:`) and enter:
 
 ```
-sift c VIA2
+cif see VIA2
 ```
-![PLACEHOLDER: screenshot/terminal-output/schematic]
 
 - Black squares will appear showing the **contact cuts** (they represent the mask layer for VIA2).
 
@@ -1866,9 +1870,8 @@ sift c VIA2
 To clear this overlay, enter in the console:
 
 ```
-feedback clear
+feed clear
 ```
-![PLACEHOLDER: screenshot/terminal-output/schematic]
 
 ### 5. Verify Enclosure Rule Enforcement
 
@@ -1885,7 +1888,6 @@ or
 ```
 snap int
 ```
-![PLACEHOLDER: screenshot/terminal-output/schematic]
 
 #### Measure the VIA2-M3 Edge Distance
 
@@ -1899,7 +1901,6 @@ box
 (or simply press the `b` key while focused on the layout)
 
 - The measured width will display in the console, verifying the minimum enclosure (e.g., $0.065$ microns or larger).
-![PLACEHOLDER: screenshot/terminal-output/schematic]
 
 *Because Magic auto-generates and centers these cuts, the enclosure is always $ \geq 0.065 $ microns—this rule is correct by design.*
 
@@ -1913,4 +1914,178 @@ At this point, you've learned:
 
 The next step will proceed to analyzing a layer with an incorrect but simple-to-fix rule.
 
-![PLACEHOLDER: screenshot/terminal-output/schematic]
+---
+# Lab exercise to fix poly.9 error in Sky130 tech-file
+
+This lab exercise demonstrates how to identify, troubleshoot, and fix rule implementation errors in an unfinished version of the tech file for an open-source hardware design environment. The aim is to locate a flagged design rule violation, verify its documentation and schematic, inspect the related design rule check (DRC) entries in the tech file, and update them to properly enforce spacing requirements between Poly resistors and Poly, diffusion, or tap layers. The steps include loading files in Magic, checking rule definitions, editing the tech file, reloading it, and verifying error detection.
+
+## Lab Steps
+
+1. **Find a Flagged Rule Implementation Error**
+
+   - Open Magic and load the file `Poly.mag` to view rules and flagged errors.
+   - Locate a flagged rule violation. In this exercise, select rule **Poly.9**.
+
+   <img width="884" height="740" alt="image" src="https://github.com/user-attachments/assets/3df72a2b-cea3-4064-a8bd-a2b992c0efe9" />
+  <img width="1852" height="873" alt="image" src="https://github.com/user-attachments/assets/e894d147-f51a-4501-9ec8-cc4923b57c02" />
+
+2. **Verify Rule Description**
+
+   - Refer to the website for the rule description for **Poly.9**.
+   - Description: "**Poly resistor, spacing to Poly or spacing, no overlap to diff tap. The rule distance is $0.4$ microns.**"
+
+   <img width="1161" height="65" alt="image" src="https://github.com/user-attachments/assets/cc431cac-db46-4638-ab97-b4e6b33e49b6" />
+
+
+3. **Identify Layer Types in the Layout**
+
+   - In Magic, select any drawn figure with the **S** key.
+   - Then type the command: `what`
+   - Observe output for layer type, e.g., "type Poly res" and "type Poly".
+
+   <img width="982" height="595" alt="image" src="https://github.com/user-attachments/assets/b06222d5-faab-48c7-8ff0-6036f26e940f" />
+  <img width="978" height="694" alt="image" src="https://github.com/user-attachments/assets/54e34d0e-7a91-4773-b093-34b972ff04c4" />
+
+
+4. **Measure the Distance Relevant to the Rule**
+
+   - Use the cursor box in Magic to measure the spacing between a Poly resistor and regular Poly.
+   - press `b`
+   - Example measurement: box shows $0.22$ microns.
+
+   <img width="975" height="735" alt="image" src="https://github.com/user-attachments/assets/894bef3b-1480-4910-a39f-105b7b8ed59f" />
+
+
+5. **Detect Missing or Incorrect Rule Implementation**
+
+   - Note the violation is not being flagging correctly and must be fixed.
+
+
+6. **Edit the Tech File to Add/Fix Rule**
+
+   - Open the `sky130A.tech` file using your preferred editor (e.g., `vim`, `vi`, `nano`).
+
+   ```
+   vim sky130A.tech
+   ```
+
+   - The **DRC section** begins around line 4702.
+   - Search for `Poly.9` to check rule definitions.
+
+   ```
+   /Poly.9
+   ```
+
+   <img width="733" height="489" alt="image" src="https://github.com/user-attachments/assets/b4f758f2-5aa1-4da2-8817-6f3cc07663d5" />
+
+
+   - Identify current rule entries:
+     - Defined: NP res and NSD, XHR Poly and diffusion.
+   - Missing: Poly resistor to regular Poly spacing rule.
+
+7. **Add the Spacing Rule in the Tech File**
+
+   - Copy an existing rule and modify all `diff` references to `Poly` (or more precisely, use the alias for "all Poly non res" as found in the aliases section).
+   - Update both rules to include all Poly resistor spacing cases.
+
+   ```
+   width uhrpoly 350 "uhrpoly resistor width < %d"
+   spacing xhrpoly,uhrpoly,xpc alldiff 480 touching_illegal \
+	"xhrpoly/uhrpoly resistor spacing to diffusion < %d (poly.9)"
+
+   width uhrpoly 350 "uhrpoly resistor width < %d"
+   spacing xhrpoly,uhrpoly,xpc allpolynonres* 480 touching_illegal \
+	"xhrpoly/uhrpoly resistor spacing to diffusion < %d (poly.9)"
+   ```
+
+   <img width="665" height="212" alt="image" src="https://github.com/user-attachments/assets/e649c362-8e57-4af9-9da3-d0c2a78a5aee" />
+  <img width="664" height="385" alt="image" src="https://github.com/user-attachments/assets/9aba5919-9352-458f-9d50-b57c1736bba9" />
+
+
+8. **Save Changes to the Tech File**
+
+   - Save the updated `sky130A.tech` file in your text editor.
+
+
+9. **Reload the Tech File in Magic**
+
+   - Without restarting Magic, reload the tech file from the command line:
+
+   ```
+   tech load sky130A.tech
+   ```
+
+   <img width="989" height="532" alt="image" src="https://github.com/user-attachments/assets/fb09f9a0-9e13-4acd-883e-e2827dc87666" />
+
+
+   - You may see a pop-up warning about editing the tech file while Magic is running; proceed if only adjusting DRC rules.
+
+
+10. **Force DRC Re-Check**
+
+    - Command the DRC engine to re-check all design rules:
+
+    ```
+    drc check
+    ```
+
+    <img width="981" height="801" alt="image" src="https://github.com/user-attachments/assets/fc58e474-fe38-4e66-bfe8-3b7e23d61a2d" />
+
+
+    - Verify that the error for Poly resistor to Poly spacing is now flagged correctly.
+
+11. **Check Rule Coverage**
+
+    - Observe that you've fixed the Poly to Poly resistor spacing, but the rule also covers Poly resistor to diffusion and tap.
+    - If a diagram for Poly resistor to diffusion or tap is missing, create or update it to ensure all violations are checked.
+
+---
+
+# Lab exercise to implement poly resistor spacing to diff and tap
+
+This lab guides you through the process of copying and verifying different types of diffusion and tap regions in a layout for poly resistors using Magic, an open-source VLSI layout tool. The goal is to identify and resolve design rule violations related to distances between poly resistors and diffusion or tap regions, implement corrections in the technology rule file, and verify the fixes with design rule checks (DRC). The main steps include copying resistor instances, drawing diffusion layers with correct colors, correcting rule file issues, and verifying with DRC.
+
+## Lab Steps
+
+1. **Copy poly resistor structures**
+
+   - Copy three resistor structures to work with different diffusion and tap types.
+   - These include n diffusion, p diffusion, n tap, and p tap layers.
+
+   <img width="769" height="350" alt="image" src="https://github.com/user-attachments/assets/8c731fad-13bc-4668-be6f-13e92e46f1b7" />
+
+
+2. **Identify and name diffusion and substrate layers**
+
+   - The main layers are:
+     - **n diffusion** (`endif`)
+     - **p diffusion** (`pdif`)
+     - **substrate in diffusion** (`in SD`)
+     - **p substrate p diffusion** (`PSD`)
+
+   - n-type diffusions are drawn in **green**; p-type diffusions are drawn in **tan**.
+
+
+3. **Draw diffusion layers near poly resistors**
+
+   - Place the diffusion layers close to the poly resistor devices to test spacing and rule enforcement.
+
+
+4. **Draw n-well under p diffusion and n tap**
+
+   - Draw an in-well layer beneath the p diffusion and n tap.
+   - This helps mask irrelevant errors in the DRC checker, focusing only on relevant spacing violations.
+
+
+5. **Review design rule check (DRC) results**
+
+   - Perform a DRC in Magic to check for violations related to spacing between poly resistors and diffusion/tap.
+
+   ```
+   drc check
+   ```
+
+   - Observe:
+     - XHR and HR poly resistors correctly display spacing violations.
+     - The n poly resistor only flags a distance violation to n tap, not n diffusion.
+---
