@@ -1165,7 +1165,8 @@ This lab guides you in constructing and verifying the layout of a **basic CMOS i
     - **Polysilicon** (often red) forms the gate.
     - Use the color palette within the tool to identify each layer by hovering the cursor and observing the legend.
 
-![PLACEHOLDER: screenshot/terminal-output/schematic]
+<img width="1212" height="716" alt="image" src="https://github.com/user-attachments/assets/51485718-85d1-47b0-9b92-0f606c682e4d" />
+
 
 ### 2. Confirm Diffusion Regions and Polysilicon Intersections
 
@@ -1175,7 +1176,8 @@ This lab guides you in constructing and verifying the layout of a **basic CMOS i
 
 - Hover over the intersection area in the layout tool and press `s` to select the object beneath the cursor.
 
-![PLACEHOLDER: screenshot/terminal-output/schematic]
+<img width="363" height="580" alt="image" src="https://github.com/user-attachments/assets/c6a66c77-22f8-443f-874b-b3d724cb98c1" />
+
 
 ### 3. Verify Device Structures
 
@@ -1183,7 +1185,9 @@ This lab guides you in constructing and verifying the layout of a **basic CMOS i
     - Confirm that the intersection of **poly and n-diffusion** reports as **NMOS**.
     - Confirm that the intersection of **poly and p-diffusion** reports as **PMOS**.
 
-![PLACEHOLDER: screenshot/terminal-output/schematic]
+<img width="998" height="607" alt="image" src="https://github.com/user-attachments/assets/0937a5cd-2d73-419b-99f6-b7701d7cbe75" />
+<img width="1004" height="586" alt="image" src="https://github.com/user-attachments/assets/41e7e98e-614f-409f-a2d8-3ea2f29e5ede" />
+
 
 ### 4. Examine Gate Connections
 
@@ -1191,7 +1195,8 @@ This lab guides you in constructing and verifying the layout of a **basic CMOS i
     - The gates of both NMOS and PMOS are connected to the input net.
     - Select the gate poly line and observe that both transistor gates are electrically connected.
 
-![PLACEHOLDER: screenshot/terminal-output/schematic]
+<img width="354" height="568" alt="image" src="https://github.com/user-attachments/assets/9b952f64-0aa7-4514-bcec-b41d0335bdbf" />
+
 
 ### 5. Check Output Connectivity (Drain Connections)
 
@@ -1201,7 +1206,7 @@ This lab guides you in constructing and verifying the layout of a **basic CMOS i
         - Second and third press: expands selection to all connected items.
     - The highlighted selection should include both NMOS and PMOS drains, confirming their connectivity at the output (Y node).
 
-![PLACEHOLDER: screenshot/terminal-output/schematic]
+<img width="377" height="607" alt="image" src="https://github.com/user-attachments/assets/14a4c54e-43ee-445c-ad6d-4dae56761273" />
 
 ### 6. Verify Power and Ground Connections
 
@@ -1214,20 +1219,22 @@ This lab guides you in constructing and verifying the layout of a **basic CMOS i
     - Press `s` again to expand selection to the entire region.
     - Confirm that the selected region correctly spans from the PMOS source to the VDD rail.
 
-![PLACEHOLDER: screenshot/terminal-output/schematic]
+<img width="390" height="598" alt="image" src="https://github.com/user-attachments/assets/ff63a4db-32e5-4d67-8a1e-f036312a7e51" />
+
 
 - For NMOS:
     - Move the cursor over the ground contact and repeat the selection process (`s`, `s`).
     - Confirm the source of the NMOS is connected to the ground rail.
 
-![PLACEHOLDER: screenshot/terminal-output/schematic]
+<img width="331" height="571" alt="image" src="https://github.com/user-attachments/assets/b249884a-35b5-442d-a519-942623ce5d12" />
+
 
 ### 7. Reference: Building Inverter from Scratch
 
 - An in-depth guide to building the inverter and further documentation is available on the referenced GitHub page.
 - Review descriptions of **OpenLane** tools and the layout process, if additional information is required.
 
-![PLACEHOLDER: screenshot/terminal-output/schematic]
+[Here](https://github.com/nickson-jose/vsdstdcelldesign)
 
 ### 8. Understand Abstract Cell Views (LEF)
 
@@ -1235,10 +1242,675 @@ This lab guides you in constructing and verifying the layout of a **basic CMOS i
     - LEF describes **layout boundaries, metal layers, and pin locations** but omits **logic implementation** details for IP protection.
     - Compare the detailed physical layout (showing transistors, wells, and polysilicon) with LEF (showing only cell edges and pin markers).
 
-![PLACEHOLDER: screenshot/terminal-output/schematic]
-
 - In commercial tools, LEF may also be known as "frame view". LEF is essential for placement and routing, providing just the necessary physical cell information for automatic tools.
 
 ---
 
-**End of lab steps.**
+# Lab steps to create std cell layout and extract spice netlist
+
+This lab demonstrates the **step-by-step creation of a standard cell** using the Magic VLSI layout tool. The aim is to define a fixed bounding box for the cell, lay down active layers (including wells, contacts, and metal interconnects), incrementally resolve design rule errors, and extract the cell for SPICE-level simulation.  
+The workflow includes defining precise coordinates, drawing and connecting all relevant layers (such as N-well, local interconnect, and metal 1), ensuring the cell is design-rule clean, and extracting the layout for simulation.
+
+## Lab Steps
+
+### 1. Start Magic and Open a New Layout
+
+- Open Magic and ensure the layout window is empty for a fresh cell design.
+  
+  <img width="992" height="671" alt="image" src="https://github.com/user-attachments/assets/56edcbf3-1b3a-4a48-9713-ca164ba40981" />
+
+
+### 2. Define the Fixed Bounding Box (Bbox)
+
+- Create a fixed bounding box to set your standard cell's boundaries.  
+- Use command, specifying lower-left and upper-right coordinates (`llx`, `lly`, `urx`, `ury`):
+    ```
+    box 0 0 138 272
+    ```
+  - **Lower-left corner** is at (0,0).  
+  - **Upper-right corner** is at (138, 272) (unit: lambda, or 1.38μm by 2.72μm if using 0.01μm units).
+  
+<img width="1008" height="692" alt="image" src="https://github.com/user-attachments/assets/41645373-3dc8-4de2-9023-ac38ca095853" />
+<img width="791" height="513" alt="image" src="https://github.com/user-attachments/assets/9e39af8e-c48c-42a0-ad1b-0c9ee187b2b6" />
+
+
+- *Tip: Typing `box` with the cursor shows the current box dimensions in the Magic terminal.*
+
+### 3. Draw the N-well Region
+
+- The dashed line represents the **N-well** for PMOS.
+- Select the region corresponding to your PMOS and:
+    ```
+    paint nwell
+    ```
+
+### 4. Draw the Local Interconnect Layer (Poly or Locali)
+
+- Use the paint tool to draw **Locali** (local interconnect) and connect between devices.
+    ```
+    paint locali
+    ```
+
+### 5. Draw Metal1 for Power and Ground Rails
+
+- Standard cell rules require **power (VDD)** and **ground (GND)** rails to be on **Metal1**.
+    ```
+    paint metal1
+    ```
+
+### 6. Add Contacts Between Layers
+
+#### a. N-well/Substrate Contact
+
+- Needed to connect **nwell** and **locali** for PMOS.
+    ```
+    paint pcontact
+    ```
+  - Place where N-well and locali overlap.
+
+#### b. Locali to Metal1 Contact (Licon)
+
+- Needed to connect **locali** to **metal1**.
+    ```
+    paint licon
+    ```
+  - Place where locali and metal1 overlap.
+
+#### c. For NMOS: P-substrate to Locali Contact
+
+- Draw contacts between the **p-substrate** (no explicit well) and **locali** for NMOS.
+    ```
+    paint ncontact
+    ```
+
+### 7. Check Layout Design Rules (DRC) Interactively
+
+- Magic's DRC engine flags all errors during layout.
+- To inspect errors:
+    - Go to the DRC tab and click **Find Next Error**.
+    - Magic will zoom in on DRC violations.
+    - Each violation is detailed in the terminal.
+  
+<img width="178" height="162" alt="image" src="https://github.com/user-attachments/assets/ec02a174-b982-4edf-92ff-874ffaa72a3f" />
+
+
+- To fix DRC violations:
+    - Select the area covering the error.
+    - Paint the required layer (e.g., missing nwell or metal1).
+    - When corrections are made, rerun the DRC check.
+    - Errors should reduce as you fix issues.
+  
+  <img width="873" height="299" alt="image" src="https://github.com/user-attachments/assets/dd9f0aab-007c-4318-a93e-e69158649bf8" />
+  <img width="688" height="629" alt="image" src="https://github.com/user-attachments/assets/dea1abfb-b825-4650-8935-2e3236bde730" />
+
+
+### 8. Ensure DRC Cleanliness
+
+- The final design **must have zero DRC errors** for manufacturability.
+- Confirm by checking that the DRC count is zero in the Magic interface.
+  
+<img width="77" height="28" alt="image" src="https://github.com/user-attachments/assets/6357f659-706c-4a14-943f-b03375b2000f" />
+
+
+### 9. Extract the Netlist for SPICE Simulation
+
+- Open Magic's tkcon (Magic's TCL shell).
+- Change directory to your working cell directory if needed.
+
+#### a. Extract Layout to .ext File
+    ```
+    pwd
+    extract all
+    ```
+- This creates an extraction file (e.g., `sky_inv.ext`).
+  
+ <img width="982" height="340" alt="image" src="https://github.com/user-attachments/assets/e6942771-b725-460a-8752-f23f87ab8cc1" />
+
+
+#### b. Verify .ext File Creation
+    ```
+    ls -l
+    ```
+- You should see the new `.ext` file in the directory.
+
+<img width="733" height="77" alt="image" src="https://github.com/user-attachments/assets/58e52230-98f8-45dd-a451-ede36063cbe5" />
+
+#### c. Convert Extraction to SPICE Netlist
+
+    ```
+    ext2spice cthresh 0 rthresh 0
+    ext2spice
+    ```
+- This generates a SPICE netlist (e.g., `sky_inv.spice`).  
+- Check directory contents again to confirm file creation.
+
+<img width="981" height="340" alt="image" src="https://github.com/user-attachments/assets/403cce83-46e1-475b-89a7-bca64ededed5" />
+<img width="734" height="322" alt="image" src="https://github.com/user-attachments/assets/5e8ff6a0-4583-4c34-b815-dcb8fff4c724" />
+
+
+#### d. View SPICE Netlist Contents
+
+    ```
+    cat sky_inv.spice
+    ```
+- Inspect the generated netlist for correctness.
+
+ <img width="727" height="496" alt="image" src="https://github.com/user-attachments/assets/e98bc4ba-bf35-404a-aa55-ac3478bb12b0" />
+
+---
+
+- The cell is now ready for simulation in NGspice or other SPICE simulators.
+- *Note: The SPICE netlist includes extracted parasitic capacitances for realistic simulation.*
+
+---
+
+# Sky130 Tech File Labs
+
+# Lab steps to create final SPICE deck using Sky130 tech
+
+This lab demonstrates the setup and simulation of a CMOS inverter circuit using SPICE. You will define device connections, model files, voltage sources, and perform a transient analysis using Ngspice. The steps cover schematic interpretation, SPICE deck creation, model file linking, input pulse definition, scaling adjustments, and running a transient analysis from 1 ns to 20 ns.
+
+## Lab Steps
+
+### 1. Analyze Schematic Nodes and Device Connections
+
+- **Identify PMOS (M1000)**  
+  - Model: P-shot  
+  - Drain: connected to node Y  
+  - Gate: connected to node A  
+  - Source and substrate: connected to node VWR  
+  - Node names (Y, A, VWR) designate connection points, not voltages
+
+- **Identify NMOS**  
+  - Model: N-shot  
+  - Drain: connected to node Y  
+  - Gate: connected to node A  
+  - Source and substrate: connected to node VGD
+
+<img width="731" height="363" alt="image" src="https://github.com/user-attachments/assets/4e7c87e1-31b3-4ff0-9d94-311a6b246fd3" />
+
+
+### 2. Define Required Voltage Nodes
+
+- **Connect VGD node to ground (VSS)**
+- **Connect VWR to supply voltage**
+- **Create nodes:**
+  - Node '0' for ground
+  - Node for VDD with a value of $3.3$ V
+  - Node for input voltage (V_A), which will use a pulse source
+
+
+### 3. Adjust Scaling for Layout Consistency
+
+- **Set SPICE deck scale to match layout units**
+- The default scale is $1$ dimension unit $= 10,000$ microns, but the required grid is $0.01$ units per dimension.
+- For example, a width of $37$ in the SPICE file with a grid scale of $0.01$ equals $0.37$ microns:  
+  $width = 37 \times 0.01 = 0.37$ microns
+
+- Edit the `.scale` parameter in your SPICE deck:
+```spice
+.scale 0.01u
+```
+<img width="671" height="507" alt="image" src="https://github.com/user-attachments/assets/383c2209-7bcc-4089-89e1-04ac07e4bbb2" />
+
+### 4. Include PMOS and NMOS Model Files
+
+- Model files are typically inside the `libs/` folder.
+- Include both model files in your netlist:
+```spice
+.include ./libs/pshort.lib
+.include ./libs/nshort.lib
+```
+<img width="704" height="557" alt="image" src="https://github.com/user-attachments/assets/d2f81caf-a20e-4fe2-b909-819cdd9ffca9" />
+
+
+### 5. Define Devices in the SPICE Netlist
+
+- **PMOS definition** (ensure correct model reference):
+```spice
+M1000 Y A VPWR VPWR pshort.lib
+```
+
+- **NMOS definition**:
+```spice
+M1001 Y A VGND VGND nshort.lib
+```
+*Adjust device/model names as per actual filenames and netlist conventions.*
+
+
+### 6. Define Power and Ground Sources
+
+- **Supply Voltage (VDD) between VWR and ground:**
+```spice
+VDD VPWR 0 3.3V
+```
+- **Ground reference (VSS) between VGD and ground:**
+```spice
+VSS VGND 0 0V
+```
+
+### 7. Define the Input Pulse Source
+
+- **Input pulse (V_A) between gate A and ground:**
+```spice
+Va A VGND PULSE(0V 3.3V 0 0.1ns 0.1ns 2ns 4ns)
+```
+- This describes:
+  - Start at $0$ V
+  - Pulse to $3.3$ V
+  - Delay: $0$ ns
+  - Rise time: $0.1$ ns
+  - Fall time: $0.1$ ns
+  - Pulse width: $2$ ns
+  - Period: $4$ ns
+
+<img width="660" height="469" alt="image" src="https://github.com/user-attachments/assets/e049877a-1c1b-4dbe-8f2e-db0047b83f7c" />
+
+### 8. Set Up Transient Analysis
+
+- **Configure transient simulation:**  
+  Runs from $1$ ns to $20$ ns.
+```spice
+.tran 1n 20n
+```
+# Lab steps to characterize inverter using sky130 model files
+
+This lab focuses on characterizing a standard inverter cell by analyzing its transient response and extracting key performance metrics such as rise/fall transition times and propagation delays ("cell delays") at room temperature. The steps include running SPICE simulations, plotting time-domain responses, adjusting load capacitance, and conducting detailed measurements on simulation results. All steps are illustrated with plot interactions and calculations.
+
+## Lab Steps
+
+### 1. Run Initial SPICE Simulation and Plot Output
+
+```ngspice
+ngspice sky130_inv.spice
+```
+<img width="730" height="682" alt="image" src="https://github.com/user-attachments/assets/4a568edf-ac60-4cd1-9a9a-cdf3c2a02287" />
+
+- Open your SPICE simulation tool.
+- Run the simulation for the inverter cell.
+- Plot the **output voltage (Y)** against **time** to visualize the cell's response to the input.
+
+```ngspice
+plot y vs time a
+```
+
+<img width="741" height="730" alt="image" src="https://github.com/user-attachments/assets/c690b3fc-12a1-442a-b957-2987d55222a3" />
+
+
+### 2. Adjust Load Capacitance
+
+- Inspect the SPICE netlist for the output load capacitor, labeled as `C3`.
+- The default value may be too low (e.g., `0.24fF`). Increase it for a more realistic load, such as `2fF`.
+
+```spice
+C3 OUT 0 2f
+```
+<img width="662" height="553" alt="image" src="https://github.com/user-attachments/assets/536ea558-db99-48e4-920e-c69fc7897d38" />
+<img width="655" height="551" alt="image" src="https://github.com/user-attachments/assets/f3313728-58bf-45f0-ba21-c04f3e5984aa" />
+
+- Rerun the simulation.
+
+<img width="889" height="884" alt="image" src="https://github.com/user-attachments/assets/16951199-b7f4-4865-8d54-700ff893072a" />
+
+
+### 3. Plot New Transient Output
+
+- Plot the **output voltage versus time**, with the adjusted load capacitance.
+- Observe the output for improved waveforms.
+
+### 4. Identify and Measure Rise Transition Time
+
+- The **rise transition** is defined as the time required for the output to transition from **20% to 80%** of its maximum value.
+- Given the supply voltage $V_{DD} = 3.3V$:
+  - $20\%$ of $3.3V$ is $0.66V$.
+  - $80\%$ of $3.3V$ is $2.64V$.
+
+- Use the plot:
+  - Zoom in near the output rise edge.
+  - Locate the time at which the output voltage first crosses $0.66V$ (let's say $t_{20\%} = 2.18\,ns$).
+  - Locate the time at which the output voltage reaches $2.64V$ (let's say $t_{80\%} = 2.245\,ns$).
+
+<img width="888" height="861" alt="image" src="https://github.com/user-attachments/assets/5efcae88-419b-4405-8612-ee30e65e9b0d" />
+
+- Calculate the rise transition time:
+  - $t_{rise} = t_{80\%} - t_{20\%} = 2.245\,ns - 2.18\,ns = 0.064\,ns$
+
+### 5. Measure Fall Transition Time
+
+- The **fall transition** is the time required for the output to fall from **80% to 20%** ($2.64V$ down to $0.66V$).
+- Follow the same procedure as above by examining the output fall region.
+- The value is to be determined as part of your assignment.
+
+### 6. Measure Cell Propagation (Rise) Delay
+
+- The **cell rise delay** is the time difference between the $50\%$ point of the input transition and the $50\%$ point of the output transition on a rising edge.
+- Calculate $50\%$ of $3.3V$: $1.65V$.
+
+- On the plot:
+  - Find the time when the **output** rises through $1.65V$ (e.g., $t_{out,50\%} = 2.211\,ns$).
+  - Find the corresponding time when the **input** crosses $1.65V$ on its rising edge (e.g., $t_{in,50\%} = 2.150\,ns$).
+
+- Compute **cell rise delay**:
+  - $t_{rise,delay} = t_{out,50\%} - t_{in,50\%} = 2.211\,ns - 2.150\,ns = 0.061\,ns$
+
+### 7. Measure Cell Fall Delay
+
+- The **cell fall delay** is the time difference between the $50\%$ point of a falling output and the $50\%$ point of the input transition.
+- This step will be completed as part of your assignment.
+
+### 8. Note the Simulation Temperature
+
+- The characterization was performed at a temperature of **$27^\circ$C** (room temperature).
+
+<img width="676" height="94" alt="image" src="https://github.com/user-attachments/assets/33ef55db-2b81-41cd-82be-efc7cad826d7" />
+
+
+### 9. Prepare for Layout Extraction and OpenLANE Integration
+
+- The current layout for the characterized inverter is displayed.
+
+<img width="479" height="705" alt="image" src="https://github.com/user-attachments/assets/f009b05b-a0fd-408b-89bb-2d264772053d" />
+
+- Next, create a **LEF (Library Exchange Format) file** from the layout for integration into OpenLANE.
+- In future labs, you will use this custom cell within a larger PICO or RISC-V core design and validate OpenLANE tool acceptance.
+
+---
+# Lab introduction to Magic tool options and DRC rules
+
+This documentation provides an overview of **Magic's Design Rule Checking (DRC) engine** as utilized in open-source EDA tool flows, specifically referencing the context of the Google Skywater PDK. It explains Magic’s approach to DRC, the structure and function of the technology file, and the categories of DRC rules available. Theoretical concepts behind electrical connectivity, rule types, and geometric manipulations within technology files are discussed, alongside the relevance of mask data formats.
+
+<img width="531" height="95" alt="image" src="https://github.com/user-attachments/assets/1f336731-1e1d-4493-86ef-32971aec669a" />
+
+
+## Core Concepts
+
+### Magic’s DRC Engine
+
+- **Design Rule Checking (DRC)** in Magic is essential for validating whether a physical layout meets the manufacturing constraints defined by a process technology. The engine analyzes geometric relationships between layers and flags violations based on predefined rules.
+- Magic supports multiple DRC styles within a single Process Design Kit (PDK), enabling flexibility for different fabrication requirements.
+
+
+### Technology Files
+
+- The **technology file** in Magic acts as the central configuration for a given process technology. It contains comprehensive data including:
+  - Definitions of layer types, colors, and patterns.
+  - Electrical connectivity information.
+  - DRC rules for layout validation.
+  - Rules for GDS file generation, device extraction, and other process-specific operations.
+- Technology files allow users to model process technologies in a highly customizable and detailed manner, making them foundational for open-source hardware workflows.
+
+
+### Edge-Based DRC Rules
+
+- **Edge-based rules** are the fundamental method by which Magic checks for DRC violations. These rules evaluate:
+  - The relationship at boundaries between layers.
+  - Geometric properties such as width, spacing, surround, extend, and overhang.
+  - Generic edge circumstances that don't specifically fit named rule categories.
+
+The typical spacing rule can be expressed as $d \geq d_\text{min}$, where $d$ is the measured distance and $d_\text{min}$ is the minimum allowed.
+
+
+### Non-Edge-Based DRC Rules
+
+- **Non-edge-based rules** relate to layer properties independent of edges, such as:
+  - **Area rule:** Ensures the area $A$ of a polygon meets $A \geq A_\text{min}$.
+  - **Maximum width rule:** Restricts the maximum possible width $w$ so $w \leq w_\text{max}$.
+  - **Rectangular only:** Enforces polygonal shapes to be strictly rectangles.
+  - **Angles:** Specifies allowable angles at polygon corners.
+
+
+### Geometric Manipulation and Boolean Operations
+
+- For rules too complex to model directly with edge or area rules, Magic allows for **sequential geometric manipulations** using operators such as:
+  - **Boolean Operators:** $A \land B$ (AND), $A \lor B$ (OR), $\neg A$ (NOT)
+  - **Grow/Shrink:** Morphs shapes by expanding ($r_\text{grow}$) or contracting ($r_\text{shrink}$) boundaries by specified radii.
+  - **Bloat:** Applies more complex expansion logic.
+
+The result of these operations becomes the basis for additional rule checking.
+
+
+### Mask Data Representations
+
+- **SIF (Caltech Intermediate Format):** A human-readable ASCII-based format for mask layouts. Each mask layer is named rather than numerically indexed.
+- **GDSII:** The industry-standard, binary format for mask data used in fabrication. It is less human-readable but widely supported.
+
+Both formats serve as outputs for layout designs, but only SIF is referenced for rule definition purposes in Magic's tech files.
+
+
+## Key Points
+
+- **DRC styles** in Magic are adaptable for various manufacturing needs and can target different rule sets within the same PDK.
+- **Technology files** aggregate all settings required for both the layout editor and the design rule engine, uniting them in a single interface.
+- **Edge-based rules** address relationships between adjacent layout features, such as minimum spacing, required surrounds, or permitted overlaps.
+- **Non-edge-based rules** enforce overall polygon properties, including area constraints and geometric regularity.
+- **Advanced rule checking** takes advantage of geometric and boolean manipulation, extending Magic’s sophisticated layout validation capabilities.
+- **Documentation** for Magic’s syntax, command usage, and rule definitions is essential for the creation and amendment of technology files, supporting reproducible open-source hardware development flows.
+- **Open-source process technologies** such as Google Skywater provide the foundation and transparency necessary for community-driven advancement of hardware design.
+
+---
+
+# Lab introduction to Sky130 pdk's and steps to download labs
+
+This lab introduces the use of the **Skywater PDK** and the related documentation for understanding and applying design rules in integrated circuit layout with the **Magic** layout tool. The main aim is to familiarize participants with navigating the design rule documentation, opening and viewing Magic layouts related to these rules, and manipulating technology files for lab exercises. All necessary files, including layouts and technology scripts, are provided in a self-contained package. The lab will guide you through setup, navigation, and basic usage.
+
+**Key steps:**
+- Access Skywater PDK documentation and identify relevant design rules.
+- Locate and examine lab layout files (.mag) using Magic.
+- Review and modify technology files as needed.
+- Start Magic and explore layout layers, including special handling for automatically-generated implant layers.
+
+---
+
+## Lab Steps
+
+### 1. Open Skywater PDK Documentation
+
+- Launch your browser and navigate to the **Skywater PDK documentation** at `[Click Here](https://skywater-pdk.readthedocs.io/en/main/)`
+- Review the sidebar and locate the **Design Rules** section.
+- Click through the rule sets and examine relevant illustrations.
+  
+<img width="1914" height="856" alt="image" src="https://github.com/user-attachments/assets/cf8a605c-f518-457e-8d39-82062c89c7f9" />
+<img width="273" height="548" alt="image" src="https://github.com/user-attachments/assets/42396ee4-8e2b-4ebe-8071-0122535a40a8" />
+
+
+### 2. Locate Magic Layouts for Lab Exercise
+
+- Find the provided lab package for this exercise. It contains approximately two dozen `.mag` layout files along with a technology file and startup script.
+- Unpack the provided tarball in your home directory. Use the terminal:
+
+  ```sh
+  wget https://opencircuitdesign.com/open_pdks/archive/drc_tests.tgz
+  tar xfz drc_tests.tgz
+  ```
+<img width="894" height="310" alt="image" src="https://github.com/user-attachments/assets/a2191f13-ea0a-4423-9275-b73527569f59" />
+
+### 3. Review Layout Files and Magic RC Script
+
+- In `~/Desktop/work/drc_tests/` you should find:
+  - `.mag` files (layouts for lab exercises)
+  - `magicrc` file (Magic startup script)
+  - Technology file for Magic
+
+  <img width="732" height="490" alt="image" src="https://github.com/user-attachments/assets/35a2127c-335e-499d-9c72-c73e5d983d8c" />
+
+### 4. Set Up and Start Magic Layout Tool
+
+- Change into the lab directory:
+
+  ```sh
+  cd ~/Desktop/work/drc_tests/
+  ```
+
+- Start Magic with the recommended graphics option (for improved visuals):
+
+  ```sh
+  magic -d OGL
+  # or
+  magic -d XR
+  ```
+
+  *You may also simply run:*
+  ```sh
+  magic
+  ```
+
+<img width="852" height="767" alt="image" src="https://github.com/user-attachments/assets/cbb1721a-7b4d-4e18-b205-c3cf801d0729" />
+
+- Magic will use the `magicrc` script to load the tech file.
+
+### 5. Viewing and Highlighting Layers in Magic
+
+- The documentation defines layers by mask/design type (e.g., metal lines, vias, Poly, diffusion, implants).
+- Note: **Implant-like layers** are automatically generated and are not directly visible in the layout.
+
+- To view these, use Magic’s `CIFC` command to highlight generated layers. For a given layer (as indicated by layout file header):
+
+  ```tcl
+  cif see <layer_name>
+  ```
+
+  *Example: Highlighting a "nplus" layer:*
+  ```tcl
+  cif see nplus
+  ```
+
+
+- Layout files may include top-of-file comments specifying which layers to visualize using this command.
+
+### 8. Summary of Layer Groups
+
+- In documentation and layouts, layer references split into:
+  - **Drawn layers:** metal lines, vias, Poly, diffusion
+  - **Implants:** nplus, pplus, threshold tuning
+  - **Specialty rule sets:** e.g., MIM caps, extended drain MOSFETs
+
+- For mathematical expressions or rule tabulations refer to documentation; if needed, format equations using dollar signs, e.g. `$W \geq 0.32\,\mu m$`.
+---
+
+# Lab introduction to Magic and steps to load Sky130 tech-rules
+
+This lab demonstrates how to use the Magic VLSI layout tool to inspect and understand design rule checking (DRC) violations using **Metal 3 (M3)** layers in the Google SkyWater process. The steps cover starting Magic, loading a sample layout, interacting with DRC violations, visualizing derived layers (contacts), and measuring geometric requirements. The exercises teach how layout geometry, DRC feedback, and process rules interact, with specific focus on **M3 DRC rule M3.4** and the auto-generation of contact cuts.
+
+## Lab Steps
+
+### 1. Start Magic and Open the Metal 3 Layout
+
+#### Open the Magic Layout File
+
+From the command line, run:
+
+```
+magic -d XR met3.mag
+```
+![PLACEHOLDER: screenshot/terminal-output/schematic]
+
+Alternatively, start Magic and use the menu:
+- Select **File** > **Open** and load the `met3.mag` file from the file dialog.
+![PLACEHOLDER: screenshot/terminal-output/schematic]
+
+#### Observe the Layout View
+
+You should see a layout window displaying several independent example geometries for Metal 3. Each example is labeled with a rule number corresponding to the Google SkyWater documentation. Areas with DRC errors will appear as white patches.
+![PLACEHOLDER: screenshot/terminal-output/schematic]
+
+### 2. Exploring the Rule Documentation
+
+- Access the SkyWater rules documentation online.
+- Navigate to **Design Rules** > **Periphery Rules**.
+- Find the **M3** section using the table of contents to reference rule explanations.
+![PLACEHOLDER: screenshot/terminal-output/schematic]
+
+**Note:** Rules flagged with "CPU" refer to process variants not present in SkyWater Sky130 and can be ignored.
+
+### 3. Using Magic's Console and Hot Keys
+
+Most Magic commands can be entered through the console window. To reach the console while in the layout window, type `:` or `;`. Then enter the desired command and press Return.
+
+- Position the cursor box over any example.
+- Press `:` to activate console focus.
+- Type:
+
+```
+drc why
+```
+![PLACEHOLDER: screenshot/terminal-output/schematic]
+
+- Press **Return**. The violation rule at the cursor location will display in the console window.
+
+### 4. Investigate Rule M3.4 (Via 2 Enclosure)
+
+**Rule M3.4:** "VIA2 must be enclosed by Metal 3 by at least $0.065$ microns."
+
+- All visible drawn layers except M3.4 are direct in the layout.
+
+#### Visualize Contact Cuts for VIA2
+
+To visualize how Magic creates contact cuts for VIA2:
+
+1. Draw a large area of M3 contact:
+   - Use the `paint` command
+     - Or, in the GUI, hover over the M3 contact icon and either click the middle mouse button or hit the `p` key.
+![PLACEHOLDER: screenshot/terminal-output/schematic]
+
+2. With the cursor box still around the drawn area, open the console (`:`) and enter:
+
+```
+sift c VIA2
+```
+![PLACEHOLDER: screenshot/terminal-output/schematic]
+
+- Black squares will appear showing the **contact cuts** (they represent the mask layer for VIA2).
+
+#### Dismiss the Feedback Overlay
+
+To clear this overlay, enter in the console:
+
+```
+feedback clear
+```
+![PLACEHOLDER: screenshot/terminal-output/schematic]
+
+### 5. Verify Enclosure Rule Enforcement
+
+The VIA2 must be enclosed by M3 by at least $0.065$ microns. Magic ensures this automatically:
+
+- The internal grid is typically set to $0.01$ microns.
+
+To **snap the cursor box to a finer grid (e.g., 5 nm)**, enter in the console:
+
+```
+snap internal
+```
+or
+```
+snap int
+```
+![PLACEHOLDER: screenshot/terminal-output/schematic]
+
+#### Measure the VIA2-M3 Edge Distance
+
+- Place the cursor box between a contact cut and the drawn via edge.
+- Type `:` to focus on the console, then type:
+
+```
+box
+```
+
+(or simply press the `b` key while focused on the layout)
+
+- The measured width will display in the console, verifying the minimum enclosure (e.g., $0.065$ microns or larger).
+![PLACEHOLDER: screenshot/terminal-output/schematic]
+
+*Because Magic auto-generates and centers these cuts, the enclosure is always $ \geq 0.065 $ microns—this rule is correct by design.*
+
+### 6. Next Exercise and Recap
+
+At this point, you've learned:
+- How to open and inspect layouts in Magic.
+- How to interpret DRC feedback and rule mapping.
+- How Magic visualizes and enforces VIA contact requirements (e.g., M3.4).
+- How to measure geometry to confirm design rule satisfaction.
+
+The next step will proceed to analyzing a layer with an incorrect but simple-to-fix rule.
+
+![PLACEHOLDER: screenshot/terminal-output/schematic]
