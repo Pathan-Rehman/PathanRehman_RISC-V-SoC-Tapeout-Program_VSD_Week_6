@@ -1150,3 +1150,95 @@ This section elaborates on the theoretical aspects of higher-level metal formati
 ---
 
 # Lab introduction to Sky130 basic layers layout and LEF using inverter
+
+This lab guides you in constructing and verifying the layout of a **basic CMOS inverter** using standard VLSI design tools. You will learn how to identify and use the necessary process layers (local interconnect, Metal1, Metal2, etc.), select the correct diffusion regions for NMOS and PMOS devices, verify device presence and connectivity using layout tools, and understand the difference between physical layout and abstract cell representations (like LEF). The lab steps walk through detailed operations for selection, connectivity checks, and an explanation of the LEF abstraction.
+
+## Lab Steps
+
+### 1. Recognize and Identify CMOS Inverter Layers
+
+- **Objective:** Understand and identify each layer required for CMOS inverter layout in the layout editor (e.g., magic or SkyWater).
+    - The **local interconnect layer** (*local I*) is used for short routing.
+    - **Metal1** (light purple) and **Metal2** (pinkish) are upper-level routing layers.
+    - The **"anvil"** is represented by solid, slanting dashed lines.
+    - **NMOS diffusion** is marked in green; **PMOS diffusion** in brown.
+    - **Polysilicon** (often red) forms the gate.
+    - Use the color palette within the tool to identify each layer by hovering the cursor and observing the legend.
+
+![PLACEHOLDER: screenshot/terminal-output/schematic]
+
+### 2. Confirm Diffusion Regions and Polysilicon Intersections
+
+- **Objective:** Ensure devices are correctly instantiated according to CMOS design rules.
+    - Where **polysilicon crosses NMOS diffusion (green)**, an **NMOS transistor** is formed.
+    - Where **polysilicon crosses PMOS diffusion (brown)**, a **PMOS transistor** is formed.
+
+- Hover over the intersection area in the layout tool and press `s` to select the object beneath the cursor.
+
+![PLACEHOLDER: screenshot/terminal-output/schematic]
+
+### 3. Verify Device Structures
+
+- With the area selected (after pressing `s`), use the tool's "what" function (sometimes invoked by a command or menu) to identify the selected structure.
+    - Confirm that the intersection of **poly and n-diffusion** reports as **NMOS**.
+    - Confirm that the intersection of **poly and p-diffusion** reports as **PMOS**.
+
+![PLACEHOLDER: screenshot/terminal-output/schematic]
+
+### 4. Examine Gate Connections
+
+- **Objective:** Verify both gates are connected to the inverter input.
+    - The gates of both NMOS and PMOS are connected to the input net.
+    - Select the gate poly line and observe that both transistor gates are electrically connected.
+
+![PLACEHOLDER: screenshot/terminal-output/schematic]
+
+### 5. Check Output Connectivity (Drain Connections)
+
+- **Objective:** Confirm that the drains of both MOSFETs form the inverter output.
+    - To check connections, press `s` three times with the cursor on the OUT (Y) node:
+        - First press: selects item under cursor (e.g., output net).
+        - Second and third press: expands selection to all connected items.
+    - The highlighted selection should include both NMOS and PMOS drains, confirming their connectivity at the output (Y node).
+
+![PLACEHOLDER: screenshot/terminal-output/schematic]
+
+### 6. Verify Power and Ground Connections
+
+- **Objective:** Ensure correct power architecture.
+    - The **source of PMOS** must be connected to **VDD**.
+    - The **source of NMOS** must be connected to **ground**.
+
+- For PMOS:
+    - Move the cursor over the VDD contact and press `s` to select it.
+    - Press `s` again to expand selection to the entire region.
+    - Confirm that the selected region correctly spans from the PMOS source to the VDD rail.
+
+![PLACEHOLDER: screenshot/terminal-output/schematic]
+
+- For NMOS:
+    - Move the cursor over the ground contact and repeat the selection process (`s`, `s`).
+    - Confirm the source of the NMOS is connected to the ground rail.
+
+![PLACEHOLDER: screenshot/terminal-output/schematic]
+
+### 7. Reference: Building Inverter from Scratch
+
+- An in-depth guide to building the inverter and further documentation is available on the referenced GitHub page.
+- Review descriptions of **OpenLane** tools and the layout process, if additional information is required.
+
+![PLACEHOLDER: screenshot/terminal-output/schematic]
+
+### 8. Understand Abstract Cell Views (LEF)
+
+- **Objective:** Grasp the abstraction provided by the LEF (Library Exchange Format) file.
+    - LEF describes **layout boundaries, metal layers, and pin locations** but omits **logic implementation** details for IP protection.
+    - Compare the detailed physical layout (showing transistors, wells, and polysilicon) with LEF (showing only cell edges and pin markers).
+
+![PLACEHOLDER: screenshot/terminal-output/schematic]
+
+- In commercial tools, LEF may also be known as "frame view". LEF is essential for placement and routing, providing just the necessary physical cell information for automatic tools.
+
+---
+
+**End of lab steps.**
